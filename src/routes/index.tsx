@@ -25,12 +25,12 @@ const Routes = (): JSX.Element => {
 
 	return (
 		<Switch>
-			<RouteUnauthenticated path='/forgot-password' component={ForgotPassword} />
 			<RouteUnauthenticated path='/login' component={Login} />
+			<RouteUnauthenticated path='/forgot-password' component={ForgotPassword} />
 
 			<RouteAuthenticated path='/' exact component={Home} />
 
-			<RouteAuthenticated path='/schedule' component={ScheduleRoutes} />
+			<RouteAuthenticated path='/agenda' component={ScheduleRoutes} />
 
 			<Redirect to={url} />
 		</Switch>
