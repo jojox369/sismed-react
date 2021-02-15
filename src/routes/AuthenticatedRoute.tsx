@@ -10,6 +10,13 @@ const Container = styled.div`
 	display: flex;
 `;
 
+const Content = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+`;
+
 const RouteAuthenticated = ({ component: Component, path }: RouteProps): JSX.Element => {
 	const { token } = useSelector(userLogged);
 
@@ -21,7 +28,9 @@ const RouteAuthenticated = ({ component: Component, path }: RouteProps): JSX.Ele
 		<>
 			<Container>
 				<SideBar />
-				<Route component={Component} path={path} />
+				<Content>
+					<Route component={Component} path={path} />
+				</Content>
 			</Container>
 		</>
 	);

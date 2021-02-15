@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Attendance = () => {
-	return <div>Attendance Page</div>;
+	return <div></div>;
 };
 
 export default Attendance;

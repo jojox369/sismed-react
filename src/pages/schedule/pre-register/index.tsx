@@ -1,7 +1,7 @@
 import React from 'react';
 
 const PreRegister = () => {
-	return <div>Pre Register page</div>;
+	return <div></div>;
 };
 
 export default PreRegister;
