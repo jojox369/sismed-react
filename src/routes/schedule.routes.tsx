@@ -5,7 +5,7 @@ import { Attendance, Schedule, Edit, PreRegister, Register } from '../pages/sche
 const ScheduleRoutes = () => {
 	return (
 		<>
-			<Route path='/agenda' exact component={Schedule} />
+			<Route path='/schedule' exact component={Schedule} />
 			<Route path='/schedule/edit/:id' component={Edit} />
 			<Route path='/schedule/register/:id' component={Register} />
 			<Route path='/schedule/attendance/:id' component={Attendance} />

@@ -1,5 +1,4 @@
 import api from './api';
-import { store } from '../redux/config';
 
 import EmployeeService from './employee';
 import HealthInsuranceService from './health-insurance';
@@ -98,15 +97,15 @@ export interface EditForm {
 	compareceu: boolean;
 	observacao: string;
 }
+
 const Schedule = {
-	getByDate: async (date: string, medicId?: number) => {
-		const { user } = store.getState();
+	getSchedule: async (medicId: number) => {
+		const response = await api.get(`schedule?medicId=${medicId}`);
+		return response;
+	},
 
-		let response = await api.get(`agenda/${user.id}/${date}`);
-
-		if (medicId) {
-			response = await api.get(`agenda/${medicId}/${date}`);
-		}
+	getByDate: async (date: string, medicId: number) => {
+		const response = await api.get(`schedule?medicId=${medicId}&date=${date}`);
 		return response;
 	},
 

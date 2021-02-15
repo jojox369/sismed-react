@@ -1,4 +1,5 @@
 import { store } from 'react-notifications-component';
+
 export const Message = (message: string, type: number): void => {
 	let title = '';
 	let messageType: 'danger' | 'warning' | 'success' | 'info' | 'default' | undefined = 'success';
@@ -32,4 +33,15 @@ export const Message = (message: string, type: number): void => {
 			onScreen: true,
 		},
 	});
+};
+
+export const USDateFormatter = (date: Date): string => {
+	const dateFormatted = date.toLocaleDateString().split('/');
+
+	return `${dateFormatted[2]}-${dateFormatted[1]}-${dateFormatted[0]}`;
+};
+
+export const BrDateFormatter = (date: string): string => {
+	const dateSplited = date.split('-');
+	return date ? `${dateSplited[2]}/${dateSplited[1]}/${dateSplited[0]}` : date;
 };

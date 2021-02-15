@@ -30,7 +30,7 @@ const Routes = (): JSX.Element => {
 
 			<RouteAuthenticated path='/' exact component={Home} />
 
-			<RouteAuthenticated path='/agenda' component={ScheduleRoutes} />
+			<RouteAuthenticated path='/schedule' component={ScheduleRoutes} />
 
 			<Redirect to={url} />
 		</Switch>

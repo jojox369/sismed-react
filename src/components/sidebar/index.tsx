@@ -26,49 +26,49 @@ const SidebarData = [
 	{
 		title: 'Agenda',
 		icon: ScheduleIcon,
-		link: '/agenda',
+		link: '/schedule',
 	},
 
 	{
 		title: 'Pacientes',
 		icon: PatientIcon,
-		link: '/pacientes',
+		link: '/patient',
 	},
 
 	{
 		title: 'Funcionários',
 		icon: EmployeeIcon,
-		link: '/funcionarios',
+		link: '/employee',
 	},
 
 	{
 		title: 'Convênios',
 		icon: HealthInsuranceIcon,
-		link: '/convenios',
+		link: '/health-insurances',
 	},
 
 	{
 		title: 'Registros Clínicos',
 		icon: ClinicalRegistersIcon,
-		link: '/registros',
+		link: '/clinical-registers',
 	},
 
 	{
 		title: 'Laboratórios',
 		icon: LaboratoriesIcon,
-		link: '/laboratorios',
+		link: '/laboratories',
 	},
 
 	{
 		title: 'Exames',
 		icon: ExamsIcon,
-		link: '/exames',
+		link: '/exams',
 	},
 
 	{
 		title: 'Opções',
 		icon: SettingsIcon,
-		link: '/usuario',
+		link: '/user/settings',
 	},
 ];
 
