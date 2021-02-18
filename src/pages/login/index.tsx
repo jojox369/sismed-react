@@ -50,8 +50,8 @@ const LoginPage = () => {
 			const response = await UserService.auth(data);
 			dispatch(login(response.data));
 			reset();
-			setFieldsActives({} as Fields);
 		} catch (err) {
+			setButtonEnable(true);
 			const validationErrors: Record<string, any> = {};
 			if (err instanceof Yup.ValidationError) {
 				err.inner.forEach(error => {
@@ -62,8 +62,6 @@ const LoginPage = () => {
 			if (err.response) {
 				Message(err.response.data.message, 1);
 			}
-		} finally {
-			setButtonEnable(true);
 		}
 	};
 	return (

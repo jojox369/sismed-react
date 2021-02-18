@@ -1,17 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import FullCalendar, { DateSelectArg } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Container } from './styles';
 import * as Functions from '../../../assets/functions';
-import ScheduleService from '../../../services/schedule';
+import { ScheduleData } from '../../../services/schedule';
 
 import '@fullcalendar/daygrid/main.css';
 import '@fullcalendar/timegrid/main.css';
 import { useSelector } from 'react-redux';
 import { userLogged } from '../../../redux/User/User.selects';
 
+interface Events {
+	id: string;
+	title: string;
+	start: string;
+	allDay: boolean;
+}
+
+interface Props {
+	schedules: ScheduleData[];
+}
 const buttonsText = {
 	today: 'Data Atual',
 	month: 'Mês',
@@ -45,32 +55,29 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
 	// }
 };
 
-const Calendar = () => {
-	const { id, perfil } = useSelector(userLogged);
-	const [schedulings, setSchedulings] = useState([]);
-	const [medicId, setMedicId] = useState<number | undefined>(undefined);
+const Calendar: React.FC<Props> = ({ schedules }) => {
+	const [events, setEvents] = useState<Events[]>([]);
+	const initialRender = useRef(true);
 
-	const getData = async () => {
-		try {
-			const response = await ScheduleService.getSchedule(medicId as number);
-			console.log(response);
-		} catch {
-			console.log('erro ao listar agendamentos');
-		}
+	const buildEvents = () => {
+		const events = schedules.map(scheduling => {
+			return { id: scheduling.id.toString(), title: scheduling.patientName, start: `${scheduling.date}T${scheduling.time}`, allDay: false };
+		});
+		setEvents(events);
 	};
-
 	useEffect(() => {
-		if (perfil !== 3) {
-			setMedicId(id);
-			getData();
+		if (initialRender.current) {
+			initialRender.current = false;
+		} else {
+			buildEvents();
 		}
-	}, []);
+	}, [schedules]);
 
 	return (
 		<Container>
 			<FullCalendar
 				plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-				initialView='dayGridMonth'
+				initialView='timeGridDay'
 				contentHeight={700}
 				locale='pt'
 				headerToolbar={headerToolbar}
@@ -79,6 +86,10 @@ const Calendar = () => {
 				dayMaxEvents={true}
 				buttonText={buttonsText}
 				select={handleDateSelect}
+				events={events}
+				displayEventTime={true}
+				allDayText='Dia Todo'
+				eventClick={arg => console.log(arg.event.id)}
 			/>
 		</Container>
 	);

@@ -5,6 +5,8 @@ import * as FaIcons from 'react-icons/fa';
 import * as BiIcons from 'react-icons/bi';
 import * as RiIcons from 'react-icons/ri';
 import * as FiIcons from 'react-icons/fi';
+import { logout } from '../../redux/User/User.actions';
+import { useDispatch } from 'react-redux';
 
 const HomeIcon = <FaIcons.FaHome />;
 const ScheduleIcon = <FaIcons.FaCalendarAlt />;
@@ -69,11 +71,17 @@ const SidebarData = [
 		title: 'Opções',
 		icon: SettingsIcon,
 		link: '/user/settings',
+		onClick: true,
 	},
 ];
 
 const SideBar: React.FC = () => {
 	const location = useLocation();
+	const dispatch = useDispatch();
+
+	const userLogout = () => {
+		dispatch(logout());
+	};
 
 	return (
 		<SidebarContainer>
@@ -88,7 +96,9 @@ const SideBar: React.FC = () => {
 					return (
 						<SidebarMenuItem key={index} active={location.pathname === item.link ? true : false}>
 							<Icon>{item.icon}</Icon>
-							<SidebarMenuItemLabel to={item.link}>{item.title}</SidebarMenuItemLabel>
+							<SidebarMenuItemLabel to={item.link} onClick={item.onClick ? userLogout : undefined}>
+								{item.title}
+							</SidebarMenuItemLabel>
 						</SidebarMenuItem>
 					);
 				})}

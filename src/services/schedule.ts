@@ -5,21 +5,21 @@ import HealthInsuranceService from './health-insurance';
 
 export interface ScheduleData {
 	id: number;
-	data: string;
-	hora: string;
-	medico: string;
-	pagou: number;
-	primeiraVez: number;
-	observacao: string;
-	finalizado: number;
-	remarcado: number;
-	compareceu: number;
-	prontuario: number;
-	nome: string;
-	idade: string;
-	celular: string;
-	convenio: string;
+	date: string;
+	time: string;
+	medic: string;
+	paid: number;
+	firstTime: number;
+	finished: number;
+	rescheduled: number;
+	attended: number;
+	patientId: number;
+	patientName: string;
+	patientAge: string;
+	patientCellPhone: string;
+	healthInsurance: string;
 	editavel: boolean;
+	notes: string;
 }
 
 export interface NewSchedulingForm {
@@ -101,6 +101,7 @@ export interface EditForm {
 const Schedule = {
 	getSchedule: async (medicId: number) => {
 		const response = await api.get(`schedule?medicId=${medicId}`);
+
 		return response;
 	},
 
