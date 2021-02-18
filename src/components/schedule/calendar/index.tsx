@@ -1,16 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import FullCalendar, { DateSelectArg } from '@fullcalendar/react';
+import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Container } from './styles';
-import * as Functions from '../../../assets/functions';
+
 import { ScheduleData } from '../../../services/schedule';
 
 import '@fullcalendar/daygrid/main.css';
 import '@fullcalendar/timegrid/main.css';
-import { useSelector } from 'react-redux';
-import { userLogged } from '../../../redux/User/User.selects';
 
 interface Events {
 	id: string;
@@ -21,6 +19,7 @@ interface Events {
 
 interface Props {
 	schedules: ScheduleData[];
+	onClickEvent: (id: number) => void;
 }
 const buttonsText = {
 	today: 'Data Atual',
@@ -36,7 +35,7 @@ const headerToolbar = {
 	right: 'dayGridMonth,timeGridWeek,timeGridDay',
 };
 
-const handleDateSelect = (selectInfo: DateSelectArg) => {
+/* const handleDateSelect = (selectInfo: DateSelectArg) => {
 	// const title = prompt('Please enter a new title for your event');
 	const calendarApi = selectInfo.view.calendar;
 
@@ -53,9 +52,9 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
 	// 		allDay: selectInfo.allDay,
 	// 	});
 	// }
-};
+}; */
 
-const Calendar: React.FC<Props> = ({ schedules }) => {
+const Calendar: React.FC<Props> = ({ schedules, onClickEvent }) => {
 	const [events, setEvents] = useState<Events[]>([]);
 	const initialRender = useRef(true);
 
@@ -85,11 +84,11 @@ const Calendar: React.FC<Props> = ({ schedules }) => {
 				selectable={true}
 				dayMaxEvents={true}
 				buttonText={buttonsText}
-				select={handleDateSelect}
+				// select={handleDateSelect}
 				events={events}
 				displayEventTime={true}
 				allDayText='Dia Todo'
-				eventClick={arg => console.log(arg.event.id)}
+				eventClick={arg => onClickEvent(+arg.event.id)}
 			/>
 		</Container>
 	);
