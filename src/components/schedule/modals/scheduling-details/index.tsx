@@ -1,7 +1,17 @@
 import React from 'react';
 import { ScheduleData } from '../../../../services/schedule';
 import Modal from '../../../modal';
-import { Container, PatientName, SchedulingInfo, Img, NameText, Field, ButtonsContainer, Button, SchedulingInformations } from './styles';
+import {
+	Container,
+	PatientName,
+	SchedulingInfo,
+	Img,
+	NameText,
+	Field,
+	ButtonsContainer,
+	PatientAttendance,
+	SchedulingInformations,
+} from './styles';
 import UserImage from '../../../../assets/images/user-image.png';
 import { DisableInput } from '../../../';
 import { CellNumberFormatter, VerifyScheduleFields } from '../../../../assets/functions';
@@ -42,7 +52,7 @@ const SchedulingDetails: React.FC<Props> = ({ showModal, handleClose, scheduling
 					</Field>
 					<Field>
 						<ButtonsContainer>
-							<Button>Atender Paciente</Button>
+							<PatientAttendance to='#'>Atender Paciente</PatientAttendance>
 							<SchedulingInformations to='#' title='Clique para saber mais informações do agendamento'>
 								Mais Informações
 							</SchedulingInformations>

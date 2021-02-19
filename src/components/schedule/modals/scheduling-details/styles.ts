@@ -49,15 +49,19 @@ export const ButtonsContainer = styled.div`
 	align-items: center;
 `;
 
-export const Button = styled.button`
+export const PatientAttendance = styled(Link)`
 	background: #1161ee;
 	color: #fff;
-	display: block;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	height: 50px;
 	width: 180px;
 	transition: background-color 0.2s;
 	border-radius: 4px;
 	border: none;
+	text-decoration: none;
+
 	&:hover {
 		background: #0b43a6;
 	}
