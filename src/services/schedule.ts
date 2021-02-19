@@ -18,7 +18,7 @@ export interface ScheduleData {
 	patientAge: string;
 	patientCellPhone: string;
 	healthInsurance: string;
-	editavel: boolean;
+	editable: boolean;
 	notes: string;
 }
 

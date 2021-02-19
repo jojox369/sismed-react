@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { FormHandles, SubmitHandler } from '@unform/core';
 import { Form, FormHeader, Field } from './styles';
 
-import { Input } from '../../components/form';
+import { Input } from '../../components';
 import { Container } from './styles';
 import * as Yup from 'yup';
 import { Button } from '../../assets/styles/global';

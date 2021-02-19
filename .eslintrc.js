@@ -13,7 +13,7 @@ module.exports = {
 		browser: true,
 		es6: true,
 		jest: true,
-		node: true
+		node: true,
 	},
 	parserOptions: {
 		ecmaVersion: 2020,
@@ -23,7 +23,7 @@ module.exports = {
 			arrowFunctions: true,
 		},
 	},
-	plugins: ['react', '@typescript-eslint', 'prettier', "react-hooks"],
+	plugins: ['react', '@typescript-eslint', 'prettier', 'react-hooks'],
 	settings: {
 		react: {
 			version: 'detect',
@@ -46,12 +46,11 @@ module.exports = {
 		'import/prefer-default-export': 'off',
 		'@typescript-eslint/explicit-function-return-type': 'off',
 		'@typescript-eslint/no-var-requires': 'off',
-		'prettier/prettier': ["error", { "endOfLine": "auto" }],
-		"@typescript-eslint/no-explicit-any": "off",
+		'prettier/prettier': ['error', { endOfLine: 'auto' }],
+		'@typescript-eslint/no-explicit-any': 'off',
 		'react/prop-types': ['off'],
-		"@typescript-eslint/explicit-module-boundary-types": "off",
-		"react-hooks/rules-of-hooks": "error",
-		"react-hooks/exhaustive-deps": "warn"
+		'@typescript-eslint/explicit-module-boundary-types': 'off',
+		'react-hooks/rules-of-hooks': 'error',
+		'react-hooks/exhaustive-deps': 'off',
 	},
-
 };
