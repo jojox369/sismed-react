@@ -4,8 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Container } from './styles';
-
-import { ScheduleData } from '../../../services/schedule';
+import { ScheduleData } from '../../../@types/schedule';
 
 import '@fullcalendar/daygrid/main.css';
 import '@fullcalendar/timegrid/main.css';
@@ -60,7 +59,12 @@ const Calendar: React.FC<Props> = ({ schedules, onClickEvent }) => {
 
 	const buildEvents = () => {
 		const events = schedules.map(scheduling => {
-			return { id: scheduling.id.toString(), title: scheduling.patientName, start: `${scheduling.date}T${scheduling.time}`, allDay: false };
+			return {
+				id: scheduling.id.toString(),
+				title: scheduling.patient.name,
+				start: `${scheduling.date}T${scheduling.time}`,
+				allDay: false,
+			};
 		});
 		setEvents(events);
 	};

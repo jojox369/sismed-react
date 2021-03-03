@@ -1,5 +1,4 @@
 import React from 'react';
-import { ScheduleData } from '../../../../services/schedule';
 import Modal from '../../../modal';
 import {
 	Container,
@@ -15,6 +14,7 @@ import {
 import UserImage from '../../../../assets/images/user-image.png';
 import { DisableInput } from '../../../';
 import { CellNumberFormatter, VerifyScheduleFields } from '../../../../assets/functions';
+import { ScheduleData } from '../../../../@types/schedule';
 
 interface Props {
 	showModal: boolean;
@@ -28,19 +28,19 @@ const SchedulingDetails: React.FC<Props> = ({ showModal, handleClose, scheduling
 			<Container>
 				<PatientName>
 					<Img src={UserImage} alt='User' />
-					<NameText>{scheduling?.patientName}</NameText>
+					<NameText>{scheduling?.patient.name}</NameText>
 				</PatientName>
 				<SchedulingInfo>
 					<Field>
-						<DisableInput fieldActive={true} label='Prontuario' defaultValue={scheduling.patientId} />
+						<DisableInput fieldActive={true} label='Prontuario' defaultValue={scheduling.patient.id} />
 					</Field>
 
 					<Field>
-						<DisableInput fieldActive={true} label='Idade' defaultValue={scheduling.patientAge} />
+						<DisableInput fieldActive={true} label='Idade' defaultValue={scheduling.patient.age} />
 					</Field>
 
 					<Field>
-						<DisableInput fieldActive={true} label='Celular' defaultValue={CellNumberFormatter(scheduling.patientCellPhone)} />
+						<DisableInput fieldActive={true} label='Celular' defaultValue={CellNumberFormatter(scheduling.patient.cellPhone)} />
 					</Field>
 
 					<Field>
@@ -52,7 +52,7 @@ const SchedulingDetails: React.FC<Props> = ({ showModal, handleClose, scheduling
 					</Field>
 					<Field>
 						<ButtonsContainer>
-							<PatientAttendance to='#'>Atender Paciente</PatientAttendance>
+							<PatientAttendance to={`/schedule/attendance/${scheduling.id}`}>Atender Paciente</PatientAttendance>
 							<SchedulingInformations to='#' title='Clique para saber mais informações do agendamento'>
 								Mais Informações
 							</SchedulingInformations>

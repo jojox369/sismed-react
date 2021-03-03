@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { ScheduleData } from '../../../@types/schedule';
 import { Message } from '../../../assets/functions';
 import { Calendar, SchedulingDetails } from '../../../components';
 import { userLogged } from '../../../redux/User/User.selects';
-import { ScheduleData } from '../../../services/schedule';
+
 import ScheduleService from '../../../services/schedule';
 
 const initialState = {
@@ -16,10 +17,12 @@ const initialState = {
 	finished: 0,
 	rescheduled: 0,
 	attended: 0,
-	patientId: 0,
-	patientName: '',
-	patientAge: '',
-	patientCellPhone: '',
+	patient: {
+		id: 0,
+		name: '',
+		age: '',
+		cellPhone: '',
+	},
 	healthInsurance: '',
 	editable: false,
 	notes: '',

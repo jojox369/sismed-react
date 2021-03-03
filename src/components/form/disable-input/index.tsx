@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { InputHTMLAttributes, useState } from 'react'
-import { InputContainer } from '../styles';
+import { InputContainer } from '../input/styles';
 
 
 
