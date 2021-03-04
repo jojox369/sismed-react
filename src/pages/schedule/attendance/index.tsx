@@ -11,7 +11,10 @@ import TextAreaComponent from '../../../components/form/TextArea';
 import Spinner from '../../../components/spinner';
 import ClinicalRegisterService from '../../../services/clinical-register';
 import ScheduleService from '../../../services/schedule';
-import { ButtonArea, ButtonsGroup, Container, FieldsArea, OldRegisters, PatientAge, PatientArea, PatientName, TextArea } from './styles';
+import { Main, ButtonArea, ButtonsGroup, Container, FieldsArea, OldRegisters, PatientArea, TextArea } from './styles';
+import PreviousRegistersComponent from '../../../components/clinical-register/previous-registers';
+import { PatientInformations } from '../../../components';
+import { PreviousRegisters } from '../../../@types/clinical-register';
 
 const Attendance = () => {
 	const { id } = useParams<RouteParams>();
@@ -30,14 +33,25 @@ const Attendance = () => {
 		},
 	} as ScheduleAttendance);
 	const [loading, setLoading] = useState(false);
+	const [previousRegisters, setPreviousRegisters] = useState<PreviousRegisters[]>([]);
 
 	const getData = async () => {
 		setLoading(true);
 		try {
 			const response = await ScheduleService.getById(+id);
 			setScheduling(response.data);
+			getPreviousRegisters(response.data.patient.id, response.data.employeeId);
 		} catch {
 			Message('Não foi possível obter as informações desse agendamento', 1);
+		}
+	};
+
+	const getPreviousRegisters = async (patientId: number, medicId: number) => {
+		try {
+			const response = await ClinicalRegisterService.getByPatient(patientId, medicId);
+			setPreviousRegisters(response.data);
+		} catch {
+			Message('Não foi possível obter as informações dos registros anteriores do paciente', 1);
 		} finally {
 			setLoading(false);
 		}
@@ -64,7 +78,8 @@ const Attendance = () => {
 				description: formRef.current?.getFieldValue('description'),
 			};
 
-			await ClinicalRegisterService.save(clinicalRegister);
+			const response = await ClinicalRegisterService.save(clinicalRegister);
+			setPreviousRegisters([...previousRegisters, response.data]);
 			Message('Registro clínico salvo com sucesso', 0);
 			reset();
 		} catch (err) {
@@ -85,34 +100,36 @@ const Attendance = () => {
 		<>
 			{!loading ? (
 				<Container>
-					<PatientArea>
-						<PatientName>{scheduling.patient.name}</PatientName>
+					<Main>
+						<PatientArea>
+							<PatientInformations patient={scheduling.patient} />
+						</PatientArea>
 
-						<PatientAge>Idade: {scheduling.patient.age}</PatientAge>
-					</PatientArea>
+						<FieldsArea>
+							<TextArea>
+								<Form ref={formRef} onSubmit={handleSubmit} id='form'>
+									<TextAreaComponent name='description' title='Digite o registro cliníco' />
+								</Form>
+							</TextArea>
 
-					<FieldsArea>
-						<TextArea>
-							<Form ref={formRef} onSubmit={handleSubmit} id='form'>
-								<TextAreaComponent name='description' title='Digite o registro cliníco' />
-							</Form>
-						</TextArea>
+							<ButtonsGroup>
+								<ButtonArea>
+									<Button form='form'>Salvar Registro</Button>
+								</ButtonArea>
 
-						<ButtonsGroup>
-							<ButtonArea>
-								<Button form='form'>Salvar Registro</Button>
-							</ButtonArea>
+								<ButtonArea>
+									<ConfirmButton>Finalizar Atendimento</ConfirmButton>
+								</ButtonArea>
 
-							<ButtonArea>
-								<ConfirmButton>Finalizar Atendimento</ConfirmButton>
-							</ButtonArea>
-
-							<ButtonArea>
-								<DangerButton>Paciente Não compareceu</DangerButton>
-							</ButtonArea>
-						</ButtonsGroup>
-					</FieldsArea>
-					<OldRegisters></OldRegisters>
+								<ButtonArea>
+									<DangerButton>Paciente Não compareceu</DangerButton>
+								</ButtonArea>
+							</ButtonsGroup>
+						</FieldsArea>
+					</Main>
+					<OldRegisters>
+						<PreviousRegistersComponent previousRegisters={previousRegisters} />
+					</OldRegisters>
 				</Container>
 			) : (
 				<Spinner color='#000000' />

@@ -14,12 +14,12 @@ import {
 import UserImage from '../../../../assets/images/user-image.png';
 import { DisableInput } from '../../../';
 import { CellNumberFormatter, VerifyScheduleFields } from '../../../../assets/functions';
-import { ScheduleData } from '../../../../@types/schedule';
+import { Schedule } from '../../../../@types/schedule';
 
 interface Props {
 	showModal: boolean;
 	handleClose: () => void;
-	scheduling: ScheduleData;
+	scheduling: Schedule;
 }
 
 const SchedulingDetails: React.FC<Props> = ({ showModal, handleClose, scheduling }) => {

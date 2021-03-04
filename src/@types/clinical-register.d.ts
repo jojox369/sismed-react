@@ -5,9 +5,9 @@ export interface ClinicalRegisterSave {
 	description: string;
 }
 
-export interface PreviousRegistersData {
+export interface PreviousRegisters {
 	id: number;
-	data: string;
-	hora: string;
-	descricao: string;
+	date: string;
+	time: string;
+	description: string;
 }

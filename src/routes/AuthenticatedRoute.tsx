@@ -15,6 +15,7 @@ const Content = styled.div`
 	align-items: center;
 	justify-content: center;
 	width: 100%;
+	margin-left: 250px;
 `;
 
 const RouteAuthenticated = ({ component: Component, path }: RouteProps): JSX.Element => {

@@ -1,4 +1,4 @@
-import { User } from '../../models';
+import { User } from '../../@types/user';
 
 export function login(user: User) {
 	return {

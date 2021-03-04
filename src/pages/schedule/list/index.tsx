@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { ScheduleData } from '../../../@types/schedule';
+import { Schedule } from '../../../@types/schedule';
 import { Message } from '../../../assets/functions';
 import { Calendar, SchedulingDetails } from '../../../components';
 import { userLogged } from '../../../redux/User/User.selects';
@@ -30,7 +30,7 @@ const initialState = {
 
 const List = () => {
 	const { id, perfil } = useSelector(userLogged);
-	const [schedules, setSchedules] = useState<ScheduleData[]>([]);
+	const [schedules, setSchedules] = useState<Schedule[]>([]);
 	const [showModal, setShowModal] = useState(false);
 	const [selectedId, setSelectedId] = useState(0);
 	const [selectedScheduling, setSelectedScheduling] = useState(initialState);
@@ -74,7 +74,7 @@ const List = () => {
 			<SchedulingDetails
 				showModal={showModal && setSelectedScheduling !== undefined}
 				handleClose={() => setShowModal(false)}
-				scheduling={selectedScheduling as ScheduleData}
+				scheduling={selectedScheduling as Schedule}
 			/>
 			<Calendar
 				schedules={schedules}

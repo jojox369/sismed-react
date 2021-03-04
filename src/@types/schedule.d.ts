@@ -1,4 +1,6 @@
-export interface ScheduleData {
+import { Patient } from './patient';
+
+export interface Schedule {
 	id: number;
 	date: string;
 	time: string;
@@ -24,12 +26,7 @@ export interface ScheduleAttendance {
 	firstTime: number;
 	notes: string;
 	employeeId: number;
-	patient: {
-		id: number;
-		name: string;
-		age: number;
-		cellPhone: string;
-	};
+	patient: Patient;
 }
 
 export interface NewSchedulingForm {

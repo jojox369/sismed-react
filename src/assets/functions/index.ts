@@ -53,3 +53,17 @@ export const CellNumberFormatter = (cell: string): string => {
 export const VerifyScheduleFields = (field: number | undefined): string => {
 	return field === 1 ? 'Sim' : 'Não';
 };
+
+export const TimeFormatter = (time: string): string => {
+	return time.replace(/\D/g, '').replace(/(\d{2})(\d{2})(\d{2})/g, '$1:$2');
+};
+
+export const CutString = (note: string | null, length: number): string | null => {
+	let noteFormatted = note;
+	if (note) {
+		if (note.length > 17) {
+			noteFormatted = `${note.slice(0, length)}...`;
+		}
+	}
+	return noteFormatted;
+};

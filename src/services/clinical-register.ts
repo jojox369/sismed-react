@@ -1,9 +1,9 @@
 import { ClinicalRegisterSave } from '../@types/clinical-register';
 import api from './api';
 
-const ClinicalResgiter = {
+const ClinicalRegister = {
 	getByPatient: async (patientId: number, medicId: number) => {
-		const response = await api.get(`/registroClinico/paciente/${patientId}/medico/${medicId}`);
+		const response = await api.get(`/clinicalRegister?patientId=${patientId}&medicId=${medicId}`);
 		return response;
 	},
 	save: async (register: ClinicalRegisterSave) => {
@@ -12,4 +12,4 @@ const ClinicalResgiter = {
 	},
 };
 
-export default ClinicalResgiter;
+export default ClinicalRegister;

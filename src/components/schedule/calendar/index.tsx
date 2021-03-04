@@ -4,7 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Container } from './styles';
-import { ScheduleData } from '../../../@types/schedule';
+import { Schedule } from '../../../@types/schedule';
 
 import '@fullcalendar/daygrid/main.css';
 import '@fullcalendar/timegrid/main.css';
@@ -17,7 +17,7 @@ interface Events {
 }
 
 interface Props {
-	schedules: ScheduleData[];
+	schedules: Schedule[];
 	onClickEvent: (id: number) => void;
 }
 const buttonsText = {

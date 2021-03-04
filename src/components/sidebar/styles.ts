@@ -6,13 +6,15 @@ interface Props {
 }
 
 export const SidebarContainer = styled.div`
-	height: 100vh;
-	width: 270px;
+	height: 100%;
+	width: 250px;
 	background-color: #0187ce;
 	color: #fff;
 	display: flex;
 	flex-direction: column;
 	font-family: 'Roboto', sans-serif;
+	position: fixed;
+	overflow-x: hidden;
 `;
 
 export const SidebarMenu = styled.ul`
