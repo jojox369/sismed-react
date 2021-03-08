@@ -29,78 +29,18 @@ export interface ScheduleAttendance {
 	patient: Patient;
 }
 
-export interface NewSchedulingForm {
-	funcionarioId: number;
-	convenioId?: number;
-	tipoConvenioId?: number;
-	pacienteId: number;
-	procedimentoId: number;
-	data: string;
-	hora: string;
-}
-
-export interface PreRegisterForm {
-	agenda: {
-		funcionarioId: number;
-		convenioId?: number;
-		tipoConvenioId?: number;
-		procedimentoId: number;
-		data: string;
-		hora: string;
-	};
-	paciente: {
-		nome: string;
-		cpf: string;
-		rg?: string;
-		dataNascimento?: string;
-		tipoConvenioId: number;
-	};
-}
-
-export interface EditData {
+export interface UpdateSchedule {
 	id: number;
-	data: string;
-	hora: string;
-	compareceu: number;
-	pagou: number;
-	primeiraVez: number;
-	observacao: string;
-	paciente: {
-		prontuario: number;
-		nome: string;
-		cpf: string;
-		rg: string;
-		dataNascimento: string;
-		tipoConvenio: {
-			id: number;
-			nome: string;
-			convenio: {
-				id: number;
-				nome: string;
-			};
-		};
-	};
-	funcionario: {
-		id: number;
-		crm: number;
-		especialidade: string;
-	};
-	convenio: number;
-	tipoConvenio: number;
-	procedimento: number;
-	editavel: boolean;
-}
-
-export interface EditForm {
-	id: number;
-	data: string;
-	hora: string;
-	pacienteId: number;
-	funcionarioId: number;
-	convenioId?: number;
-	tipoConvenioId?: number;
-	procedimentoId: number;
-	pagou: boolean;
-	compareceu: boolean;
-	observacao: string;
+	date?: string;
+	time?: string;
+	paid?: number;
+	firstTime?: number;
+	finished?: number;
+	rescheduled?: number;
+	attended?: number;
+	notes?: string;
+	employeeId?: number;
+	patientId?: number;
+	healthInsuranceTypeId?: number;
+	procedureId?: number;
 }

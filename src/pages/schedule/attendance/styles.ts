@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-	width: 100%;
-	height: 100%;
-	overflow-x: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 `;
 
 export const Main = styled.main`
@@ -49,4 +50,6 @@ export const TextArea = styled.div`
 	align-items: center;
 `;
 
-export const OldRegisters = styled.div``;
+export const OldRegisters = styled.div`
+	padding: 3rem;
+`;

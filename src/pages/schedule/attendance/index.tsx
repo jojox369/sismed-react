@@ -1,25 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FormHandles, SubmitHandler } from '@unform/core';
 import { Form } from '@unform/web';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { RouteParams } from '../../../@types/router';
 import { ScheduleAttendance } from '../../../@types/schedule';
 import { Message } from '../../../assets/functions';
-import { Button, ConfirmButton, DangerButton } from '../../../assets/styles/global';
+import { Button, ConfirmButton } from '../../../assets/styles/global';
 import TextAreaComponent from '../../../components/form/TextArea';
 import Spinner from '../../../components/spinner';
 import ClinicalRegisterService from '../../../services/clinical-register';
 import ScheduleService from '../../../services/schedule';
 import { Main, ButtonArea, ButtonsGroup, Container, FieldsArea, OldRegisters, PatientArea, TextArea } from './styles';
 import PreviousRegistersComponent from '../../../components/clinical-register/previous-registers';
-import { PatientInformations } from '../../../components';
+import { ConfirmModal, PatientInformations } from '../../../components';
 import { PreviousRegisters } from '../../../@types/clinical-register';
 
 const Attendance = () => {
 	const { id } = useParams<RouteParams>();
 	const formRef = useRef<FormHandles>(null);
-
+	const history = useHistory();
 	const [scheduling, setScheduling] = useState({
 		id: 0,
 		firstTime: 0,
@@ -34,6 +34,8 @@ const Attendance = () => {
 	} as ScheduleAttendance);
 	const [loading, setLoading] = useState(false);
 	const [previousRegisters, setPreviousRegisters] = useState<PreviousRegisters[]>([]);
+
+	const [confirmModal, setConfirmModal] = useState(false);
 
 	const getData = async () => {
 		setLoading(true);
@@ -55,6 +57,26 @@ const Attendance = () => {
 		} finally {
 			setLoading(false);
 		}
+	};
+
+	const finishAttendance = async () => {
+		setConfirmModal(false);
+		setLoading(true);
+
+		const data = {
+			id: +id,
+			finished: 1,
+			attended: 1,
+		};
+		try {
+			await ScheduleService.update(data);
+			history.push('/schedule');
+			setLoading(false);
+		} catch {
+			Message('Erro ao tentar finalizar o atendimento', 1);
+			setLoading(false);
+		}
+		return;
 	};
 
 	useEffect(() => {
@@ -79,7 +101,10 @@ const Attendance = () => {
 			};
 
 			const response = await ClinicalRegisterService.save(clinicalRegister);
-			setPreviousRegisters([...previousRegisters, response.data]);
+			const copyArray = [...previousRegisters];
+			copyArray.unshift(response.data);
+
+			setPreviousRegisters(copyArray);
 			Message('Registro clínico salvo com sucesso', 0);
 			reset();
 		} catch (err) {
@@ -99,38 +124,44 @@ const Attendance = () => {
 	return (
 		<>
 			{!loading ? (
-				<Container>
-					<Main>
-						<PatientArea>
-							<PatientInformations patient={scheduling.patient} />
-						</PatientArea>
+				<>
+					<Container>
+						<ConfirmModal
+							handleClose={() => setConfirmModal(false)}
+							isOpen={confirmModal}
+							confirmButtonTitle='Finalizar'
+							onClickConfirmButton={finishAttendance}
+						>
+							Deseja finalizar o atendimento?
+						</ConfirmModal>
+						<Main>
+							<PatientArea>
+								<PatientInformations patient={scheduling.patient} />
+							</PatientArea>
 
-						<FieldsArea>
-							<TextArea>
-								<Form ref={formRef} onSubmit={handleSubmit} id='form'>
-									<TextAreaComponent name='description' title='Digite o registro cliníco' />
-								</Form>
-							</TextArea>
+							<FieldsArea>
+								<TextArea>
+									<Form ref={formRef} onSubmit={handleSubmit} id='form'>
+										<TextAreaComponent name='description' title='Digite o registro cliníco' />
+									</Form>
+								</TextArea>
 
-							<ButtonsGroup>
-								<ButtonArea>
-									<Button form='form'>Salvar Registro</Button>
-								</ButtonArea>
+								<ButtonsGroup>
+									<ButtonArea>
+										<Button form='form'>Salvar Registro</Button>
+									</ButtonArea>
 
-								<ButtonArea>
-									<ConfirmButton>Finalizar Atendimento</ConfirmButton>
-								</ButtonArea>
-
-								<ButtonArea>
-									<DangerButton>Paciente Não compareceu</DangerButton>
-								</ButtonArea>
-							</ButtonsGroup>
-						</FieldsArea>
-					</Main>
-					<OldRegisters>
-						<PreviousRegistersComponent previousRegisters={previousRegisters} />
-					</OldRegisters>
-				</Container>
+									<ButtonArea>
+										<ConfirmButton onClick={() => setConfirmModal(true)}>Finalizar Atendimento</ConfirmButton>
+									</ButtonArea>
+								</ButtonsGroup>
+							</FieldsArea>
+						</Main>
+						<OldRegisters>
+							<PreviousRegistersComponent previousRegisters={previousRegisters} />
+						</OldRegisters>
+					</Container>
+				</>
 			) : (
 				<Spinner color='#000000' />
 			)}

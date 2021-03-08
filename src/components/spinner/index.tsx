@@ -42,9 +42,18 @@ const StyledSpinner = styled.svg<Props>`
 	}
 `;
 
+const SpinnerContainer = styled.main`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+`;
+
 const Spinner: React.FC<Props> = ({ color }) => (
-	<StyledSpinner viewBox='0 0 50 50' color={color}>
-		<circle className='path' cx='25' cy='25' r='20' fill='none' strokeWidth='2' />
-	</StyledSpinner>
+	<SpinnerContainer>
+		<StyledSpinner viewBox='0 0 50 50' color={color}>
+			<circle className='path' cx='25' cy='25' r='20' fill='none' strokeWidth='2' />
+		</StyledSpinner>
+	</SpinnerContainer>
 );
 export default Spinner;

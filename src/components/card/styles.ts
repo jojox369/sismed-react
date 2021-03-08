@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-	width: 18rem;
+	width: 100%;
 	background-color: #fff;
 	border-radius: 5px;
-	height: 300px;
+	height: 100%;
 	justify-self: center;
 	align-self: center;
 `;

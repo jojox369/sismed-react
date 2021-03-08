@@ -7,6 +7,8 @@ import { userLogged } from '../../../redux/User/User.selects';
 
 import ScheduleService from '../../../services/schedule';
 
+import { Container } from './styles';
+
 const initialState = {
 	id: 0,
 	date: '',
@@ -69,6 +71,7 @@ const List = () => {
 			setShowModal(true);
 		}
 	}, [selectedScheduling]);
+
 	return (
 		<>
 			<SchedulingDetails
@@ -76,12 +79,14 @@ const List = () => {
 				handleClose={() => setShowModal(false)}
 				scheduling={selectedScheduling as Schedule}
 			/>
-			<Calendar
-				schedules={schedules}
-				onClickEvent={id => {
-					setSelectedId(id);
-				}}
-			/>
+			<Container>
+				<Calendar
+					schedules={schedules}
+					onClickEvent={id => {
+						setSelectedId(id);
+					}}
+				/>
+			</Container>
 		</>
 	);
 };

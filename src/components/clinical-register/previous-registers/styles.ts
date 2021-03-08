@@ -1,17 +1,21 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
 	margin: 50px 10px 0 10px;
 	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 `;
 
 export const Content = styled.div`
-	flex: 1;
-	display: grid;
-	grid-template-columns: repeat(5, 1fr); /*Duas colunas com mesmo tamanho*/
-	gap: 1rem; /*Espacamento entre as colunas*/
-	align-content: center; /*Todo conteudo do grid seja alinhado ao centro verticalmente*/
-	margin-left: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	margin: 0 auto;
 `;
 export const RegisterDateTime = styled.span`
 	margin: 1.875rem 0;
@@ -19,8 +23,8 @@ export const RegisterDateTime = styled.span`
 
 export const RegisterDescriptionArea = styled.div`
 	background: #ddd;
-	height: 150px;
-	width: 90%;
+	height: 6.25rem;
+	width: 80%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -30,4 +34,23 @@ export const RegisterDescriptionArea = styled.div`
 export const PartialDescription = styled.span`
 	max-width: 200px;
 	word-wrap: break-word;
+`;
+
+export const CardArea = styled.div`
+	width: 12.5rem;
+	height: 16.875rem;
+	display: block;
+	margin: 0 1.875rem;
+`;
+
+export const MoreInformations = styled(Link)`
+	text-decoration: none;
+	font-size: 0.875rem;
+	align-self: flex-end;
+	margin: 5px 10px 0 0;
+`;
+
+export const IconArea = styled.div`
+	align-self: flex-end;
+	margin: 20px 30px;
 `;

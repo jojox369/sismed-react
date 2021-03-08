@@ -8,14 +8,16 @@ import styled from 'styled-components';
 
 const Container = styled.div`
 	display: flex;
+	height: 100%;
+	width: 100%;
 `;
 
 const Content = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
+	flex: 1;
 	margin-left: 250px;
+	> * {
+		height: 100%;
+	}
 `;
 
 const RouteAuthenticated = ({ component: Component, path }: RouteProps): JSX.Element => {
@@ -27,8 +29,8 @@ const RouteAuthenticated = ({ component: Component, path }: RouteProps): JSX.Ele
 
 	return (
 		<>
+			<SideBar />
 			<Container>
-				<SideBar />
 				<Content>
 					<Route component={Component} path={path} />
 				</Content>
