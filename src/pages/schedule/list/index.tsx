@@ -34,9 +34,8 @@ const List = () => {
 	const { id, perfil } = useSelector(userLogged);
 	const [schedules, setSchedules] = useState<Schedule[]>([]);
 	const [showModal, setShowModal] = useState(false);
-	const [selectedId, setSelectedId] = useState(0);
+
 	const [selectedScheduling, setSelectedScheduling] = useState(initialState);
-	const initialRender = useRef(true);
 
 	const getData = async () => {
 		try {
@@ -47,9 +46,12 @@ const List = () => {
 		}
 	};
 
-	const getScheduling = () => {
-		const scheduling = schedules.filter(scheduling => scheduling.id === selectedId);
-		setSelectedScheduling(scheduling[0]);
+	const getScheduling = (id: number) => {
+		const scheduling = schedules.filter(scheduling => scheduling.id === id);
+		if (scheduling[0].finished !== 1) {
+			setShowModal(true);
+			setSelectedScheduling(scheduling[0]);
+		}
 	};
 
 	useEffect(() => {
@@ -58,32 +60,24 @@ const List = () => {
 		}
 	}, []);
 
-	useEffect(() => {
-		if (selectedId !== 0) {
-			getScheduling();
-		}
-	}, [selectedId]);
+	// useEffect(() => {
+	// 	if (initialRender.current) {
+	// 		initialRender.current = false;
+	// 	} else {
+	// 		if (selectedScheduling.finished !== 1) {
 
-	useEffect(() => {
-		if (initialRender.current) {
-			initialRender.current = false;
-		} else {
-			setShowModal(true);
-		}
-	}, [selectedScheduling]);
+	// 		}
+	// 	}
+	// }, [selectedScheduling]);
 
 	return (
 		<>
-			<SchedulingDetails
-				showModal={showModal && setSelectedScheduling !== undefined}
-				handleClose={() => setShowModal(false)}
-				scheduling={selectedScheduling as Schedule}
-			/>
+			<SchedulingDetails showModal={showModal} handleClose={() => setShowModal(false)} scheduling={selectedScheduling as Schedule} />
 			<Container>
 				<Calendar
 					schedules={schedules}
 					onClickEvent={id => {
-						setSelectedId(id);
+						getScheduling(id);
 					}}
 				/>
 			</Container>

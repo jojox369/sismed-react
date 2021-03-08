@@ -14,6 +14,7 @@ interface Events {
 	title: string;
 	start: string;
 	allDay: boolean;
+	color: string;
 }
 
 interface Props {
@@ -53,6 +54,26 @@ const headerToolbar = {
 	// }
 }; */
 
+const verifyStatus = (finished: number, rescheduled: number, attended: number) => {
+	const finishedColor = '#22bb33';
+	const notAttendColor = '#bb2124';
+	const rescheduledColor = '#f0ad4e';
+
+	if (finished === 1 && attended === 1) {
+		//Paciente atendido
+		return finishedColor;
+	}
+	if (finished === 1 && attended === 0 && rescheduled === 0) {
+		//Paciente não compareceu
+		return notAttendColor;
+	}
+	if (finished === 1 && rescheduled === 1 && attended === 0) {
+		//Paciente Remarcado
+		return rescheduledColor;
+	}
+	return 'default';
+};
+
 const Calendar: React.FC<Props> = ({ schedules, onClickEvent }) => {
 	const [events, setEvents] = useState<Events[]>([]);
 	const initialRender = useRef(true);
@@ -64,6 +85,8 @@ const Calendar: React.FC<Props> = ({ schedules, onClickEvent }) => {
 				title: scheduling.patient.name,
 				start: `${scheduling.date}T${scheduling.time}`,
 				allDay: false,
+				color: verifyStatus(scheduling.finished, scheduling.rescheduled, scheduling.attended),
+				description: 'teste',
 			};
 		});
 		setEvents(events);
@@ -93,6 +116,7 @@ const Calendar: React.FC<Props> = ({ schedules, onClickEvent }) => {
 				displayEventTime={true}
 				allDayText='Dia Todo'
 				eventClick={arg => onClickEvent(+arg.event.id)}
+				eventDisplay='block'
 			/>
 		</Container>
 	);
