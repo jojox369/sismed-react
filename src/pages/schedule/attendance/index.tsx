@@ -4,7 +4,7 @@ import { Form } from '@unform/web';
 import { useHistory, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { RouteParams } from '../../../@types/router';
-import { ScheduleAttendance } from '../../../@types/schedule';
+import { ScheduleDetails } from '../../../@types/schedule';
 import { Message } from '../../../assets/functions';
 import { Button, ConfirmButton } from '../../../assets/styles/global';
 import TextAreaComponent from '../../../components/form/TextArea';
@@ -23,7 +23,9 @@ const Attendance = () => {
 	const [scheduling, setScheduling] = useState({
 		id: 0,
 		firstTime: 0,
-		employeeId: 0,
+		employee: {
+			id: 0,
+		},
 		notes: '',
 		patient: {
 			id: 0,
@@ -31,7 +33,7 @@ const Attendance = () => {
 			age: '',
 			cellPhone: '',
 		},
-	} as ScheduleAttendance);
+	} as ScheduleDetails);
 	const [loading, setLoading] = useState(false);
 	const [previousRegisters, setPreviousRegisters] = useState<PreviousRegisters[]>([]);
 
@@ -94,7 +96,7 @@ const Attendance = () => {
 			});
 
 			const clinicalRegister = {
-				employeeId: scheduling.employeeId,
+				employeeId: scheduling.employee.id,
 				patientId: scheduling.patient.id,
 				scheduleId: scheduling.id,
 				description: formRef.current?.getFieldValue('description'),

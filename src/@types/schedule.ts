@@ -1,5 +1,7 @@
 import { Patient } from './patient';
-
+import { Employee } from './employee';
+import { HealthInsuranceType } from './health-insurance-type';
+import { Procedure } from './procedure';
 export interface Schedule {
 	id: number;
 	date: string;
@@ -21,12 +23,14 @@ export interface Schedule {
 	notes: string;
 }
 
-export interface ScheduleAttendance {
+export interface ScheduleDetails {
 	id: number;
 	firstTime: number;
 	notes: string;
-	employeeId: number;
+	employee: Employee;
 	patient: Patient;
+	healthInsuranceType: HealthInsuranceType;
+	procedure: Procedure;
 }
 
 export interface UpdateSchedule {

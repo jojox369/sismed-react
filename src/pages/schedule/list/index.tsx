@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Schedule } from '../../../@types/schedule';
 import { Message } from '../../../assets/functions';
-import { Calendar, SchedulingDetails } from '../../../components';
+import { Calendar, SchedulingDetailsModal } from '../../../components';
 import { userLogged } from '../../../redux/User/User.selects';
 
 import ScheduleService from '../../../services/schedule';
@@ -72,7 +72,7 @@ const List = () => {
 
 	return (
 		<>
-			<SchedulingDetails showModal={showModal} handleClose={() => setShowModal(false)} scheduling={selectedScheduling as Schedule} />
+			<SchedulingDetailsModal showModal={showModal} handleClose={() => setShowModal(false)} scheduling={selectedScheduling as Schedule} />
 			<Container>
 				<Calendar
 					schedules={schedules}

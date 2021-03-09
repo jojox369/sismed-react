@@ -70,7 +70,7 @@ export const SidebarMenuItemLabel = styled(Link)`
 	font-weight: 600;
 	line-height: 1.3;
 	text-align: left;
-	padding: 075rem 0;
+	padding: 0.75rem 0;
 	margin-left: 1.25rem;
 	color: #ffffff;
 	text-decoration: none;

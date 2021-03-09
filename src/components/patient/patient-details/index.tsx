@@ -14,7 +14,7 @@ const PatientDetails: React.FC<Props> = ({ patient }) => {
 			<FaUserInjured size='100' />
 			<DetailsArea>
 				<InformationCard id={patient.name} title='Nome' content={patient.name} />
-				<InformationCard id={patient.age.toString()} title='Idade' content={patient.age.toString()} />
+				<InformationCard id={patient.age as string} title='Idade' content={patient.age} />
 			</DetailsArea>
 		</Container>
 	);
