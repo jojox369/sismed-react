@@ -21,27 +21,33 @@ interface Props {
 const PreviousRegistersComponent: React.FC<Props> = ({ previousRegisters }) => {
 	return (
 		<Container>
-			<IconArea>
-				<HiOutlineInformationCircle size='20' title='Para vizualizar mais registros, acesse a pagina de registros clinicos' />
-			</IconArea>
-			<Content>
-				{previousRegisters.slice(0, 5).map((register, i) => {
-					return (
-						<CardArea key={i}>
-							<Card>
-								<FaNotesMedical size='50' />
-								<RegisterDateTime>
-									{BrDateFormatter(register.date)} - {TimeFormatter(register.time)}
-								</RegisterDateTime>
-								<RegisterDescriptionArea>
-									<PartialDescription>{CutString(register.description, 50)}</PartialDescription>
-								</RegisterDescriptionArea>
-								<MoreInformations to={`/clinicalRegister/${register.id}`}>Mais informações &rarr;</MoreInformations>
-							</Card>
-						</CardArea>
-					);
-				})}
-			</Content>
+			{previousRegisters.length > 0 && (
+				<>
+					{previousRegisters.length > 5 && (
+						<IconArea>
+							<HiOutlineInformationCircle size='20' title='Para vizualizar mais registros, acesse a pagina de registros clinicos' />
+						</IconArea>
+					)}
+					<Content>
+						{previousRegisters.slice(0, 5).map((register, i) => {
+							return (
+								<CardArea key={i}>
+									<Card>
+										<FaNotesMedical size='50' />
+										<RegisterDateTime>
+											{BrDateFormatter(register.date)} - {TimeFormatter(register.time)}
+										</RegisterDateTime>
+										<RegisterDescriptionArea>
+											<PartialDescription>{CutString(register.description, 50)}</PartialDescription>
+										</RegisterDescriptionArea>
+										<MoreInformations to={`/clinicalRegister/${register.id}`}>Mais informações &rarr;</MoreInformations>
+									</Card>
+								</CardArea>
+							);
+						})}
+					</Content>
+				</>
+			)}
 		</Container>
 	);
 };

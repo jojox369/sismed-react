@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
-	margin: 50px 10px 0 10px;
+	margin: 3.125rem 0.625rem 0 0.625rem;
 	flex: 1;
 	display: flex;
 	justify-content: center;
@@ -47,10 +47,10 @@ export const MoreInformations = styled(Link)`
 	text-decoration: none;
 	font-size: 0.875rem;
 	align-self: flex-end;
-	margin: 5px 10px 0 0;
+	margin: 0.3125rem 0.625rem 0 0;
 `;
 
 export const IconArea = styled.div`
 	align-self: flex-end;
-	margin: 20px 30px;
+	margin: 1.25rem 1.875rem;
 `;

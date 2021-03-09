@@ -13,7 +13,7 @@ import ClinicalRegisterService from '../../../services/clinical-register';
 import ScheduleService from '../../../services/schedule';
 import { Main, ButtonArea, ButtonsGroup, Container, FieldsArea, OldRegisters, PatientArea, TextArea } from './styles';
 import PreviousRegistersComponent from '../../../components/clinical-register/previous-registers';
-import { ConfirmModal, PatientInformations } from '../../../components';
+import { ConfirmModal, PatientDetails } from '../../../components';
 import { PreviousRegisters } from '../../../@types/clinical-register';
 
 const Attendance = () => {
@@ -28,7 +28,7 @@ const Attendance = () => {
 		patient: {
 			id: 0,
 			name: '',
-			age: 0,
+			age: '',
 			cellPhone: '',
 		},
 	} as ScheduleAttendance);
@@ -136,7 +136,7 @@ const Attendance = () => {
 						</ConfirmModal>
 						<Main>
 							<PatientArea>
-								<PatientInformations patient={scheduling.patient} />
+								<PatientDetails patient={scheduling.patient} />
 							</PatientArea>
 
 							<FieldsArea>

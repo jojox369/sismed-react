@@ -1,6 +1,6 @@
 export interface Patient {
 	id: number;
 	name: string;
-	age: number;
+	age: string;
 	cellPhone: string;
 }

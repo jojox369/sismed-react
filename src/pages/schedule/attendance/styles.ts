@@ -12,6 +12,7 @@ export const Main = styled.main`
 	justify-content: center;
 	align-items: center;
 	margin-top: 70px;
+	width: 100%;
 `;
 
 export const PatientArea = styled.div`
@@ -19,7 +20,7 @@ export const PatientArea = styled.div`
 	justify-content: flex-start;
 	align-items: center;
 	height: 100%;
-	width: 30%;
+	width: 40%;
 	align-self: flex-start;
 `;
 
@@ -27,7 +28,7 @@ export const FieldsArea = styled.div`
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
-	width: 70%;
+	width: 60%;
 `;
 
 export const ButtonsGroup = styled.div`
