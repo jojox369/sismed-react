@@ -42,19 +42,19 @@ export const USDateFormatter = (date: Date) => {
 };
 
 export const BrDateFormatter = (date: string) => {
-	const dateSplited = date.split('-');
-	return date ? `${dateSplited[2]}/${dateSplited[1]}/${dateSplited[0]}` : date;
+	const dateSplitted = date.split('-');
+	return date ? `${dateSplitted[2]}/${dateSplitted[1]}/${dateSplitted[0]}` : date;
 };
 
-export const CellNumberFormatter = (cell: string): string => {
+export const CellNumberFormatter = (cell: string) => {
 	return cell.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/g, '($1) $2 $3-$4');
 };
 
-export const VerifyScheduleFields = (field: number | undefined): string => {
+export const VerifyScheduleFields = (field: number | undefined) => {
 	return field === 1 ? 'Sim' : 'Não';
 };
 
-export const TimeFormatter = (time: string): string => {
+export const TimeFormatter = (time: string) => {
 	return time.replace(/\D/g, '').replace(/(\d{2})(\d{2})(\d{2})/g, '$1:$2');
 };
 
@@ -66,4 +66,8 @@ export const CutString = (note: string | null, length: number): string | null =>
 		}
 	}
 	return noteFormatted;
+};
+
+export const StringFormatter = (string: string) => {
+	return string.toLowerCase().replace(/(?:^|\s)(?!da|de|do)\S/g, l => l.toUpperCase());
 };

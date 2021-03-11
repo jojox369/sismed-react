@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 interface DivProps {
 	focused: boolean;
-	error: string | undefined;
-	required: boolean | undefined;
+	error?: string;
+	required?: boolean;
 }
 export const InputContainer = styled.div<DivProps>`
 	width: 100%;

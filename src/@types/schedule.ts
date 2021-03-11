@@ -26,6 +26,7 @@ export interface Schedule {
 export interface ScheduleDetails {
 	id: number;
 	firstTime: number;
+	paid: number;
 	notes: string;
 	employee: Employee;
 	patient: Patient;

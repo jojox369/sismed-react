@@ -11,7 +11,7 @@ interface Props {
 const PatientDetails: React.FC<Props> = ({ patient }) => {
 	return (
 		<Container>
-			<FaUserInjured size='100' />
+			<FaUserInjured size='80' />
 			<DetailsArea>
 				<InformationCard id={patient.name} title='Nome' content={patient.name} />
 				<InformationCard id={patient.age as string} title='Idade' content={patient.age} />

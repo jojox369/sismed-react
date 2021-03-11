@@ -46,6 +46,8 @@ export const ModalContent = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	background: #ededed;
+	border-radius: 12px;
 	h1 {
 		color: #5c3aff;
 	}
