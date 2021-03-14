@@ -25,8 +25,11 @@ export interface Schedule {
 
 export interface ScheduleDetails {
 	id: number;
+	date: string;
+	time: string;
 	firstTime: number;
 	paid: number;
+	attended: number;
 	notes: string;
 	employee: Employee;
 	patient: Patient;

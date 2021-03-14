@@ -11,7 +11,7 @@ export const InputContainer = styled.div<DivProps>`
 	border-radius: 4px;
 	position: relative;
 	background-color: ${props => (props.focused ? '#fff' : 'rgba(255, 255, 255, 0.8)')};
-	margin-top: 30px;
+	margin-top: 1.25rem;
 	transition: 0.3s background-color ease-in-out, 0.3s box-shadow ease-in-out;
 
 	&:hover {
@@ -70,6 +70,10 @@ export const InputContainer = styled.div<DivProps>`
 		transition: 0.1s all ease-in-out;
 	}
 
+	& input:focus {
+		box-shadow: 0px 4px 20px 0px #0287ce;
+	}
+
 	${props =>
 		props.focused &&
 		`
@@ -77,7 +81,7 @@ export const InputContainer = styled.div<DivProps>`
 			box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.2);
 			& input{
 				padding: 24px 16px 8px 16px;
-				box-shadow: 0px 4px 20px 0px #0287CE;
+				
 			}
 			& input + label{
 				top: 4px;

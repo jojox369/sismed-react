@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.section`
 	width: 100%;
 	height: 3.5rem;
 	border-radius: 0.25rem;
 	position: relative;
 	background: #fff;
-	margin-top: 1.875rem;
+	margin-top: 1.25rem;
 	transition: box-shadow 0.2s;
 	:hover {
 		/* background-color: rgba(255, 255, 255, 0.45); */

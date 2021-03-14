@@ -5,7 +5,7 @@ interface Props {
 	active: boolean;
 }
 
-export const SidebarContainer = styled.div`
+export const SidebarContainer = styled.section`
 	height: 100%;
 	width: 15.625rem;
 	background-color: #0187ce;

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
-export const Overlay = styled(motion.div)`
+export const Overlay = styled(motion.section)`
 	position: fixed;
 	top: 0;
 	left: 0;

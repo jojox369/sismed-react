@@ -13,7 +13,7 @@ import ClinicalRegisterService from '../../../services/clinical-register';
 import ScheduleService from '../../../services/schedule';
 import { Main, ButtonArea, ButtonsGroup, Container, FieldsArea, OldRegisters, PatientArea, TextArea } from './styles';
 import PreviousRegistersComponent from '../../../components/clinical-register/previous-registers';
-import { ConfirmModal, PatientDetails } from '../../../components';
+import { ConfirmModal, Error, PatientDetails } from '../../../components';
 import { PreviousRegisters } from '../../../@types/clinical-register';
 
 const Attendance = () => {
@@ -35,6 +35,7 @@ const Attendance = () => {
 		},
 	} as ScheduleDetails);
 	const [loading, setLoading] = useState(false);
+	const [hasError, setHasError] = useState(false);
 	const [previousRegisters, setPreviousRegisters] = useState<PreviousRegisters[]>([]);
 
 	const [confirmModal, setConfirmModal] = useState(false);
@@ -47,6 +48,8 @@ const Attendance = () => {
 			getPreviousRegisters(response.data.patient.id, response.data.employeeId);
 		} catch {
 			Message('Não foi possível obter as informações desse agendamento', 1);
+			setHasError(true);
+			setLoading(false);
 		}
 	};
 
@@ -125,7 +128,7 @@ const Attendance = () => {
 
 	return (
 		<>
-			{!loading ? (
+			{!loading && (
 				<>
 					<Container>
 						<ConfirmModal
@@ -164,9 +167,9 @@ const Attendance = () => {
 						</OldRegisters>
 					</Container>
 				</>
-			) : (
-				<Spinner color='#000000' />
 			)}
+			{loading && <Spinner />}
+			{hasError && <Error />}
 		</>
 	);
 };

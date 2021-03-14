@@ -1,15 +1,23 @@
-import React from 'react';
-import { Container, DetailsArea } from './styles';
+import React, { useState } from 'react';
 import { BiCalendarEdit } from 'react-icons/bi';
-import { ScheduleDetails } from '../../../@types/schedule';
-import Select from '../../form/select';
 import { HealthInsuranceType } from '../../../@types/health-insurance-type';
+import { Procedure } from '../../../@types/procedure';
+import { ScheduleDetails } from '../../../@types/schedule';
+import { Button } from '../../../assets/styles/global';
+import Input from '../../form/input';
+import Select from '../../form/select';
+import TextAreaComponent from '../../form/TextArea';
+import Modal from '../../modal';
+
+import { Container, DetailsArea, ModalContainer } from './styles';
 
 interface Props {
 	scheduling: ScheduleDetails;
 	healthInsuranceTypes: HealthInsuranceType[];
+	procedures: Procedure[];
 	onSelectChange: (id: number, name: string) => void;
 	onHealthInsuranceChange: (id: number, name: string) => void;
+	onNotesChange: (notes: string) => void;
 }
 const options = [
 	{
@@ -21,7 +29,15 @@ const options = [
 		name: 'Não',
 	},
 ];
-const SchedulingDetails: React.FC<Props> = ({ scheduling, healthInsuranceTypes, onSelectChange, onHealthInsuranceChange }) => {
+const SchedulingDetails: React.FC<Props> = ({
+	scheduling,
+	healthInsuranceTypes,
+	onSelectChange,
+	onHealthInsuranceChange,
+	procedures,
+	onNotesChange,
+}) => {
+	const [showModal, setShowModal] = useState(false);
 	const healthInsurances = healthInsuranceTypes.map(healthInsuranceType => ({
 		id: healthInsuranceType.healthInsurance.id,
 		name: healthInsuranceType.healthInsurance.name,
@@ -45,10 +61,24 @@ const SchedulingDetails: React.FC<Props> = ({ scheduling, healthInsuranceTypes, 
 
 	return (
 		<Container>
+			<Modal handleClose={() => setShowModal(false)} isOpen={showModal}>
+				<ModalContainer>
+					<TextAreaComponent
+						title='Insira as observações'
+						name='notes'
+						defaultValue={scheduling.notes}
+						onChange={e => onNotesChange(e.target.value)}
+					/>
+					<Button onClick={() => setShowModal(false)}>Adicionar</Button>
+				</ModalContainer>
+			</Modal>
 			<BiCalendarEdit size='80' />
 			<DetailsArea>
+				<Input label='Data' type='date' name='date' fieldActive={true} defaultValue={scheduling.date} />
+				<Input label='Hora' type='time' name='time' fieldActive={true} defaultValue={scheduling.time} />
 				<Select
 					label='Convênio'
+					name='healthInsurance'
 					defaultLabel='Selecione o convênio'
 					options={healthInsurances}
 					fieldActive={false}
@@ -57,6 +87,7 @@ const SchedulingDetails: React.FC<Props> = ({ scheduling, healthInsuranceTypes, 
 				/>
 				<Select
 					label='Plano'
+					name='healthInsuranceType'
 					defaultLabel='Selecione o plano'
 					options={getHealthInsurancesTypes()}
 					fieldActive={false}
@@ -64,7 +95,20 @@ const SchedulingDetails: React.FC<Props> = ({ scheduling, healthInsuranceTypes, 
 					onChange={healthInsuranceTypeChange}
 				/>
 
-				<Select label='Pagou' options={options} fieldActive={false} defaultValue={scheduling.paid} />
+				<Select
+					label='Procedimento'
+					name='procedureId'
+					defaultLabel='Selecione o procedimento'
+					options={procedures}
+					fieldActive={false}
+					defaultValue={scheduling.procedure.id}
+					onChange={healthInsuranceTypeChange}
+				/>
+				<Select label='Pagou' name='paid' options={options} fieldActive={false} defaultValue={scheduling.paid} />
+				<Select label='Compareceu' name='attended' options={options} fieldActive={false} defaultValue={scheduling.attended} />
+				<Button type='button' style={{ marginTop: '1.25rem' }} onClick={() => setShowModal(true)}>
+					Adicionar Observações
+				</Button>
 			</DetailsArea>
 		</Container>
 	);

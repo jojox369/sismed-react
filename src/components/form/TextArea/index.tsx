@@ -36,7 +36,7 @@ const TextAreaComponent: React.FC<Props> = ({ title, subTitle, ...props }) => {
 			</Title>
 			{subTitle && <SubTitle>{subTitle}</SubTitle>}
 
-			<TextArea rows={5} cols={10} id='text-area' ref={textAreaRef} defaultValue={defaultValue} {...props} />
+			<TextArea id='text-area' ref={textAreaRef} defaultValue={defaultValue} {...props} />
 		</Container>
 	);
 };

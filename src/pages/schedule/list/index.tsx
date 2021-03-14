@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Schedule } from '../../../@types/schedule';
 import { Message } from '../../../assets/functions';
-import { Calendar, SchedulingDetailsModal } from '../../../components';
+import { Calendar, SchedulingDetailsModal, Spinner, Error } from '../../../components';
 import { userLogged } from '../../../redux/User/User.selects';
 
 import ScheduleService from '../../../services/schedule';
@@ -34,15 +34,21 @@ const List = () => {
 	const { id, perfil } = useSelector(userLogged);
 	const [schedules, setSchedules] = useState<Schedule[]>([]);
 	const [showModal, setShowModal] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [hasError, setHasError] = useState(false);
 
 	const [selectedScheduling, setSelectedScheduling] = useState(initialState);
 
 	const getData = async () => {
+		setLoading(false);
 		try {
 			const response = await ScheduleService.getSchedule(id);
 			setSchedules(response.data);
 		} catch {
 			Message('Não foi possivel carregar os agendamentos', 1);
+			setHasError(true);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -74,12 +80,16 @@ const List = () => {
 		<>
 			<SchedulingDetailsModal showModal={showModal} handleClose={() => setShowModal(false)} scheduling={selectedScheduling as Schedule} />
 			<Container>
-				<Calendar
-					schedules={schedules}
-					onClickEvent={id => {
-						getScheduling(id);
-					}}
-				/>
+				{!loading && (
+					<Calendar
+						schedules={schedules}
+						onClickEvent={id => {
+							getScheduling(id);
+						}}
+					/>
+				)}
+				{loading && <Spinner />}
+				{hasError && <Error />}
 			</Container>
 		</>
 	);

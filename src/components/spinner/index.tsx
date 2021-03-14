@@ -1,6 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-
+import { SpinnerContainer, StyledSpinner } from './styles';
 /*
 https://codesandbox.io/s/m3v440z36j?file=/src/index.js
 */
@@ -8,46 +7,6 @@ https://codesandbox.io/s/m3v440z36j?file=/src/index.js
 interface Props {
 	color?: string;
 }
-
-const StyledSpinner = styled.svg<Props>`
-	animation: rotate 1s linear infinite;
-
-	width: 50px;
-	height: 50px;
-
-	& .path {
-		stroke: ${props => (props.color ? props.color : '#ffffff')};
-		stroke-linecap: round;
-		animation: dash 1.5s ease-in-out infinite;
-	}
-
-	@keyframes rotate {
-		100% {
-			transform: rotate(360deg);
-		}
-	}
-	@keyframes dash {
-		0% {
-			stroke-dasharray: 1, 150;
-			stroke-dashoffset: 0;
-		}
-		50% {
-			stroke-dasharray: 90, 150;
-			stroke-dashoffset: -35;
-		}
-		100% {
-			stroke-dasharray: 90, 150;
-			stroke-dashoffset: -124;
-		}
-	}
-`;
-
-const SpinnerContainer = styled.main`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100%;
-`;
 
 const Spinner: React.FC<Props> = ({ color }) => (
 	<SpinnerContainer>

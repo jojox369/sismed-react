@@ -18,6 +18,7 @@ const EmployeeDetails: React.FC<Props> = ({ employee, medics, changeEmployee }) 
 			<DetailsArea>
 				<Select
 					fieldActive={false}
+					name='employeeId'
 					label='Médico'
 					options={medics}
 					defaultValue={employee.id}

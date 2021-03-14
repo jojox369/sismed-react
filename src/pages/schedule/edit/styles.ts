@@ -3,7 +3,7 @@ import { Form } from '@unform/web';
 
 export const Container = styled.main`
 	display: flex;
-	justify-content: center;
+	justify-content: flex-start;
 	align-items: center;
 	flex-direction: column;
 `;
@@ -28,14 +28,20 @@ export const Content = styled.section`
 	justify-content: center;
 	align-items: center;
 	> * {
-		height: 31.25rem;
 		padding: 0 2rem;
 	}
 `;
 
-export const PatientArea = styled.section``;
+export const PatientArea = styled.section`
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	height: 100%;
+`;
 export const EmployeeArea = styled.section``;
-export const SchedulingArea = styled.section``;
+export const SchedulingArea = styled.section`
+	height: 100%;
+`;
 
 export const CustomForm = styled(Form)`
 	display: flex;

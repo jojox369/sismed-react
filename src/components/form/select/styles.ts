@@ -6,13 +6,14 @@ interface Props {
 	required?: boolean;
 }
 
-export const Container = styled.div<Props>`
+export const Container = styled.section<Props>`
 	width: 100%;
 	height: 3.5rem;
 	border-radius: 0.25rem;
 	background-color: #fff;
 	transition: box-shadow 0.2s;
-	margin-top: 1.875rem;
+	margin-top: 1.25rem;
+
 	position: relative;
 	:hover {
 		/* background-color: rgba(255, 255, 255, 0.45); */

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Container, Select, Option, Label } from './styles';
 import { StringFormatter } from '../../../assets/functions';
+import { useField } from '@unform/core';
 
 export interface SelectOptions {
 	id: number;
@@ -10,21 +11,29 @@ export interface SelectOptions {
 interface Props extends React.SelectHTMLAttributes<HTMLSelectElement> {
 	options: SelectOptions[];
 	defaultLabel?: string;
-	register?: any;
-	error?: string;
 	label: string;
 	fieldActive: boolean;
 }
 
-const SelectComponent: React.FC<Props> = ({ options, defaultLabel, fieldActive, register, error, label, ...props }) => {
+const SelectComponent: React.FC<Props> = ({ options, defaultLabel, fieldActive, label, ...props }) => {
 	const [focused, setFocused] = useState(false);
+	const { fieldName, registerField, defaultValue, error } = useField(props.name as string);
+	const inputRef = useRef<HTMLSelectElement>(null);
+
+	useEffect(() => {
+		registerField({
+			name: fieldName,
+			ref: inputRef.current,
+			path: 'value',
+		});
+	}, [fieldName, registerField]);
 	const isFocused = focused || fieldActive;
 	return (
 		<Container error={error} focused={isFocused} required={props.required}>
 			<Label>{label}</Label>
 			<Select
-				defaultValue={props.defaultValue ? props.defaultValue : undefined}
-				ref={register}
+				defaultValue={defaultValue ? defaultValue : undefined}
+				ref={inputRef}
 				onFocus={() => setFocused(true)}
 				onBlur={() => setFocused(false)}
 				{...props}
