@@ -3,10 +3,12 @@ import { BiCalendarEdit } from 'react-icons/bi';
 import { HealthInsuranceType } from '../../../@types/health-insurance-type';
 import { Procedure } from '../../../@types/procedure';
 import { ScheduleDetails } from '../../../@types/schedule';
+import { BrDateFormatter, TimeFormatter, StringFormatter, VerifyScheduleFields } from '../../../assets/functions';
 import { Button } from '../../../assets/styles/global';
 import Input from '../../form/input';
 import Select from '../../form/select';
 import TextAreaComponent from '../../form/TextArea';
+import InformationCard from '../../information-card';
 import Modal from '../../modal';
 
 import { Container, DetailsArea, ModalContainer } from './styles';
@@ -59,6 +61,14 @@ const SchedulingDetails: React.FC<Props> = ({
 		onSelectChange(healthInsurance[0].id, healthInsurance[0].name);
 	};
 
+	const generateHealthInsuranceName = () => {
+		if (scheduling.healthInsuranceType.id === 1) {
+			return StringFormatter(scheduling.healthInsuranceType.name);
+		} else {
+			return StringFormatter(`${scheduling.healthInsuranceType.healthInsurance.name} - ${scheduling.healthInsuranceType.name}`);
+		}
+	};
+
 	return (
 		<Container>
 			<Modal handleClose={() => setShowModal(false)} isOpen={showModal}>
@@ -74,41 +84,54 @@ const SchedulingDetails: React.FC<Props> = ({
 			</Modal>
 			<BiCalendarEdit size='80' />
 			<DetailsArea>
-				<Input label='Data' type='date' name='date' fieldActive={true} defaultValue={scheduling.date} />
-				<Input label='Hora' type='time' name='time' fieldActive={true} defaultValue={scheduling.time} />
-				<Select
-					label='Convênio'
-					name='healthInsurance'
-					defaultLabel='Selecione o convênio'
-					options={healthInsurances}
-					fieldActive={false}
-					defaultValue={scheduling.healthInsuranceType.healthInsurance.id}
-					onChange={healthInsuranceChange}
-				/>
-				<Select
-					label='Plano'
-					name='healthInsuranceType'
-					defaultLabel='Selecione o plano'
-					options={getHealthInsurancesTypes()}
-					fieldActive={false}
-					defaultValue={scheduling.healthInsuranceType.id}
-					onChange={healthInsuranceTypeChange}
-				/>
+				{scheduling.finished === 0 ? (
+					<>
+						<Input label='Data' type='date' name='date' fieldActive={true} defaultValue={scheduling.date} />
+						<Input label='Hora' type='time' name='time' fieldActive={true} defaultValue={scheduling.time} />
+						<Select
+							label='Convênio'
+							name='healthInsurance'
+							defaultLabel='Selecione o convênio'
+							options={healthInsurances}
+							fieldActive={false}
+							defaultValue={scheduling.healthInsuranceType.healthInsurance.id}
+							onChange={healthInsuranceChange}
+						/>
+						<Select
+							label='Plano'
+							name='healthInsuranceType'
+							defaultLabel='Selecione o plano'
+							options={getHealthInsurancesTypes()}
+							fieldActive={false}
+							defaultValue={scheduling.healthInsuranceType.id}
+							onChange={healthInsuranceTypeChange}
+						/>
 
-				<Select
-					label='Procedimento'
-					name='procedureId'
-					defaultLabel='Selecione o procedimento'
-					options={procedures}
-					fieldActive={false}
-					defaultValue={scheduling.procedure.id}
-					onChange={healthInsuranceTypeChange}
-				/>
-				<Select label='Pagou' name='paid' options={options} fieldActive={false} defaultValue={scheduling.paid} />
-				<Select label='Compareceu' name='attended' options={options} fieldActive={false} defaultValue={scheduling.attended} />
-				<Button type='button' style={{ marginTop: '1.25rem' }} onClick={() => setShowModal(true)}>
-					Adicionar Observações
-				</Button>
+						<Select
+							label='Procedimento'
+							name='procedureId'
+							defaultLabel='Selecione o procedimento'
+							options={procedures}
+							fieldActive={false}
+							defaultValue={scheduling.procedure.id}
+							onChange={healthInsuranceTypeChange}
+						/>
+						<Select label='Pagou' name='paid' options={options} fieldActive={false} defaultValue={scheduling.paid} />
+						<Select label='Compareceu' name='attended' options={options} fieldActive={false} defaultValue={scheduling.attended} />
+						<Button type='button' style={{ marginTop: '1.25rem' }} onClick={() => setShowModal(true)}>
+							Adicionar Observações
+						</Button>
+					</>
+				) : (
+					<>
+						<InformationCard id='date' title='Data' content={BrDateFormatter(scheduling.date)} />
+						<InformationCard id='time' title='Hora' content={TimeFormatter(scheduling.time)} />
+						<InformationCard id='healthInsurance' title='Convênio' content={generateHealthInsuranceName()} />
+						<InformationCard id='procedure' title='Procedimento' content={StringFormatter(scheduling.procedure.name)} />
+						<InformationCard id='attended' title='Compareceu' content={VerifyScheduleFields(scheduling.attended)} />
+						<InformationCard id='paid' title='Pagou' content={VerifyScheduleFields(scheduling.paid)} />
+					</>
+				)}
 			</DetailsArea>
 		</Container>
 	);

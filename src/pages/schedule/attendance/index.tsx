@@ -76,7 +76,6 @@ const Attendance = () => {
 		try {
 			await ScheduleService.update(data);
 			history.push('/schedule');
-			setLoading(false);
 		} catch {
 			Message('Erro ao tentar finalizar o atendimento', 1);
 			setLoading(false);

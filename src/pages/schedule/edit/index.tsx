@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { RouteParams } from '../../../@types/router';
 import { ScheduleDetails } from '../../../@types/schedule';
 import { Message } from '../../../assets/functions';
-import { EmployeeDetails, Error, PatientDetails, SchedulingDetails } from '../../../components';
+import { ConfirmModal, EmployeeDetails, Error, PatientDetails, SchedulingDetails } from '../../../components';
 import Spinner from '../../../components/spinner';
 import ScheduleService from '../../../services/schedule';
 import EmployeeService from '../../../services/employee';
@@ -28,6 +28,7 @@ interface EditForm {
 }
 
 const Edit = () => {
+	const history = useHistory();
 	const { id } = useParams<RouteParams>();
 	const [loading, setLoading] = useState(false);
 	const [hasError, setHasError] = useState(false);
@@ -35,6 +36,7 @@ const Edit = () => {
 	const [medics, setMedics] = useState<Employee[]>([]);
 	const [healthInsuranceTypes, setHealthInsuranceTypes] = useState<HealthInsuranceType[]>([]);
 	const [procedures, setProcedures] = useState<Procedure[]>([]);
+	const [confirmModal, setConfirmModal] = useState(false);
 	const formRef = useRef<FormHandles>(null);
 
 	const getData = async () => {
@@ -102,7 +104,7 @@ const Edit = () => {
 		setScheduling({ ...scheduling, notes });
 	};
 
-	const onSubmit: SubmitHandler<EditForm> = async (dataForm, { reset }) => {
+	const onSubmit: SubmitHandler<EditForm> = async dataForm => {
 		setLoading(true);
 		try {
 			const schema = Yup.object().shape({
@@ -151,6 +153,52 @@ const Edit = () => {
 		}
 	};
 
+	const reschedule = async () => {
+		setLoading(true);
+		const date = formRef.current?.getFieldValue('date');
+		const time = formRef.current?.getFieldValue('time');
+		const employeeId = +formRef.current?.getFieldValue('employeeId');
+		const healthInsuranceTypeId = +formRef.current?.getFieldValue('healthInsuranceType');
+		const procedureId = +formRef.current?.getFieldValue('procedureId');
+		const patientId = scheduling.patient.id;
+		const notes = scheduling.notes;
+
+		const schedulingData = {
+			id: scheduling.id,
+			date,
+			time,
+			employeeId,
+			healthInsuranceTypeId,
+			procedureId,
+			patientId,
+			notes,
+		};
+
+		try {
+			await ScheduleService.reschedule(schedulingData);
+			Message('Reagendamento realizado com sucesso', 0);
+		} catch (err) {
+			if (err.response.status === 409) {
+				Message('Médico já possui agendamento para dia e hora informados', 1);
+			}
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const deleteScheduling = async () => {
+		setLoading(true);
+		setConfirmModal(false);
+		try {
+			await ScheduleService.delete(scheduling.id);
+			history.push('/schedule');
+			Message('Agendamento excluído com sucesso', 0);
+		} catch {
+			Message('Erro ao tentar excluir o agendamento', 1);
+			setLoading(false);
+		}
+	};
+
 	useEffect(() => {
 		getData();
 	}, []);
@@ -160,18 +208,36 @@ const Edit = () => {
 			{!loading && scheduling.id && (
 				<>
 					<Container>
+						<ConfirmModal
+							handleClose={() => setConfirmModal(false)}
+							isOpen={confirmModal}
+							confirmButtonTitle='Excluir'
+							onClickConfirmButton={deleteScheduling}
+						>
+							Tem certeza que deseja excluir o agendamento?
+						</ConfirmModal>
 						<ButtonsArea>
-							<ConfirmButton form='form'>Atualizar</ConfirmButton>
-							<DangerButton>Excluir</DangerButton>
-							<Button>Remarcar</Button>
+							{scheduling.finished === 0 && (
+								<>
+									<ConfirmButton form='form'>Atualizar</ConfirmButton>
+									<DangerButton onClick={() => setConfirmModal(true)}>Excluir</DangerButton>
+									<Button onClick={reschedule}>Remarcar</Button>
+								</>
+							)}
 						</ButtonsArea>
+
 						<Content>
 							<PatientArea>
 								<PatientDetails patient={scheduling.patient} />
 							</PatientArea>
 							<CustomForm onSubmit={onSubmit} id='form' ref={formRef}>
 								<EmployeeArea>
-									<EmployeeDetails employee={scheduling.employee} changeEmployee={changeEmployee} medics={medics} />
+									<EmployeeDetails
+										employee={scheduling.employee}
+										changeEmployee={changeEmployee}
+										medics={medics}
+										edit={scheduling.finished === 0}
+									/>
 								</EmployeeArea>
 
 								<SchedulingArea>

@@ -8,22 +8,27 @@ import Select from '../../form/select';
 interface Props {
 	employee: Employee;
 	medics: Employee[];
+	edit: boolean;
 	changeEmployee: (id: number) => void;
 }
 
-const EmployeeDetails: React.FC<Props> = ({ employee, medics, changeEmployee }) => {
+const EmployeeDetails: React.FC<Props> = ({ employee, medics, changeEmployee, edit }) => {
 	return (
 		<Container>
 			<FaUserMd size='80' />
 			<DetailsArea>
-				<Select
-					fieldActive={false}
-					name='employeeId'
-					label='Médico'
-					options={medics}
-					defaultValue={employee.id}
-					onChange={(e: React.ChangeEvent<HTMLSelectElement>) => changeEmployee(+e.target.value)}
-				/>
+				{edit ? (
+					<Select
+						fieldActive={false}
+						name='employeeId'
+						label='Médico'
+						options={medics}
+						defaultValue={employee.id}
+						onChange={(e: React.ChangeEvent<HTMLSelectElement>) => changeEmployee(+e.target.value)}
+					/>
+				) : (
+					<InformationCard id='doctor' title='Médico' content={employee.name} />
+				)}
 				<InformationCard id={employee.crm as string} title='CRM' content={employee.crm} />
 				<InformationCard id={employee.specialty as string} title='CRM' content={employee.specialty} />
 			</DetailsArea>

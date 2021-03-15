@@ -28,6 +28,7 @@ export interface ScheduleDetails {
 	date: string;
 	time: string;
 	firstTime: number;
+	finished: number;
 	paid: number;
 	attended: number;
 	notes: string;

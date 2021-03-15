@@ -59,8 +59,12 @@ const LoginPage = () => {
 				});
 				formRef.current?.setErrors(validationErrors);
 			}
-			if (err.response) {
-				Message(err.response.data.message, 1);
+			if (err.response.status === 401) {
+				Message('Senha inválida', 1);
+			} else if (err.response.status === 403) {
+				Message('CPF não possui acesso ao sistema', 1);
+			} else {
+				Message('CPF não encontrado', 1);
 			}
 		}
 	};
