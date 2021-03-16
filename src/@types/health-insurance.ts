@@ -1,4 +1,5 @@
 import { BankData } from './bank-data';
+
 export interface HealthInsurance {
 	id: number;
 	name: string;
@@ -6,4 +7,9 @@ export interface HealthInsurance {
 	cnpj?: string;
 	ansRegister?: string;
 	bankData: BankData;
+}
+
+export interface HealthInsuranceSchedule {
+	id: number;
+	name: string;
 }

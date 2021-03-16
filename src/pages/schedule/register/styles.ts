@@ -16,9 +16,6 @@ export const ButtonsArea = styled.header`
 	align-self: flex-end;
 	> * {
 		width: 9.375rem;
-		margin-right: 1rem;
-	}
-	> :last-child {
 		margin-right: 2.5rem;
 	}
 `;

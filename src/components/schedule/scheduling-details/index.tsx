@@ -20,6 +20,7 @@ interface Props {
 	onSelectChange: (id: number, name: string) => void;
 	onHealthInsuranceChange: (id: number, name: string) => void;
 	onNotesChange: (notes: string) => void;
+	newScheduling?: boolean;
 }
 const options = [
 	{
@@ -38,6 +39,7 @@ const SchedulingDetails: React.FC<Props> = ({
 	onHealthInsuranceChange,
 	procedures,
 	onNotesChange,
+	newScheduling,
 }) => {
 	const [showModal, setShowModal] = useState(false);
 	const healthInsurances = healthInsuranceTypes.map(healthInsuranceType => ({
@@ -96,6 +98,7 @@ const SchedulingDetails: React.FC<Props> = ({
 							fieldActive={false}
 							defaultValue={scheduling.healthInsuranceType.healthInsurance.id}
 							onChange={healthInsuranceChange}
+							disabled={scheduling.employee.id === 0}
 						/>
 						<Select
 							label='Plano'
@@ -105,6 +108,7 @@ const SchedulingDetails: React.FC<Props> = ({
 							fieldActive={false}
 							defaultValue={scheduling.healthInsuranceType.id}
 							onChange={healthInsuranceTypeChange}
+							disabled={scheduling.healthInsuranceType.healthInsurance.id === 0}
 						/>
 
 						<Select
@@ -115,12 +119,17 @@ const SchedulingDetails: React.FC<Props> = ({
 							fieldActive={false}
 							defaultValue={scheduling.procedure.id}
 							onChange={healthInsuranceTypeChange}
+							disabled={scheduling.healthInsuranceType.healthInsurance.id === 0}
 						/>
-						<Select label='Pagou' name='paid' options={options} fieldActive={false} defaultValue={scheduling.paid} />
-						<Select label='Compareceu' name='attended' options={options} fieldActive={false} defaultValue={scheduling.attended} />
-						<Button type='button' style={{ marginTop: '1.25rem' }} onClick={() => setShowModal(true)}>
-							Adicionar Observações
-						</Button>
+						{!newScheduling && (
+							<>
+								<Select label='Pagou' name='paid' options={options} fieldActive={false} defaultValue={scheduling.paid} />
+								<Select label='Compareceu' name='attended' options={options} fieldActive={false} defaultValue={scheduling.attended} />
+								<Button type='button' style={{ marginTop: '1.25rem' }} onClick={() => setShowModal(true)}>
+									Adicionar Observações
+								</Button>
+							</>
+						)}
 					</>
 				) : (
 					<>

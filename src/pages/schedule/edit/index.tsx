@@ -8,7 +8,7 @@ import Spinner from '../../../components/spinner';
 import ScheduleService from '../../../services/schedule';
 import EmployeeService from '../../../services/employee';
 import ProcedureService from '../../../services/procedure';
-import { Container, EmployeeArea, PatientArea, SchedulingArea, ButtonsArea, Content, CustomForm } from './styles';
+import { Container, EmployeeArea, PatientArea, SchedulingArea, ButtonsArea, Content, Form } from './styles';
 import { Employee } from '../../../@types/employee';
 import { HealthInsuranceType } from '../../../@types/health-insurance-type';
 import { Button, DangerButton, ConfirmButton } from '../../../assets/styles/global';
@@ -230,7 +230,7 @@ const Edit = () => {
 							<PatientArea>
 								<PatientDetails patient={scheduling.patient} />
 							</PatientArea>
-							<CustomForm onSubmit={onSubmit} id='form' ref={formRef}>
+							<Form onSubmit={onSubmit} id='form' ref={formRef}>
 								<EmployeeArea>
 									<EmployeeDetails
 										employee={scheduling.employee}
@@ -250,7 +250,7 @@ const Edit = () => {
 										onNotesChange={onNotesChange}
 									/>
 								</SchedulingArea>
-							</CustomForm>
+							</Form>
 						</Content>
 					</Container>
 				</>

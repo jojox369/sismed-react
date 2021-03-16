@@ -1,5 +1,6 @@
 import { Address } from './address';
 import { Profile } from './profile';
+
 export interface Employee {
 	id: number;
 	name: string;
@@ -17,9 +18,16 @@ export interface Employee {
 	beginDate: string;
 	dismissalDate?: string;
 	crm?: string;
-	specialty: string;
+	specialty?: string;
 	recoveryCode?: string;
 	password: string;
 	address: Address;
 	profile: Profile;
+}
+
+export interface EmployeeSchedule {
+	id: number;
+	name: string;
+	crm?: string;
+	specialty?: string;
 }

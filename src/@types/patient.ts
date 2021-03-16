@@ -1,5 +1,6 @@
 import { Address } from './address';
 import { HealthInsuranceType } from './health-insurance-type';
+
 export interface Patient {
 	id: number;
 	name: string;
@@ -25,4 +26,11 @@ export interface Patient {
 	address?: Address;
 	healthInsuranceType: HealthInsuranceType;
 	age?: string;
+}
+
+export interface PatientSchedule {
+	id: number;
+	name: string;
+	cpf?: string;
+	dateBirth?: string;
 }

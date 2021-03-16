@@ -15,10 +15,12 @@ export const Container = styled.section<Props>`
 	margin-top: 1.25rem;
 
 	position: relative;
-	:hover {
-		/* background-color: rgba(255, 255, 255, 0.45); */
-		box-shadow: 0 0.25rem 1.25rem 0 #0287ce;
+
+	&:hover {
+		background-color: rgba(255, 255, 255, 0.45);
+		box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);
 	}
+
 	${props =>
 		props.focused &&
 		`

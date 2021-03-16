@@ -20,20 +20,7 @@ const Attendance = () => {
 	const { id } = useParams<RouteParams>();
 	const formRef = useRef<FormHandles>(null);
 	const history = useHistory();
-	const [scheduling, setScheduling] = useState({
-		id: 0,
-		firstTime: 0,
-		employee: {
-			id: 0,
-		},
-		notes: '',
-		patient: {
-			id: 0,
-			name: '',
-			age: '',
-			cellPhone: '',
-		},
-	} as ScheduleDetails);
+	const [scheduling, setScheduling] = useState({} as ScheduleDetails);
 	const [loading, setLoading] = useState(false);
 	const [hasError, setHasError] = useState(false);
 	const [previousRegisters, setPreviousRegisters] = useState<PreviousRegisters[]>([]);
@@ -127,7 +114,7 @@ const Attendance = () => {
 
 	return (
 		<>
-			{!loading && (
+			{!loading && scheduling.id && (
 				<>
 					<Container>
 						<ConfirmModal

@@ -4,14 +4,16 @@ import ReactNotification from 'react-notifications-component';
 
 import Routes from './routes/';
 import 'react-notifications-component/dist/theme.css';
-import './App.css';
-
+import { GlobalStyles, Main } from './assets/styles/global';
 const App = (): JSX.Element => {
 	return (
-		<div className='App'>
-			<ReactNotification />
-			<Routes />
-		</div>
+		<>
+			<GlobalStyles />
+			<Main>
+				<ReactNotification />
+				<Routes />
+			</Main>
+		</>
 	);
 };
 

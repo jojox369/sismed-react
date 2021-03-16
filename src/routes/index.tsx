@@ -1,5 +1,3 @@
-import '../App.css';
-
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Switch } from 'react-router-dom';

@@ -1,4 +1,29 @@
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
+
+export const GlobalStyles = createGlobalStyle`
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*,*:focus,*:hover{
+  outline:none;
+}
+
+body {
+  background-color: #e1e1e1;
+}
+
+body, input, button, textarea{
+  font: 600 18px Nunito, sans-serif;
+}
+`;
+
+export const Main = styled.main`
+	width: 100vw;
+	height: 100vh;
+`;
 
 export const Button = styled.button`
 	background: #1161ee;

@@ -1,7 +1,8 @@
-import { Patient } from './patient';
-import { Employee } from './employee';
-import { HealthInsuranceType } from './health-insurance-type';
-import { Procedure } from './procedure';
+import { PatientSchedule } from './patient';
+import { EmployeeSchedule } from './employee';
+import { HealthInsuranceTypeSchedule } from './health-insurance-type';
+import { ProcedureSchedule } from './procedure';
+
 export interface Schedule {
 	id: number;
 	date: string;
@@ -32,10 +33,10 @@ export interface ScheduleDetails {
 	paid: number;
 	attended: number;
 	notes: string;
-	employee: Employee;
-	patient: Patient;
-	healthInsuranceType: HealthInsuranceType;
-	procedure: Procedure;
+	employee: EmployeeSchedule;
+	patient: PatientSchedule;
+	healthInsuranceType: HealthInsuranceTypeSchedule;
+	procedure: ProcedureSchedule;
 }
 
 export interface UpdateSchedule {
@@ -52,4 +53,13 @@ export interface UpdateSchedule {
 	patientId?: number;
 	healthInsuranceTypeId?: number;
 	procedureId?: number;
+}
+
+export interface NewScheduling {
+	date: string;
+	time: string;
+	employeeId: number;
+	healthInsuranceTypeId: number;
+	procedureId: number;
+	patient: PatientSchedule;
 }

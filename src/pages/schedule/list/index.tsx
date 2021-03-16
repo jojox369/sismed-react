@@ -7,7 +7,7 @@ import { userLogged } from '../../../redux/User/User.selects';
 
 import ScheduleService from '../../../services/schedule';
 
-import { Container } from './styles';
+import { Container, ColorsInfo, FinishedColor, ListColors, NotAttendColor, RescheduledColor, ColorDescription } from './styles';
 
 const initialState = {
 	id: 0,
@@ -81,12 +81,27 @@ const List = () => {
 			<SchedulingDetailsModal showModal={showModal} handleClose={() => setShowModal(false)} scheduling={selectedScheduling as Schedule} />
 			<Container>
 				{!loading && (
-					<Calendar
-						schedules={schedules}
-						onClickEvent={id => {
-							getScheduling(id);
-						}}
-					/>
+					<>
+						<Calendar
+							schedules={schedules}
+							onClickEvent={id => {
+								getScheduling(id);
+							}}
+						/>
+						<ColorsInfo>
+							<ListColors>
+								<FinishedColor>
+									<ColorDescription>Finalizado</ColorDescription>
+								</FinishedColor>
+								<NotAttendColor>
+									<ColorDescription>Paciente não compareceu </ColorDescription>
+								</NotAttendColor>
+								<RescheduledColor>
+									<ColorDescription>Remarcado</ColorDescription>
+								</RescheduledColor>
+							</ListColors>
+						</ColorsInfo>
+					</>
 				)}
 				{loading && <Spinner />}
 				{hasError && <Error />}

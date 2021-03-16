@@ -1,21 +1,33 @@
 import React from 'react';
 import { Container, DetailsArea } from './styles';
-import { Patient } from '../../../@types/patient';
 import { FaUserInjured } from 'react-icons/fa';
 import InformationCard from '../../information-card';
 
-interface Props {
-	patient: Patient;
+interface Patient {
+	id: number;
+	name: string;
+	age?: string;
 }
 
-const PatientDetails: React.FC<Props> = ({ patient }) => {
+interface Props {
+	patient: Patient;
+	edit?: boolean;
+}
+
+const PatientDetails: React.FC<Props> = ({ patient, edit }) => {
 	return (
 		<Container>
 			<FaUserInjured size='80' />
 			<DetailsArea>
-				<InformationCard id='prontuario' title='Prontuário' content={patient.id} />
-				<InformationCard id='name' title='Nome' content={patient.name} />
-				<InformationCard id='age' title='Idade' content={patient.age} />
+				{!edit ? (
+					<>
+						<InformationCard id='prontuario' title='Prontuário' content={patient.id} />
+						<InformationCard id='name' title='Nome' content={patient.name} />
+						<InformationCard id='age' title='Idade' content={patient.age} />
+					</>
+				) : (
+					<>Editing Patient</>
+				)}
 			</DetailsArea>
 		</Container>
 	);

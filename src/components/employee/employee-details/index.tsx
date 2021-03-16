@@ -2,8 +2,14 @@ import React from 'react';
 import { Container, DetailsArea } from './styles';
 import { FaUserMd } from 'react-icons/fa';
 import InformationCard from '../../information-card';
-import { Employee } from '../../../@types/employee';
 import Select from '../../form/select';
+
+interface Employee {
+	id: number;
+	name: string;
+	crm?: string;
+	specialty?: string;
+}
 
 interface Props {
 	employee: Employee;
@@ -24,13 +30,18 @@ const EmployeeDetails: React.FC<Props> = ({ employee, medics, changeEmployee, ed
 						label='Médico'
 						options={medics}
 						defaultValue={employee.id}
+						defaultLabel='Selecione um médico'
 						onChange={(e: React.ChangeEvent<HTMLSelectElement>) => changeEmployee(+e.target.value)}
 					/>
 				) : (
 					<InformationCard id='doctor' title='Médico' content={employee.name} />
 				)}
-				<InformationCard id={employee.crm as string} title='CRM' content={employee.crm} />
-				<InformationCard id={employee.specialty as string} title='CRM' content={employee.specialty} />
+				{employee.id !== 0 && (
+					<>
+						<InformationCard id={employee.crm as string} title='CRM' content={employee.crm} />
+						<InformationCard id={employee.specialty as string} title='CRM' content={employee.specialty} />
+					</>
+				)}
 			</DetailsArea>
 		</Container>
 	);
