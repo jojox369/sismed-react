@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Schedule } from '../../../@types/schedule';
 import { Message } from '../../../assets/functions';
-import { Calendar, SchedulingDetailsModal, Spinner, Error } from '../../../components';
+import { Calendar, Error, SchedulingDetailsModal, Select, Spinner } from '../../../components';
 import { userLogged } from '../../../redux/User/User.selects';
-
 import ScheduleService from '../../../services/schedule';
-
-import { Container, ColorsInfo, FinishedColor, ListColors, NotAttendColor, RescheduledColor, ColorDescription } from './styles';
+import EmployeeService from '../../../services/employee';
+import { ColorDescription, ColorsInfo, Container, FinishedColor, ListColors, NotAttendColor, RescheduledColor, Form } from './styles';
 
 const initialState = {
 	id: 0,
@@ -31,11 +30,12 @@ const initialState = {
 };
 
 const List = () => {
-	const { id, perfil } = useSelector(userLogged);
+	const { id, profile } = useSelector(userLogged);
 	const [schedules, setSchedules] = useState<Schedule[]>([]);
 	const [showModal, setShowModal] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [hasError, setHasError] = useState(false);
+	const [medics, SetMedics] = useState([]);
 
 	const [selectedScheduling, setSelectedScheduling] = useState(initialState);
 
@@ -60,9 +60,30 @@ const List = () => {
 		}
 	};
 
+	const getMedics = async () => {
+		try {
+			const { data } = await EmployeeService.getMedics();
+			SetMedics(data);
+		} catch {
+			Message('Erro ao tentar listar os médicos disponíveis', 1);
+		}
+	};
+
+	const onChange = async (id: number) => {
+		try {
+			const response = await ScheduleService.getSchedule(id);
+			setSchedules(response.data);
+		} catch {
+			Message('Não foi possivel carregar os agendamentos', 1);
+			setHasError(true);
+		}
+	};
+
 	useEffect(() => {
-		if (perfil !== 3) {
+		if (profile !== 3) {
 			getData();
+		} else {
+			getMedics();
 		}
 	}, []);
 
@@ -82,6 +103,18 @@ const List = () => {
 			<Container>
 				{!loading && (
 					<>
+						{profile === 3 && (
+							<Form onSubmit={() => null}>
+								<Select
+									fieldActive={false}
+									label='Selecione um médico'
+									options={medics}
+									name='selectDoctor'
+									onChange={e => onChange(+e.target.value)}
+								/>
+							</Form>
+						)}
+
 						<Calendar
 							schedules={schedules}
 							onClickEvent={id => {

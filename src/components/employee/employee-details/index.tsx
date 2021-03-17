@@ -3,17 +3,11 @@ import { Container, DetailsArea } from './styles';
 import { FaUserMd } from 'react-icons/fa';
 import InformationCard from '../../information-card';
 import Select from '../../form/select';
-
-interface Employee {
-	id: number;
-	name: string;
-	crm?: string;
-	specialty?: string;
-}
+import { Medic } from '../../../@types/employee';
 
 interface Props {
-	employee: Employee;
-	medics: Employee[];
+	employee: Medic;
+	medics: Medic[];
 	edit: boolean;
 	changeEmployee: (id: number) => void;
 }

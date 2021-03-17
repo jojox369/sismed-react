@@ -13,7 +13,7 @@ export default function reducer(state = initialState, action: AnyAction) {
 			return {
 				...state,
 				id: action.payload.id,
-				perfil: action.payload.perfil,
+				profile: action.payload.profile,
 				name: action.payload.name,
 				token: action.payload.token,
 			};

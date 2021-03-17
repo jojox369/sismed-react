@@ -25,7 +25,7 @@ export interface Employee {
 	profile: Profile;
 }
 
-export interface EmployeeSchedule {
+export interface Medic {
 	id: number;
 	name: string;
 	crm?: string;

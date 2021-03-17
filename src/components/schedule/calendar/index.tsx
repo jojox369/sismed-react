@@ -116,7 +116,7 @@ const Calendar: React.FC<Props> = ({ schedules, onClickEvent }) => {
 				plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
 				customButtons={customButtons}
 				initialView='timeGridDay'
-				contentHeight={700}
+				contentHeight={600}
 				locale='pt'
 				headerToolbar={headerToolbar}
 				editable={true}

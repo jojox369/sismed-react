@@ -1,5 +1,5 @@
 import { PatientSchedule } from './patient';
-import { EmployeeSchedule } from './employee';
+import { Medic } from './employee';
 import { HealthInsuranceTypeSchedule } from './health-insurance-type';
 import { ProcedureSchedule } from './procedure';
 
@@ -33,7 +33,7 @@ export interface ScheduleDetails {
 	paid: number;
 	attended: number;
 	notes: string;
-	employee: EmployeeSchedule;
+	employee: Medic;
 	patient: PatientSchedule;
 	healthInsuranceType: HealthInsuranceTypeSchedule;
 	procedure: ProcedureSchedule;

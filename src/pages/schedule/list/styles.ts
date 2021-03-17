@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Form as UnForm } from '@unform/web';
 
 export const Container = styled.section`
 	display: flex;
@@ -45,4 +46,11 @@ export const RescheduledColor = styled.li`
 
 export const ColorDescription = styled.span`
 	font-size: 1.3rem;
+`;
+
+export const Form = styled(UnForm)`
+	display: flex;
+	width: 21.875rem;
+	margin: 0.625rem 0;
+	z-index: 1;
 `;

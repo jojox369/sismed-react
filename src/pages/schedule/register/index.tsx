@@ -1,6 +1,6 @@
 import { FormHandles, SubmitHandler } from '@unform/core';
 import React, { useEffect, useRef, useState } from 'react';
-import { Employee } from '../../../@types/employee';
+import { Medic } from '../../../@types/employee';
 import { HealthInsuranceType } from '../../../@types/health-insurance-type';
 import { Procedure } from '../../../@types/procedure';
 import { ScheduleDetails } from '../../../@types/schedule';
@@ -41,7 +41,7 @@ const Register = () => {
 	const [loading, setLoading] = useState(false);
 	const [hasError, setHasError] = useState(false);
 	const [scheduling, setScheduling] = useState<ScheduleDetails>(initialState);
-	const [medics, setMedics] = useState<Employee[]>([]);
+	const [medics, setMedics] = useState<Medic[]>([]);
 	const [healthInsuranceTypes, setHealthInsuranceTypes] = useState<HealthInsuranceType[]>([]);
 	const [procedures, setProcedures] = useState<Procedure[]>([]);
 	const formRef = useRef<FormHandles>(null);

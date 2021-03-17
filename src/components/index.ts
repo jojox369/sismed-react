@@ -15,6 +15,7 @@ export { default as PreviousRegisters } from './clinical-register/previous-regis
 /* Form Components */
 export { default as Input } from './form/input';
 export { default as TextArea } from './form/TextArea';
+export { default as Select } from './form/select';
 
 /*Others Components */
 export { default as Card } from './card';
