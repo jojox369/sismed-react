@@ -54,10 +54,6 @@ export const VerifyScheduleFields = (field: number | undefined) => {
 	return field === 1 ? 'Sim' : 'Não';
 };
 
-export const TimeFormatter = (time: string) => {
-	return time.replace(/\D/g, '').replace(/(\d{2})(\d{2})(\d{2})/g, '$1:$2');
-};
-
 export const CutString = (note: string | null, length: number): string | null => {
 	let noteFormatted = note;
 	if (note) {
@@ -70,4 +66,26 @@ export const CutString = (note: string | null, length: number): string | null =>
 
 export const StringFormatter = (string: string) => {
 	return string.toLowerCase().replace(/(?:^|\s)(?!da|de|do)\S/g, l => l.toUpperCase());
+};
+
+export const CpfFormatter = (cpf: string): string => {
+	return cpf ? cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, '$1.$2.$3-$4') : 'Não Cadastrado';
+};
+
+export const RgFormatter = (rg: string): string => {
+	return rg ? rg.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/g, '$1.$2.$3-$4') : 'Não Cadastrado';
+};
+
+export const PhoneFormatter = (phone: string): string => {
+	let phoneFormatted;
+	if (phone.length > 10) {
+		phoneFormatted = phone.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/g, '($1) $2 $3-$4');
+	} else {
+		phoneFormatted = phone.replace(/(\d{2})(\d{4})(\d{4})/g, '($1) $2-$3');
+	}
+	return phoneFormatted;
+};
+
+export const TimeFormatter = (time: string) => {
+	return time.replace(/\D/g, '').replace(/(\d{2})(\d{2})(\d{2})/g, '$1:$2');
 };

@@ -2,7 +2,7 @@ import { AnyAction } from 'redux';
 
 const initialState = {
 	id: undefined,
-	perfil: undefined,
+	profile: undefined,
 	name: undefined,
 	token: undefined,
 };

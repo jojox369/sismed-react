@@ -7,7 +7,7 @@ export const Container = styled.section`
 	position: relative;
 	background: #fff;
 	margin-top: 1.25rem;
-	transition: box-shadow 0.2s;
+	transition: 0.3s box-shadow ease-in-out;
 	:hover {
 		/* background-color: rgba(255, 255, 255, 0.45); */
 		box-shadow: 0 0.25rem 1.25rem 0 #0287ce;

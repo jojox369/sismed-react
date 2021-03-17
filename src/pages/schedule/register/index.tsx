@@ -101,7 +101,7 @@ const Register = () => {
 	};
 
 	const onSubmit: SubmitHandler<SaveForm> = async dataForm => {
-		console.log('save');
+		console.log(dataForm);
 	};
 
 	useEffect(() => {
@@ -111,7 +111,7 @@ const Register = () => {
 	return (
 		<Container>
 			<ButtonsArea>
-				<Button>Agendar</Button>
+				<Button form='form'>Agendar</Button>
 			</ButtonsArea>
 			<Content>
 				<Form onSubmit={onSubmit} id='form' ref={formRef}>

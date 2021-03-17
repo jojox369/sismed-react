@@ -15,8 +15,9 @@ export const InputContainer = styled.div<DivProps>`
 	transition: 0.3s background-color ease-in-out, 0.3s box-shadow ease-in-out;
 
 	&:hover {
-		background-color: rgba(255, 255, 255, 0.45);
-		box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);
+		/* background-color: rgba(255, 255, 255, 0.45);
+		box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05); */
+		box-shadow: 0px 4px 20px 0px #0287ce;
 	}
 
 	& input {
@@ -70,8 +71,12 @@ export const InputContainer = styled.div<DivProps>`
 		transition: 0.1s all ease-in-out;
 	}
 
-	& input:focus {
+	& input:focus:not(:read-only) {
 		box-shadow: 0px 4px 20px 0px #0287ce;
+	}
+
+	& input:read-only {
+		cursor: default;
 	}
 
 	${props =>
