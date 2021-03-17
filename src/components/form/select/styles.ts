@@ -26,6 +26,16 @@ export const Container = styled.section<Props>`
 		`
 			box-shadow: 0 0.25rem 1.25rem 0 #0287ce;
 	`}
+
+	${props =>
+		props.required &&
+		`
+		& label::after {
+				content:' *';
+  			color: #ec392f;
+			}
+			
+		`}
 `;
 
 export const Select = styled.select`

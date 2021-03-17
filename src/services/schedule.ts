@@ -1,4 +1,4 @@
-import { UpdateSchedule } from '../@types/schedule';
+import { NewScheduling, UpdateSchedule } from '../@types/schedule';
 import api from './api';
 
 const baseURL = '/schedule';
@@ -17,6 +17,11 @@ const Schedule = {
 
 	getById: async (schedulingId: number) => {
 		const response = await api.get(`${baseURL}/${schedulingId}`);
+		return response;
+	},
+
+	save: async (scheduling: NewScheduling) => {
+		const response = await api.post(`${baseURL}/`, scheduling);
 		return response;
 	},
 

@@ -88,8 +88,8 @@ const SchedulingDetails: React.FC<Props> = ({
 			<DetailsArea>
 				{scheduling.finished === 0 ? (
 					<>
-						<Input label='Data' type='date' name='date' fieldActive={true} defaultValue={scheduling.date} />
-						<Input label='Hora' type='time' name='time' fieldActive={true} defaultValue={scheduling.time} />
+						<Input label='Data' type='date' name='date' fieldActive={true} defaultValue={scheduling.date} required />
+						<Input label='Hora' type='time' name='time' fieldActive={true} defaultValue={scheduling.time} required />
 						<Select
 							label='Convênio'
 							name='healthInsurance'
@@ -98,18 +98,22 @@ const SchedulingDetails: React.FC<Props> = ({
 							fieldActive={false}
 							defaultValue={scheduling.healthInsuranceType.healthInsurance.id}
 							onChange={healthInsuranceChange}
-							disabled={scheduling.employee.id === 0}
+							disabled={scheduling.employee.id === 0 || healthInsurances.length === 0}
+							required
 						/>
-						<Select
-							label='Plano'
-							name='healthInsuranceType'
-							defaultLabel='Selecione o plano'
-							options={getHealthInsurancesTypes()}
-							fieldActive={false}
-							defaultValue={scheduling.healthInsuranceType.id}
-							onChange={healthInsuranceTypeChange}
-							disabled={scheduling.healthInsuranceType.healthInsurance.id === 0}
-						/>
+						{scheduling.healthInsuranceType.healthInsurance.id > 1 && (
+							<Select
+								label='Plano'
+								name='healthInsuranceType'
+								defaultLabel='Selecione o plano'
+								options={getHealthInsurancesTypes()}
+								fieldActive={false}
+								defaultValue={scheduling.healthInsuranceType.id}
+								onChange={healthInsuranceTypeChange}
+								disabled={scheduling.healthInsuranceType.healthInsurance.id === 0}
+								required
+							/>
+						)}
 
 						<Select
 							label='Procedimento'
@@ -120,6 +124,7 @@ const SchedulingDetails: React.FC<Props> = ({
 							defaultValue={scheduling.procedure.id}
 							onChange={healthInsuranceTypeChange}
 							disabled={scheduling.healthInsuranceType.healthInsurance.id === 0}
+							required
 						/>
 						{!newScheduling && (
 							<>
