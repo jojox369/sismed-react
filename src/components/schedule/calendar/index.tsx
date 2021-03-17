@@ -8,6 +8,7 @@ import { Schedule } from '../../../@types/schedule';
 
 import '@fullcalendar/daygrid/main.css';
 import '@fullcalendar/timegrid/main.css';
+import { useHistory } from 'react-router-dom';
 
 interface Events {
 	id: string;
@@ -30,7 +31,7 @@ const buttonsText = {
 };
 
 const headerToolbar = {
-	left: 'prev,next today',
+	left: 'prev,next today newScheduling',
 	center: 'title',
 	right: 'dayGridMonth,timeGridWeek,timeGridDay',
 };
@@ -76,7 +77,17 @@ const verifyStatus = (finished: number, rescheduled: number, attended: number) =
 
 const Calendar: React.FC<Props> = ({ schedules, onClickEvent }) => {
 	const [events, setEvents] = useState<Events[]>([]);
+	const history = useHistory();
 	const initialRender = useRef(true);
+
+	const customButtons = {
+		newScheduling: {
+			text: 'Novo Agendamento',
+			click: () => {
+				history.push('/schedule/register');
+			},
+		},
+	};
 
 	const buildEvents = () => {
 		const events = schedules.map(scheduling => {
@@ -103,6 +114,7 @@ const Calendar: React.FC<Props> = ({ schedules, onClickEvent }) => {
 		<Container>
 			<FullCalendar
 				plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+				customButtons={customButtons}
 				initialView='timeGridDay'
 				contentHeight={700}
 				locale='pt'
