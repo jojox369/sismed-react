@@ -89,3 +89,8 @@ export const PhoneFormatter = (phone: string): string => {
 export const TimeFormatter = (time: string) => {
 	return time.replace(/\D/g, '').replace(/(\d{2})(\d{2})(\d{2})/g, '$1:$2');
 };
+
+export const ValidateDate = (date: string) => {
+	const result = new Date(date);
+	console.log(result);
+};

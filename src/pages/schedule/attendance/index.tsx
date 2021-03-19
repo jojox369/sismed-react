@@ -30,9 +30,10 @@ const Attendance = () => {
 	const getData = async () => {
 		setLoading(true);
 		try {
-			const response = await ScheduleService.getById(+id);
-			setScheduling(response.data);
-			getPreviousRegisters(response.data.patient.id, response.data.employeeId);
+			const { data } = await ScheduleService.getById(+id);
+			setScheduling(data);
+
+			getPreviousRegisters(data.patient.id, data.employee.id);
 		} catch {
 			Message('Não foi possível obter as informações desse agendamento', 1);
 			setHasError(true);
@@ -42,8 +43,8 @@ const Attendance = () => {
 
 	const getPreviousRegisters = async (patientId: number, medicId: number) => {
 		try {
-			const response = await ClinicalRegisterService.getByPatient(patientId, medicId);
-			setPreviousRegisters(response.data);
+			const { data } = await ClinicalRegisterService.getByPatient(patientId, medicId);
+			setPreviousRegisters(data);
 		} catch {
 			Message('Não foi possível obter as informações dos registros anteriores do paciente', 1);
 		} finally {

@@ -3,7 +3,7 @@ import React, { InputHTMLAttributes, useCallback, useEffect, useRef, useState } 
 import { useField } from '@unform/core';
 import { InputContainer } from './styles';
 
-import { cellPhone, cpf, currency, zipCode } from './masks';
+import { cellPhone, cpf, currency, zipCode } from '../../../assets/masks';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
 	label: string;

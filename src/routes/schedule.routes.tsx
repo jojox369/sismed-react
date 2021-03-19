@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { Attendance, Schedule, Edit, PreRegister, Register } from '../pages/schedule';
+import { Attendance, Edit, Register, Schedule } from '../pages/schedule';
 
 const ScheduleRoutes = () => {
 	return (
@@ -9,7 +9,6 @@ const ScheduleRoutes = () => {
 			<Route path='/schedule/edit/:id' component={Edit} />
 			<Route path='/schedule/register' component={Register} />
 			<Route path='/schedule/attendance/:id' component={Attendance} />
-			<Route path='/schedule/preregister' component={PreRegister} />
 		</>
 	);
 };

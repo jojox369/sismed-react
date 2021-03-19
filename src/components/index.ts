@@ -22,3 +22,4 @@ export { default as Card } from './card';
 export { default as ConfirmModal } from './confirm-modal';
 export { default as Error } from './error';
 export { default as Spinner } from './spinner';
+export { default as SearchComponent } from './search';
