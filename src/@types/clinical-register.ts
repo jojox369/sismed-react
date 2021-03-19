@@ -11,3 +11,9 @@ export interface PreviousRegisters {
 	time: string;
 	description: string;
 }
+
+export interface ClinicalRegistersList extends PreviousRegisters {
+	employeeId: number;
+	patientId: number;
+	scheduleId: number;
+}

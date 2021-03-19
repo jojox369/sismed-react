@@ -43,7 +43,7 @@ const Attendance = () => {
 
 	const getPreviousRegisters = async (patientId: number, medicId: number) => {
 		try {
-			const { data } = await ClinicalRegisterService.getByPatient(patientId, medicId);
+			const { data } = await ClinicalRegisterService.getByPatientId(patientId, medicId);
 			setPreviousRegisters(data);
 		} catch {
 			Message('Não foi possível obter as informações dos registros anteriores do paciente', 1);

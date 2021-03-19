@@ -54,10 +54,10 @@ export const VerifyScheduleFields = (field: number | undefined) => {
 	return field === 1 ? 'Sim' : 'Não';
 };
 
-export const CutString = (note: string | null, length: number): string | null => {
+export const CutString = (note: string | null, length: number) => {
 	let noteFormatted = note;
 	if (note) {
-		if (note.length > 17) {
+		if (note.length > length) {
 			noteFormatted = `${note.slice(0, length)}...`;
 		}
 	}
@@ -90,7 +90,6 @@ export const TimeFormatter = (time: string) => {
 	return time.replace(/\D/g, '').replace(/(\d{2})(\d{2})(\d{2})/g, '$1:$2');
 };
 
-export const ValidateDate = (date: string) => {
-	const result = new Date(date);
-	console.log(result);
+export const DateTimeFormatter = (date: string, time: string) => {
+	return `${BrDateFormatter(date)} - ${TimeFormatter(time)}`;
 };
