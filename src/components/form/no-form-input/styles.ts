@@ -16,7 +16,6 @@ export const Container = styled.section<Props>`
 	border-radius: 4px;
 	position: relative;
 	background-color: ${props => (props.focused ? '#fff' : 'rgba(255, 255, 255, 0.8)')};
-	margin-top: 1.25rem;
 	transition: 0.3s background-color ease-in-out, 0.3s box-shadow ease-in-out;
 	& :hover {
 		box-shadow: 0px 4px 20px 0px #0287ce;

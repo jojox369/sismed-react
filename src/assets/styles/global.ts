@@ -25,46 +25,40 @@ export const Main = styled.main`
 	height: 100vh;
 `;
 
-export const Button = styled.button`
-	background: #1161ee;
+const BaseButton = styled.button`
 	color: #fff;
-	display: block;
-	height: 56px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 3.5rem;
 	transition: background-color 0.2s;
-	border-radius: 4px;
+	border-radius: 0.25rem;
 	border: none;
 	width: 100%;
 	cursor: pointer;
+	> :first-child {
+		margin-right: 0.3125rem;
+	}
+`;
+
+export const Button = styled(BaseButton)`
+	background: #1161ee;
+
 	&:hover {
 		background: #0b43a6;
 	}
 `;
 
-export const DangerButton = styled.button`
+export const DangerButton = styled(BaseButton)`
 	background: #ec392f;
-	color: #fff;
-	display: block;
-	height: 56px;
-	transition: background-color 0.2s;
-	border-radius: 4px;
-	border: none;
-	width: 100%;
-	cursor: pointer;
 	&:hover {
 		background: #a52720;
 	}
 `;
 
-export const ConfirmButton = styled.button`
+export const ConfirmButton = styled(BaseButton)`
 	background: #2ad433;
-	color: #fff;
-	display: block;
-	height: 56px;
-	transition: background-color 0.2s;
-	border-radius: 4px;
-	border: none;
-	width: 100%;
-	cursor: pointer;
+
 	&:hover {
 		background: #20a527;
 	}

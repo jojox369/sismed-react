@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-import { Container, Header, Content, SearchBox } from './styles';
+import { Container, Header, Content, SearchBox, TableText, ButtonContainer } from './styles';
 import { SearchComponent, Error, Spinner, Table } from '../../../components';
 import ClinicalRegisterService from '../../../services/clinical-register';
 import { useSelector } from 'react-redux';
 import { userLogged } from '../../../redux/User/User.selects';
 import { CutString, DateTimeFormatter, Message } from '../../../assets/functions';
 import { ClinicalRegistersList } from '../../../@types/clinical-register';
+import { Button } from '../../../assets/styles/global';
+import { FiPlus } from 'react-icons/fi';
 
 const options = [
 	{ name: 'Paciente', labelText: 'Digite o nome do paciente', active: true },
@@ -32,9 +34,11 @@ const ClinicalRegisterList = () => {
 			const { data } = await ClinicalRegisterService.getByMedic(id);
 			const formattedArray = data.map((clinicalRegister: ClinicalRegistersList) => {
 				return {
-					prontuario: clinicalRegister.patientId,
+					prontuario: <TableText to={`/patient/${clinicalRegister.patientId}`}>{clinicalRegister.patientId}</TableText>,
 					dataHora: DateTimeFormatter(clinicalRegister.date, clinicalRegister.time),
-					descricacao: CutString(clinicalRegister.description, 20),
+					descricacao: (
+						<TableText to={`clinical-registers/${clinicalRegister.id}`}>{CutString(clinicalRegister.description, 20)}</TableText>
+					),
 				};
 			});
 			setClinicalRegisters(formattedArray);
@@ -102,6 +106,12 @@ const ClinicalRegisterList = () => {
 							onSearchValueChange={onSearchValueChange}
 						/>
 					</SearchBox>
+					<ButtonContainer>
+						<Button>
+							<FiPlus />
+							<span>Novo Registro</span>
+						</Button>
+					</ButtonContainer>
 				</Header>
 				<Content>
 					{!loading && (

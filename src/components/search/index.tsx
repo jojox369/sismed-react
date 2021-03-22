@@ -36,7 +36,7 @@ const SearchComponent: React.FC<Props> = ({ options, onClickItem, inputLabel, in
 		<Container>
 			<Input type={inputType} label={inputLabel} fieldActive={!!inputValue} onChange={inputValueChange} value={inputValue} />
 			<DropDownBox>
-				<AiOutlineDown style={{ marginTop: 20, marginLeft: 5, cursor: 'pointer' }} onClick={() => setIsOpen(!isOpen)} />
+				<AiOutlineDown style={{ marginLeft: 5, cursor: 'pointer' }} onClick={() => setIsOpen(!isOpen)} />
 				{isOpen && (
 					<DropDownList>
 						{options.map((option, i) => (

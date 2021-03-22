@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const Container = styled.section`
 	display: flex;
@@ -8,6 +9,9 @@ export const Container = styled.section`
 `;
 
 export const Header = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 	width: 100%;
 `;
 
@@ -17,6 +21,16 @@ export const Content = styled.div`
 `;
 
 export const SearchBox = styled.div`
+	margin: 0 1.25rem;
 	width: 18.75rem;
+`;
+
+export const TableText = styled(Link)`
+	text-decoration: none;
+`;
+
+export const ButtonContainer = styled.div`
+	width: 200px;
+	display: flex;
 	margin: 0 1.25rem;
 `;
