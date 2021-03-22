@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
-
-import { Container, Header, Content, SearchBox, TableText, ButtonContainer } from './styles';
-import { SearchComponent, Error, Spinner, Table } from '../../../components';
-import ClinicalRegisterService from '../../../services/clinical-register';
-import { useSelector } from 'react-redux';
-import { userLogged } from '../../../redux/User/User.selects';
-import { CutString, DateTimeFormatter, Message } from '../../../assets/functions';
-import { ClinicalRegistersList } from '../../../@types/clinical-register';
-import { Button } from '../../../assets/styles/global';
 import { FiPlus } from 'react-icons/fi';
+import { ClinicalRegistersList } from '../../../@types/clinical-register';
+import { Message } from '../../../assets/functions';
+import { Button } from '../../../assets/styles/global';
+import { Error, SearchComponent, Spinner, Table } from '../../../components';
+import ClinicalRegisterService from '../../../services/clinical-register';
+import { ButtonContainer, Container, Content, Header, SearchBox, TableText } from './styles';
 
 const options = [
 	{ name: 'Paciente', labelText: 'Digite o nome do paciente', active: true },
@@ -16,10 +13,9 @@ const options = [
 	{ name: 'Data', labelText: 'Digite data do registro', active: false },
 ];
 
-const columns = ['Prontuario', 'Data - Hora', 'Descrição'];
+const columns = ['Prontuario', 'Nome', 'Quantidade'];
 
 const ClinicalRegisterList = () => {
-	const { id } = useSelector(userLogged);
 	const [searchOptions, setSearchOptions] = useState(options);
 	const [searchInputLabel, setSearchInputLabel] = useState(options[0].labelText);
 	const [inputType, setInputType] = useState('text');
@@ -31,18 +27,19 @@ const ClinicalRegisterList = () => {
 	const getData = async () => {
 		setLoading(true);
 		try {
-			const { data } = await ClinicalRegisterService.getByMedic(id);
+			const { data } = await ClinicalRegisterService.getAll();
 			const formattedArray = data.map((clinicalRegister: ClinicalRegistersList) => {
 				return {
-					prontuario: <TableText to={`/patient/${clinicalRegister.patientId}`}>{clinicalRegister.patientId}</TableText>,
-					dataHora: DateTimeFormatter(clinicalRegister.date, clinicalRegister.time),
-					descricacao: (
-						<TableText to={`clinical-registers/${clinicalRegister.id}`}>{CutString(clinicalRegister.description, 20)}</TableText>
+					prontuario: (
+						<TableText to={`/clinical-registers/save?patientId=${clinicalRegister.patient.id}`}>{clinicalRegister.patient.id}</TableText>
 					),
+					nome: clinicalRegister.patient.name,
+					quantidade: clinicalRegister.amount ? clinicalRegister.amount : ' - ',
 				};
 			});
 			setClinicalRegisters(formattedArray);
-		} catch {
+		} catch (err) {
+			console.log(err);
 			Message('Erro ao tentar listar os registros clínicos', 1);
 			setHasError(true);
 		} finally {
@@ -72,15 +69,15 @@ const ClinicalRegisterList = () => {
 		if (value) {
 			try {
 				if (activeSearchField === 0) {
-					const { data } = await ClinicalRegisterService.getByPatientName(value, id);
+					const { data } = await ClinicalRegisterService.getByPatientName(value);
 					setClinicalRegisters(data);
 				}
 				if (activeSearchField === 1) {
-					const { data } = await ClinicalRegisterService.getByPatientId(+value, id);
+					const { data } = await ClinicalRegisterService.getByPatientId(+value);
 					setClinicalRegisters(data);
 				}
 				if (activeSearchField === 2) {
-					const { data } = await ClinicalRegisterService.getByDate(value, id);
+					const { data } = await ClinicalRegisterService.getByDate(value);
 					setClinicalRegisters(data);
 				}
 			} catch {
@@ -95,35 +92,35 @@ const ClinicalRegisterList = () => {
 
 	return (
 		<>
-			<Container>
-				<Header>
-					<SearchBox>
-						<SearchComponent
-							options={searchOptions}
-							onClickItem={onClickSearchItem}
-							inputLabel={searchInputLabel}
-							inputType={inputType}
-							onSearchValueChange={onSearchValueChange}
-						/>
-					</SearchBox>
-					<ButtonContainer>
-						<Button>
-							<FiPlus />
-							<span>Novo Registro</span>
-						</Button>
-					</ButtonContainer>
-				</Header>
-				<Content>
-					{!loading && (
+			{!loading && !hasError && (
+				<Container>
+					<Header>
+						<SearchBox>
+							<SearchComponent
+								options={searchOptions}
+								onClickItem={onClickSearchItem}
+								inputLabel={searchInputLabel}
+								inputType={inputType}
+								onSearchValueChange={onSearchValueChange}
+							/>
+						</SearchBox>
+						<ButtonContainer>
+							<Button>
+								<FiPlus />
+								<span>Novo Registro</span>
+							</Button>
+						</ButtonContainer>
+					</Header>
+					<Content>
 						<Table
 							dataSource={clinicalRegisters}
 							hasNoDataLabel='Nenhum Registro encontrado'
 							title='Registros Clínicos'
 							columns={columns}
 						/>
-					)}
-				</Content>
-			</Container>
+					</Content>
+				</Container>
+			)}
 			{loading && <Spinner />}
 			{hasError && <Error />}
 		</>

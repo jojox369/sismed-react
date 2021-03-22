@@ -13,7 +13,6 @@ export interface PreviousRegisters {
 }
 
 export interface ClinicalRegistersList extends PreviousRegisters {
-	employeeId: number;
-	patientId: number;
-	scheduleId: number;
+	amount: string;
+	patient: { id: number; name: string };
 }

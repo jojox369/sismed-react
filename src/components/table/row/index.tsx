@@ -9,12 +9,7 @@ const Row: React.FC<RowProps> = ({ record }) => {
 	return (
 		<tr key={record.id}>
 			{keys.map(key => {
-				return (
-					<td key={key}>
-						{!record[key].onClick && record[key]}
-						{record[key].onClick && record[key]}
-					</td>
-				);
+				return <td key={key}>{record[key]}</td>;
 			})}
 		</tr>
 	);

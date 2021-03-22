@@ -2,18 +2,28 @@ import { ClinicalRegisterSave } from '../@types/clinical-register';
 import api from './api';
 
 const ClinicalRegister = {
-	getByPatientId: async (patientId: number, medicId: number) => {
+	getAll: async () => {
+		const response = await api.get(`/clinicalRegister`);
+		return response;
+	},
+
+	getPreviousRegisters: async (patientId: number, medicId: number) => {
 		const response = await api.get(`/clinicalRegister?patientId=${patientId}&medicId=${medicId}`);
 		return response;
 	},
 
-	getByPatientName: async (name: string, medicId: number) => {
-		const response = await api.get(`/clinicalRegister?patientName=${name}&medicId=${medicId}`);
+	getByPatientId: async (patientId: number) => {
+		const response = await api.get(`/clinicalRegister?patientId=${patientId}`);
 		return response;
 	},
 
-	getByDate: async (date: string, medicId: number) => {
-		const response = await api.get(`/clinicalRegister?date=${date}&medicId=${medicId}`);
+	getByPatientName: async (name: string) => {
+		const response = await api.get(`/clinicalRegister?patientName=${name}`);
+		return response;
+	},
+
+	getByDate: async (date: string) => {
+		const response = await api.get(`/clinicalRegister?date=${date}`);
 		return response;
 	},
 

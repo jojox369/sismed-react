@@ -37,7 +37,7 @@ const BaseButton = styled.button`
 	width: 100%;
 	cursor: pointer;
 	> :first-child {
-		margin-right: 0.3125rem;
+		margin-right: 1.25rem;
 	}
 `;
 
