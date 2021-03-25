@@ -158,7 +158,7 @@ const Register = () => {
 				formRef.current?.setErrors(validationErrors);
 			}
 			if (err.response) {
-				Message(err.response.data.message, 1);
+				Message('Erro ao tentar agendar o paciente', 1);
 			}
 		} finally {
 			setLoading(false);

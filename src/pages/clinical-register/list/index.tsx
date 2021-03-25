@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { FiPlus } from 'react-icons/fi';
 import { ClinicalRegistersList } from '../../../@types/clinical-register';
 import { Message } from '../../../assets/functions';
-import { Button } from '../../../assets/styles/global';
 import { Error, SearchComponent, Spinner, Table } from '../../../components';
 import ClinicalRegisterService from '../../../services/clinical-register';
-import { ButtonContainer, Container, Content, Header, SearchBox, TableText } from './styles';
+import { Container, Content, Header, SearchBox, TableText } from './styles';
 
 interface ListData {
 	prontuario: JSX.Element;
@@ -26,7 +24,7 @@ const formatData = (clinicalRegisters: ClinicalRegistersList[]) => {
 		return {
 			prontuario: (
 				<TableText
-					to={`/clinical-registers/save?patientId=${clinicalRegister.patient.id}`}
+					to={`/clinical-registers/save/${clinicalRegister.patient.id}`}
 					title='Clique para adicionar um novo registro clínico para esse paciente'
 				>
 					{clinicalRegister.patient.id}

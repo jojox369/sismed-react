@@ -33,6 +33,7 @@ const ClinicalRegister = {
 	},
 
 	save: async (register: ClinicalRegisterSave) => {
+		console.log('aqui');
 		const response = await api.post('/clinicalRegister', register);
 		return response;
 	},

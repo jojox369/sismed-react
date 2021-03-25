@@ -7,6 +7,11 @@ const Patient = {
 		const response = await api.get(`${baseURL}`);
 		return response;
 	},
+
+	getById: async (id: number) => {
+		const response = await api.get(`${baseURL}/${id}`);
+		return response;
+	},
 	getByName: async (name: string) => {
 		const response = await api.get(`${baseURL}?name=${name}`);
 		return response;
