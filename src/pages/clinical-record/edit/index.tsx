@@ -93,7 +93,7 @@ const Edit = () => {
 		try {
 			await ClinicalRegisterService.delete(+id);
 			Message('Registro clínico excluido com sucesso', 0);
-			history.push('/clinical-registers');
+			history.push('/clinical-record');
 		} catch {
 			Message('Não foi possivel excluir o registro clínico', 1);
 			setLoading(false);
@@ -104,25 +104,29 @@ const Edit = () => {
 		<>
 			{!loading && !hasError && (
 				<Container>
-					<ConfirmModal
-						handleClose={() => setShowModal(false)}
-						isOpen={showModal}
-						confirmButtonTitle='Excluir'
-						onClickConfirmButton={deleteRegister}
-					>
-						Tem certeza que deseja excluir o registro clínico?
-					</ConfirmModal>
-					<Header>
-						<ButtonsArea>
-							<Button form='form'>
-								<BsFileCheck /> Salvar
-							</Button>
-							<DangerButton onClick={() => setShowModal(true)}>
-								<MdDeleteForever />
-								Excluir
-							</DangerButton>
-						</ButtonsArea>
-					</Header>
+					{clinicalRegister.editable && (
+						<>
+							<ConfirmModal
+								handleClose={() => setShowModal(false)}
+								isOpen={showModal}
+								confirmButtonTitle='Excluir'
+								onClickConfirmButton={deleteRegister}
+							>
+								Tem certeza que deseja excluir o registro clínico?
+							</ConfirmModal>
+							<Header>
+								<ButtonsArea>
+									<Button form='form'>
+										<BsFileCheck /> Salvar
+									</Button>
+									<DangerButton onClick={() => setShowModal(true)}>
+										<MdDeleteForever />
+										Excluir
+									</DangerButton>
+								</ButtonsArea>
+							</Header>
+						</>
+					)}
 					<Content>
 						<PatientDetails patient={clinicalRegister.patient} />
 						<ClinicalRegisterDetails>

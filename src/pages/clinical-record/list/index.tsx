@@ -89,7 +89,7 @@ const ClinicalRegisterList = () => {
 			return {
 				prontuario: (
 					<TableText
-						to={`/clinical-registers/save/${clinicalRegister.patient.id}`}
+						to={`/clinical-record/save/${clinicalRegister.patient.id}`}
 						title='Clique para adicionar um novo registro clínico para esse paciente'
 					>
 						{clinicalRegister.patient.id}
@@ -119,7 +119,7 @@ const ClinicalRegisterList = () => {
 				return {
 					dataHora: DateTimeFormatter(clinicalRegister.date, clinicalRegister.time),
 					descricao: (
-						<TableText to={`clinical-registers/edit/${clinicalRegister.id}`}> {CutString(clinicalRegister.description, 15)}</TableText>
+						<TableText to={`clinical-record/edit/${clinicalRegister.id}`}> {CutString(clinicalRegister.description, 15)}</TableText>
 					),
 				};
 			});

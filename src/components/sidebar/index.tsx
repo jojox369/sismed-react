@@ -52,7 +52,7 @@ const SidebarData = [
 	{
 		title: 'Registros Clínicos',
 		icon: ClinicalRegistersIcon,
-		link: '/clinical-registers',
+		link: '/clinical-record',
 	},
 
 	{
