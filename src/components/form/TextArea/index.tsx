@@ -30,10 +30,8 @@ const TextAreaComponent: React.FC<Props> = ({ title, subTitle, ...props }) => {
 	};
 
 	return (
-		<Container className='wrapper'>
-			<Title htmlFor='text-area' className='first-heading'>
-				{renderLabel()}
-			</Title>
+		<Container>
+			<Title htmlFor='text-area'>{renderLabel()}</Title>
 			{subTitle && <SubTitle>{subTitle}</SubTitle>}
 
 			<TextArea id='text-area' ref={textAreaRef} defaultValue={defaultValue} {...props} />

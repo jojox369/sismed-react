@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.section`
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
 `;
 
-export const Main = styled.main`
+export const Content = styled.main`
 	display: flex;
 	justify-content: center;
 	align-items: center;

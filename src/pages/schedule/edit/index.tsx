@@ -8,7 +8,7 @@ import Spinner from '../../../components/spinner';
 import ScheduleService from '../../../services/schedule';
 import EmployeeService from '../../../services/employee';
 import ProcedureService from '../../../services/procedure';
-import { Container, EmployeeArea, PatientArea, SchedulingArea, ButtonsArea, Content, Form } from './styles';
+import { Container, EmployeeArea, PatientArea, SchedulingArea, Header, Content, Form } from './styles';
 import { Employee } from '../../../@types/employee';
 import { HealthInsuranceType } from '../../../@types/health-insurance-type';
 import { Button, DangerButton, ConfirmButton } from '../../../assets/styles/global';
@@ -216,7 +216,7 @@ const Edit = () => {
 						>
 							Tem certeza que deseja excluir o agendamento?
 						</ConfirmModal>
-						<ButtonsArea>
+						<Header>
 							{scheduling.finished === 0 && (
 								<>
 									<ConfirmButton form='form'>Atualizar</ConfirmButton>
@@ -224,7 +224,7 @@ const Edit = () => {
 									<Button onClick={reschedule}>Remarcar</Button>
 								</>
 							)}
-						</ButtonsArea>
+						</Header>
 
 						<Content>
 							<PatientArea>

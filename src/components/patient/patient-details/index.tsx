@@ -90,6 +90,7 @@ const PatientDetails: React.FC<Props> = ({ patient, edit }) => {
 					<>
 						<InformationCard id='name' title='Nome' content={patientDetails.name} />
 						<InformationCard id='id' title='Prontuário' content={patientDetails.id} />
+						<InformationCard id='age' title='CPF' content={CpfFormatter(patientDetails.cpf)} />
 						<InformationCard id='age' title='Idade' content={patientDetails.age} />
 					</>
 				) : (

@@ -5,6 +5,11 @@ export interface ClinicalRegisterSave {
 	description: string;
 }
 
+export interface ClinicalRegisterUpdate {
+	id: number;
+	description: string;
+}
+
 export interface PreviousRegisters {
 	id: number;
 	date: string;

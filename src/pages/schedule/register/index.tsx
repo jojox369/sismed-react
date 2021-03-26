@@ -1,17 +1,17 @@
-import { FormHandles, SubmitHandler } from '@unform/core';
 import React, { useEffect, useRef, useState } from 'react';
+import { FormHandles, SubmitHandler } from '@unform/core';
+import * as Yup from 'yup';
 import { Medic } from '../../../@types/employee';
 import { HealthInsuranceType } from '../../../@types/health-insurance-type';
 import { Procedure } from '../../../@types/procedure';
 import { ScheduleDetails } from '../../../@types/schedule';
+import { Message } from '../../../assets/functions';
 import { Button } from '../../../assets/styles/global';
-import { ButtonsArea, Container, Content, EmployeeArea, Form, PatientArea, SchedulingArea } from './styles';
-import ScheduleService from '../../../services/schedule';
+import { EmployeeDetails, Error, PatientDetails, SchedulingDetails, Spinner } from '../../../components';
 import EmployeeService from '../../../services/employee';
 import ProcedureService from '../../../services/procedure';
-import { Message } from '../../../assets/functions';
-import { PatientDetails, EmployeeDetails, SchedulingDetails, Spinner, Error } from '../../../components';
-import * as Yup from 'yup';
+import ScheduleService from '../../../services/schedule';
+import { Container, Content, Form, Header } from './styles';
 
 interface SaveForm {
 	autoCompleteData: string;
@@ -173,30 +173,24 @@ const Register = () => {
 		<>
 			{!loading && (
 				<Container>
-					<ButtonsArea>
+					<Header>
 						<Button form='form'>Agendar</Button>
-					</ButtonsArea>
+					</Header>
 					<Content>
 						<Form onSubmit={onSubmit} id='form' ref={formRef}>
-							<PatientArea>
-								<PatientDetails patient={scheduling.patient} edit={true} />
-							</PatientArea>
+							<PatientDetails patient={scheduling.patient} edit={true} />
 
-							<EmployeeArea>
-								<EmployeeDetails employee={scheduling.employee} changeEmployee={changeEmployee} medics={medics} edit={true} />
-							</EmployeeArea>
+							<EmployeeDetails employee={scheduling.employee} changeEmployee={changeEmployee} medics={medics} edit={true} />
 
-							<SchedulingArea>
-								<SchedulingDetails
-									scheduling={scheduling}
-									healthInsuranceTypes={healthInsuranceTypes}
-									procedures={procedures}
-									onSelectChange={onSelectChange}
-									onHealthInsuranceChange={onHealthInsuranceChange}
-									onNotesChange={onNotesChange}
-									newScheduling={true}
-								/>
-							</SchedulingArea>
+							<SchedulingDetails
+								scheduling={scheduling}
+								healthInsuranceTypes={healthInsuranceTypes}
+								procedures={procedures}
+								onSelectChange={onSelectChange}
+								onHealthInsuranceChange={onHealthInsuranceChange}
+								onNotesChange={onNotesChange}
+								newScheduling={true}
+							/>
 						</Form>
 					</Content>
 				</Container>

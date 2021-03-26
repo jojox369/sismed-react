@@ -11,7 +11,7 @@ import TextAreaComponent from '../../../components/form/TextArea';
 import Spinner from '../../../components/spinner';
 import ClinicalRegisterService from '../../../services/clinical-register';
 import ScheduleService from '../../../services/schedule';
-import { Main, ButtonArea, ButtonsGroup, Container, FieldsArea, OldRegisters, PatientArea, TextArea } from './styles';
+import { Content, ButtonArea, ButtonsGroup, Container, FieldsArea, OldRegisters, PatientArea, TextArea } from './styles';
 import PreviousRegistersComponent from '../../../components/clinical-register/previous-registers';
 import { ConfirmModal, Error, PatientDetails } from '../../../components';
 import { PreviousRegisters } from '../../../@types/clinical-register';
@@ -126,7 +126,7 @@ const Attendance = () => {
 						>
 							Deseja finalizar o atendimento?
 						</ConfirmModal>
-						<Main>
+						<Content>
 							<PatientArea>
 								<PatientDetails patient={scheduling.patient} />
 							</PatientArea>
@@ -148,7 +148,7 @@ const Attendance = () => {
 									</ButtonArea>
 								</ButtonsGroup>
 							</FieldsArea>
-						</Main>
+						</Content>
 						<OldRegisters>
 							<PreviousRegistersComponent previousRegisters={previousRegisters} />
 						</OldRegisters>

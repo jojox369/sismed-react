@@ -157,29 +157,31 @@ const ClinicalRegisterList = () => {
 		<>
 			{!loading && !hasError && (
 				<Container>
-					<Header>
-						<SearchBox>
-							<SearchComponent
-								options={searchOptions}
-								onClickItem={onClickSearchItem}
-								inputLabel={searchInputLabel}
-								inputType={inputType}
-								onSearchValueChange={onSearchValueChange}
-							/>
-						</SearchBox>
-						{showListRegistersButton && (
-							<ButtonContainer>
-								<Button onClick={listAllRegisters}>Listar Registros</Button>
-							</ButtonContainer>
-						)}
-					</Header>
+					{!changingState && (
+						<>
+							<Header>
+								<SearchBox>
+									<SearchComponent
+										options={searchOptions}
+										onClickItem={onClickSearchItem}
+										inputLabel={searchInputLabel}
+										inputType={inputType}
+										onSearchValueChange={onSearchValueChange}
+									/>
+								</SearchBox>
+								{showListRegistersButton && (
+									<ButtonContainer>
+										<Button onClick={listAllRegisters}>Listar Registros</Button>
+									</ButtonContainer>
+								)}
+							</Header>
 
-					<Content>
-						{!changingState && (
-							<Table dataSource={clinicalRegisters} hasNoDataLabel='Nenhum Registro encontrado' title={tableTitle} columns={columns} />
-						)}
-						{changingState && <Spinner />}
-					</Content>
+							<Content>
+								<Table dataSource={clinicalRegisters} hasNoDataLabel='Nenhum Registro encontrado' title={tableTitle} columns={columns} />
+							</Content>
+						</>
+					)}
+					{changingState && <Spinner />}
 				</Container>
 			)}
 			{loading && <Spinner />}

@@ -24,3 +24,5 @@ export { default as Error } from './error';
 export { default as Spinner } from './spinner';
 export { default as SearchComponent } from './search';
 export { default as Table } from './table';
+export { default as InformationCard } from './information-card';
+export { default as InformationTextArea } from './information-text-area';

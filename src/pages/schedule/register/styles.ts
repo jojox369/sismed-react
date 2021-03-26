@@ -8,7 +8,7 @@ export const Container = styled.section`
 	flex-direction: column;
 `;
 
-export const ButtonsArea = styled.header`
+export const Header = styled.header`
 	padding: 3rem 0;
 	width: 100%;
 	display: flex;
@@ -20,26 +20,10 @@ export const ButtonsArea = styled.header`
 	}
 `;
 
-export const Content = styled.section`
+export const Content = styled.main`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-`;
-
-export const PatientArea = styled.section`
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	height: 100%;
-	padding: 0 2rem;
-`;
-export const EmployeeArea = styled.section`
-	padding: 0 2rem;
-	height: 100%;
-`;
-export const SchedulingArea = styled.section`
-	padding: 0 2rem;
-	height: 100%;
 `;
 
 export const Form = styled(UnForm)`

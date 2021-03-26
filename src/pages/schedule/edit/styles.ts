@@ -8,7 +8,7 @@ export const Container = styled.section`
 	flex-direction: column;
 `;
 
-export const ButtonsArea = styled.header`
+export const Header = styled.header`
 	padding: 3rem 0;
 	width: 100%;
 	display: flex;
@@ -23,7 +23,7 @@ export const ButtonsArea = styled.header`
 	}
 `;
 
-export const Content = styled.section`
+export const Content = styled.main`
 	display: flex;
 	justify-content: center;
 	align-items: center;

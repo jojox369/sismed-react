@@ -1,4 +1,4 @@
-import { ClinicalRegisterSave } from '../@types/clinical-register';
+import { ClinicalRegisterSave, ClinicalRegisterUpdate } from '../@types/clinical-register';
 import api from './api';
 
 const baseURL = '/clinicalRegister';
@@ -6,6 +6,11 @@ const baseURL = '/clinicalRegister';
 const ClinicalRegister = {
 	getAll: async () => {
 		const response = await api.get(`${baseURL}`);
+		return response;
+	},
+
+	getById: async (id: number) => {
+		const response = await api.get(`${baseURL}/${id}`);
 		return response;
 	},
 
@@ -40,8 +45,17 @@ const ClinicalRegister = {
 	},
 
 	save: async (register: ClinicalRegisterSave) => {
-		console.log('aqui');
-		const response = await api.post('${baseURL}', register);
+		const response = await api.post(`${baseURL}`, register);
+		return response;
+	},
+
+	update: async (register: ClinicalRegisterUpdate) => {
+		const response = await api.put(`${baseURL}`, register);
+		return response;
+	},
+
+	delete: async (id: number) => {
+		const response = await api.delete(`${baseURL}/${id}`);
 		return response;
 	},
 };
