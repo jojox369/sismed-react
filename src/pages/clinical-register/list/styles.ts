@@ -31,6 +31,10 @@ export const TableText = styled(Link)`
 
 export const ButtonContainer = styled.div`
 	width: 200px;
-	display: flex;
 	margin: 0 1.25rem;
+`;
+
+export const ListRegisters = styled.div`
+	cursor: pointer;
+	color: #5c3aff;
 `;

@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { ClinicalRegistersList } from '../../../@types/clinical-register';
-import { Message } from '../../../assets/functions';
+import { CutString, DateTimeFormatter, Message } from '../../../assets/functions';
+import { Button } from '../../../assets/styles/global';
 import { Error, SearchComponent, Spinner, Table } from '../../../components';
 import ClinicalRegisterService from '../../../services/clinical-register';
-import { Container, Content, Header, SearchBox, TableText } from './styles';
 
-interface ListData {
-	prontuario: JSX.Element;
-	nome: string;
-	quantidade: string;
-}
+import { Container, Content, Header, SearchBox, TableText, ListRegisters, ButtonContainer } from './styles';
 
 const options = [
 	{ name: 'Paciente', labelText: 'Digite o nome do paciente', active: true },
@@ -17,33 +13,18 @@ const options = [
 	{ name: 'Data', labelText: 'Digite data do registro', active: false },
 ];
 
-const columns = ['Prontuario', 'Nome', 'Quantidade'];
-
-const formatData = (clinicalRegisters: ClinicalRegistersList[]) => {
-	return clinicalRegisters.map((clinicalRegister: ClinicalRegistersList) => {
-		return {
-			prontuario: (
-				<TableText
-					to={`/clinical-registers/save/${clinicalRegister.patient.id}`}
-					title='Clique para adicionar um novo registro clínico para esse paciente'
-				>
-					{clinicalRegister.patient.id}
-				</TableText>
-			),
-			nome: clinicalRegister.patient.name,
-			quantidade: clinicalRegister.amount ? clinicalRegister.amount : ' - ',
-		};
-	});
-};
-
 const ClinicalRegisterList = () => {
 	const [searchOptions, setSearchOptions] = useState(options);
 	const [searchInputLabel, setSearchInputLabel] = useState(options[0].labelText);
 	const [inputType, setInputType] = useState('text');
 	const [activeSearchField, setActiveSearchField] = useState(0);
-	const [clinicalRegisters, setClinicalRegisters] = useState<ListData[]>([]);
+	const [clinicalRegisters, setClinicalRegisters] = useState<Array<Record<string, any>>>([{}]);
 	const [hasError, setHasError] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const [columns, setColumns] = useState(['Prontuario', 'Nome', 'Quantidade']);
+	const [tableTitle, setTableTitle] = useState('Registros Clínicos');
+	const [showListRegistersButton, setShowListRegistersButton] = useState(false);
+	const [changingState, setChangingState] = useState(false);
 
 	const getData = async () => {
 		try {
@@ -92,12 +73,79 @@ const ClinicalRegisterList = () => {
 					const { data } = await ClinicalRegisterService.getByDate(value);
 					setClinicalRegisters(formatData(data));
 				}
+				if (activeSearchField === 3) {
+					alert(value);
+				}
 			} catch {
 				Message('Erro ao tentar pesquisar os registros clínicos', 1);
 			}
 		} else {
 			getData();
 		}
+	};
+
+	const formatData = (clinicalRegisters: ClinicalRegistersList[]) => {
+		return clinicalRegisters.map((clinicalRegister: ClinicalRegistersList) => {
+			return {
+				prontuario: (
+					<TableText
+						to={`/clinical-registers/save/${clinicalRegister.patient.id}`}
+						title='Clique para adicionar um novo registro clínico para esse paciente'
+					>
+						{clinicalRegister.patient.id}
+					</TableText>
+				),
+				nome: clinicalRegister.patient.name,
+				quantidade: clinicalRegister.amount ? (
+					<ListRegisters
+						onClick={() => showPatientRegisters(clinicalRegister.patient.id, clinicalRegister.patient.name)}
+						title='Clique para listar os registros clínicos desse paciente'
+					>
+						{clinicalRegister.amount}
+					</ListRegisters>
+				) : (
+					<span> - </span>
+				),
+			};
+		});
+	};
+
+	const showPatientRegisters = async (patientId: number, patientName: string) => {
+		setChangingState(true);
+
+		try {
+			const { data } = await ClinicalRegisterService.getPatientRegisters(patientId);
+			const formattedData = data.map((clinicalRegister: ClinicalRegistersList) => {
+				return {
+					dataHora: DateTimeFormatter(clinicalRegister.date, clinicalRegister.time),
+					descricao: (
+						<TableText to={`clinical-registers/edit/${clinicalRegister.id}`}> {CutString(clinicalRegister.description, 15)}</TableText>
+					),
+				};
+			});
+			setClinicalRegisters(formattedData);
+			setColumns(['Data-Hora', 'Descrição']);
+			setTableTitle(patientName);
+			setShowListRegistersButton(true);
+			setSearchOptions([{ name: 'Data', labelText: 'Digite data do registro', active: true }]);
+			setInputType('date');
+			setActiveSearchField(3);
+		} catch (err) {
+			Message('Erro ao tentar listar os registros do paciente selecionado', 1);
+		} finally {
+			setChangingState(false);
+		}
+	};
+
+	const listAllRegisters = async () => {
+		setChangingState(true);
+		await getData();
+		setShowListRegistersButton(false);
+		setColumns(['Prontuario', 'Nome', 'Quantidade']);
+		setTableTitle('Registros Clínicos');
+		setSearchOptions(options);
+		setInputType('text');
+		setChangingState(false);
 	};
 
 	useEffect(() => {
@@ -119,14 +167,18 @@ const ClinicalRegisterList = () => {
 								onSearchValueChange={onSearchValueChange}
 							/>
 						</SearchBox>
+						{showListRegistersButton && (
+							<ButtonContainer>
+								<Button onClick={listAllRegisters}>Listar Registros</Button>
+							</ButtonContainer>
+						)}
 					</Header>
+
 					<Content>
-						<Table
-							dataSource={clinicalRegisters}
-							hasNoDataLabel='Nenhum Registro encontrado'
-							title='Registros Clínicos'
-							columns={columns}
-						/>
+						{!changingState && (
+							<Table dataSource={clinicalRegisters} hasNoDataLabel='Nenhum Registro encontrado' title={tableTitle} columns={columns} />
+						)}
+						{changingState && <Spinner />}
 					</Content>
 				</Container>
 			)}

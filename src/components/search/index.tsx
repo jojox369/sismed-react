@@ -21,10 +21,12 @@ const SearchComponent: React.FC<Props> = ({ options, onClickItem, inputLabel, in
 	const [isOpen, setIsOpen] = useState(false);
 	const [inputValue, setInputValue] = useState('');
 
-	const onClick = (i: number) => {
-		onClickItem(i);
+	const onClick = (i: number, active: boolean) => {
+		if (!active) {
+			onClickItem(i);
+			setInputValue('');
+		}
 		setIsOpen(false);
-		setInputValue('');
 	};
 
 	const inputValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +42,7 @@ const SearchComponent: React.FC<Props> = ({ options, onClickItem, inputLabel, in
 				{isOpen && (
 					<DropDownList>
 						{options.map((option, i) => (
-							<ListItem key={Math.random()} active={option.active} onClick={() => onClick(i)}>
+							<ListItem key={Math.random()} active={option.active} onClick={() => onClick(i, option.active)}>
 								{option.name}
 							</ListItem>
 						))}
