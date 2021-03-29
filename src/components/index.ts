@@ -10,7 +10,7 @@ export { default as PatientDetails } from './patient/patient-details';
 export { default as EmployeeDetails } from './employee/employee-details';
 
 /*Clinical Register Components */
-export { default as PreviousRegisters } from './clinical-register/previous-registers';
+export { default as PreviousRegisters } from './clinical-record/previous-record';
 
 /* Form Components */
 export { default as Input } from './form/input';

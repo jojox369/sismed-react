@@ -1,4 +1,4 @@
-import { ClinicalRegisterSave, ClinicalRegisterUpdate } from '../@types/clinical-register';
+import { ClinicalRecordSave, ClinicalRecordUpdate } from '../@types/clinical-record';
 import api from './api';
 
 const baseURL = '/clinicalRegister';
@@ -44,12 +44,12 @@ const ClinicalRegister = {
 		return response;
 	},
 
-	save: async (register: ClinicalRegisterSave) => {
+	save: async (register: ClinicalRecordSave) => {
 		const response = await api.post(`${baseURL}`, register);
 		return response;
 	},
 
-	update: async (register: ClinicalRegisterUpdate) => {
+	update: async (register: ClinicalRecordUpdate) => {
 		const response = await api.put(`${baseURL}`, register);
 		return response;
 	},

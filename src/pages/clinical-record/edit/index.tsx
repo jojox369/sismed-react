@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Container, Header, Content, ClinicalRegisterDetails, TextAreaBox, ButtonsArea } from './styles';
-import ClinicalRegisterService from '../../../services/clinical-register';
+import { Container, Header, Content, ClinicalRecordDetails, TextAreaBox, ButtonsArea } from './styles';
+import ClinicalRecordService from '../../../services/clinical-record';
 import { useHistory, useParams } from 'react-router-dom';
 import { RouteParams } from '../../../@types/router';
-import { BrDateFormatter, Message, TimeFormatter } from '../../../assets/functions';
+import { BrDateFormatter, Message, StringFormatter, TimeFormatter } from '../../../assets/functions';
 import { Error, PatientDetails, Spinner, InformationCard, InformationTextArea, TextArea, ConfirmModal } from '../../../components';
 import { Form } from '@unform/web';
 import { FormHandles, SubmitHandler } from '@unform/core';
@@ -34,7 +34,7 @@ const initialState = {
 const Edit = () => {
 	const { id } = useParams<RouteParams>();
 	const history = useHistory();
-	const [clinicalRegister, setClinicalRegister] = useState(initialState);
+	const [clinicalRecord, setClinicalRecord] = useState(initialState);
 	const [loading, setLoading] = useState(false);
 	const [hasError, setHasError] = useState(false);
 	const [showModal, setShowModal] = useState(false);
@@ -43,8 +43,8 @@ const Edit = () => {
 	const getData = async () => {
 		setLoading(true);
 		try {
-			const { data } = await ClinicalRegisterService.getById(+id);
-			setClinicalRegister(data);
+			const { data } = await ClinicalRecordService.getById(+id);
+			setClinicalRecord(data);
 		} catch {
 			Message('Erro ao tentar listar as informações do registro clínico', 1);
 			setHasError(true);
@@ -68,8 +68,8 @@ const Edit = () => {
 				abortEarly: false,
 			});
 
-			const { data } = await ClinicalRegisterService.update({ id: +id, description: dataForm.description });
-			setClinicalRegister({ ...clinicalRegister, description: data.description });
+			const { data } = await ClinicalRecordService.update({ id: +id, description: dataForm.description });
+			setClinicalRecord({ ...clinicalRecord, description: data.description });
 			Message('Registro clínico atualizado com sucesso', 0);
 		} catch (err) {
 			if (err instanceof Yup.ValidationError) {
@@ -91,7 +91,7 @@ const Edit = () => {
 		setShowModal(false);
 		setLoading(true);
 		try {
-			await ClinicalRegisterService.delete(+id);
+			await ClinicalRecordService.delete(+id);
 			Message('Registro clínico excluido com sucesso', 0);
 			history.push('/clinical-record');
 		} catch {
@@ -104,7 +104,7 @@ const Edit = () => {
 		<>
 			{!loading && !hasError && (
 				<Container>
-					{clinicalRegister.editable && (
+					{clinicalRecord.editable && (
 						<>
 							<ConfirmModal
 								handleClose={() => setShowModal(false)}
@@ -128,22 +128,22 @@ const Edit = () => {
 						</>
 					)}
 					<Content>
-						<PatientDetails patient={clinicalRegister.patient} />
-						<ClinicalRegisterDetails>
+						<PatientDetails patient={clinicalRecord.patient} />
+						<ClinicalRecordDetails>
 							<FaFileMedical size='80' />
-							<InformationCard id='date' title='Data' content={BrDateFormatter(clinicalRegister.date)} />
-							<InformationCard id='time' title='Hora' content={TimeFormatter(clinicalRegister.time)} />
-							{!clinicalRegister.editable && (
-								<InformationTextArea id='description' title='Descrição' content={`${clinicalRegister.description}`} />
+							<InformationCard id='date' title='Data' content={BrDateFormatter(clinicalRecord.date)} />
+							<InformationCard id='time' title='Hora' content={TimeFormatter(clinicalRecord.time)} />
+							{!clinicalRecord.editable && (
+								<InformationTextArea id='description' title='Descrição' content={`${StringFormatter(clinicalRecord.description)}`} />
 							)}
 							<Form onSubmit={onSubmit} id='form' ref={formRef}>
 								<TextAreaBox>
-									{clinicalRegister.editable && (
-										<TextArea title='Descrição' defaultValue={clinicalRegister.description} name='description' />
+									{clinicalRecord.editable && (
+										<TextArea title='Descrição' defaultValue={StringFormatter(clinicalRecord.description)} name='description' />
 									)}
 								</TextAreaBox>
 							</Form>
-						</ClinicalRegisterDetails>
+						</ClinicalRecordDetails>
 					</Content>
 				</Container>
 			)}

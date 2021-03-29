@@ -17,7 +17,7 @@ export const Content = styled.main`
 	margin: 1.25rem;
 `;
 
-export const ClinicalRegisterDetails = styled.section`
+export const ClinicalRecordDetails = styled.section`
 	width: 34.375rem;
 	display: flex;
 	justify-content: flex-start;

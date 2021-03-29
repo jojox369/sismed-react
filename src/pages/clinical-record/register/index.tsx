@@ -7,8 +7,8 @@ import { Message } from '../../../assets/functions';
 import { Button } from '../../../assets/styles/global';
 import { Spinner, Error, PatientDetails, TextArea } from '../../../components';
 import PatientService from '../../../services/patient';
-import ClinicalRegisterService from '../../../services/clinical-register';
-import { Container, Header, ButtonsArea, Content, PatientArea, ClinicalRegisterArea, Form } from './styles';
+import ClinicalRecordService from '../../../services/clinical-record';
+import { Container, Header, ButtonsArea, Content, PatientArea, ClinicalRecordArea, Form } from './styles';
 import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
 import { userLogged } from '../../../redux/User/User.selects';
@@ -61,7 +61,7 @@ const Register = () => {
 				employeeId: user.id,
 			};
 
-			await ClinicalRegisterService.save(saveData);
+			await ClinicalRecordService.save(saveData);
 			Message('Registro salvo com sucesso', 0);
 			reset();
 		} catch (err) {
@@ -96,11 +96,11 @@ const Register = () => {
 						<PatientArea>
 							<PatientDetails patient={patient} />
 						</PatientArea>
-						<ClinicalRegisterArea>
+						<ClinicalRecordArea>
 							<Form onSubmit={onSubmit} id='form' ref={formRef}>
 								<TextArea name='description' title='Digite o registro clínico' required />
 							</Form>
-						</ClinicalRegisterArea>
+						</ClinicalRecordArea>
 					</Content>
 				</Container>
 			)}

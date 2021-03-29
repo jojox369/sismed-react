@@ -15,9 +15,10 @@ interface Props {
 	onSearchValueChange: (value: string) => void;
 	inputLabel: string;
 	inputType?: string;
+	inputMaxLength?: number;
 }
 
-const SearchComponent: React.FC<Props> = ({ options, onClickItem, inputLabel, inputType, onSearchValueChange }) => {
+const SearchComponent: React.FC<Props> = ({ options, onClickItem, inputLabel, inputType, onSearchValueChange, inputMaxLength }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [inputValue, setInputValue] = useState('');
 
@@ -36,7 +37,14 @@ const SearchComponent: React.FC<Props> = ({ options, onClickItem, inputLabel, in
 	};
 	return (
 		<Container>
-			<Input type={inputType} label={inputLabel} fieldActive={!!inputValue} onChange={inputValueChange} value={inputValue} />
+			<Input
+				type={inputType}
+				label={inputLabel}
+				fieldActive={!!inputValue}
+				onChange={inputValueChange}
+				value={inputValue}
+				maxLength={inputMaxLength}
+			/>
 			<DropDownBox>
 				<AiOutlineDown style={{ marginLeft: 5, cursor: 'pointer' }} onClick={() => setIsOpen(!isOpen)} />
 				{isOpen && (

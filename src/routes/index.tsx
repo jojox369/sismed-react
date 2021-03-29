@@ -9,6 +9,7 @@ import { userLogged } from '../redux/User/User.selects';
 import RouteAuthenticated from './AuthenticatedRoute';
 import ScheduleRoutes from './schedule.routes';
 import ClinicalRegisterRoutes from './clinical.record.routes';
+import PatientRoutes from './patient.routes';
 import RouteUnauthenticated from './UnauthenticatedRoute';
 
 const Routes = (): JSX.Element => {
@@ -31,6 +32,7 @@ const Routes = (): JSX.Element => {
 
 			<RouteAuthenticated path='/schedule' component={ScheduleRoutes} />
 			<RouteAuthenticated path='/clinical-record' component={ClinicalRegisterRoutes} />
+			<RouteAuthenticated path='/patient' component={PatientRoutes} />
 
 			<Redirect to={url} />
 		</Switch>

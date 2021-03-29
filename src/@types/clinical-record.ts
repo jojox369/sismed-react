@@ -1,23 +1,23 @@
-export interface ClinicalRegisterSave {
+export interface ClinicalRecordSave {
 	employeeId: number;
 	patientId: number;
 	scheduleId?: number;
 	description: string;
 }
 
-export interface ClinicalRegisterUpdate {
+export interface ClinicalRecordUpdate {
 	id: number;
 	description: string;
 }
 
-export interface PreviousRegisters {
+export interface PreviousRecords {
 	id: number;
 	date: string;
 	time: string;
 	description: string;
 }
 
-export interface ClinicalRegistersList extends PreviousRegisters {
+export interface ClinicalRecordsList extends PreviousRecords {
 	amount: string;
 	patient: { id: number; name: string };
 }

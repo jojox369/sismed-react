@@ -47,7 +47,7 @@ export const BrDateFormatter = (date: string) => {
 };
 
 export const CellNumberFormatter = (cell: string) => {
-	return cell.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/g, '($1) $2 $3-$4');
+	return cell ? cell.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/g, '($1) $2 $3-$4') : 'Não Cadastrado';
 };
 
 export const VerifyScheduleFields = (field: number | undefined) => {

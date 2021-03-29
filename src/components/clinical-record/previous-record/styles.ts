@@ -17,11 +17,11 @@ export const Content = styled.div`
 	flex-wrap: wrap;
 	margin: 0 auto;
 `;
-export const RegisterDateTime = styled.span`
+export const DateTime = styled.span`
 	margin: 1.875rem 0;
 `;
 
-export const RegisterDescriptionArea = styled.div`
+export const DescriptionArea = styled.div`
 	background: #ddd;
 	height: 6.25rem;
 	width: 80%;

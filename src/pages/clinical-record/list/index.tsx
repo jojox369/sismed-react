@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { ClinicalRegistersList } from '../../../@types/clinical-register';
-import { CutString, DateTimeFormatter, Message } from '../../../assets/functions';
+import { ClinicalRecordsList } from '../../../@types/clinical-record';
+import { CutString, DateTimeFormatter, Message, StringFormatter } from '../../../assets/functions';
 import { Button } from '../../../assets/styles/global';
 import { Error, SearchComponent, Spinner, Table } from '../../../components';
-import ClinicalRegisterService from '../../../services/clinical-register';
+import ClinicalRecordService from '../../../services/clinical-record';
 
-import { Container, Content, Header, SearchBox, TableText, ListRegisters, ButtonContainer } from './styles';
+import { Container, Content, Header, SearchBox, TableText, ButtonContainer } from '../../../assets/styles/global';
+import { ListRegisters } from './styles';
+import { RiUserReceivedLine } from 'react-icons/ri';
 
 const options = [
 	{ name: 'Paciente', labelText: 'Digite o nome do paciente', active: true },
@@ -18,19 +20,19 @@ const ClinicalRegisterList = () => {
 	const [searchInputLabel, setSearchInputLabel] = useState(options[0].labelText);
 	const [inputType, setInputType] = useState('text');
 	const [activeSearchField, setActiveSearchField] = useState(0);
-	const [clinicalRegisters, setClinicalRegisters] = useState<Array<Record<string, any>>>([{}]);
+	const [clinicalRegisters, setClinicalRecords] = useState<Array<Record<string, any>>>([{}]);
 	const [hasError, setHasError] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [columns, setColumns] = useState(['Prontuario', 'Nome', 'Quantidade']);
 	const [tableTitle, setTableTitle] = useState('Registros Clínicos');
-	const [showListRegistersButton, setShowListRegistersButton] = useState(false);
+	const [showListPatientsButton, setShowListPatientsButton] = useState(false);
 	const [changingState, setChangingState] = useState(false);
 
 	const getData = async () => {
 		try {
-			const { data } = await ClinicalRegisterService.getAll();
+			const { data } = await ClinicalRecordService.getAll();
 
-			setClinicalRegisters(formatData(data));
+			setClinicalRecords(formatData(data));
 		} catch (err) {
 			console.log(err);
 			Message('Erro ao tentar listar os registros clínicos', 1);
@@ -62,16 +64,16 @@ const ClinicalRegisterList = () => {
 		if (value) {
 			try {
 				if (activeSearchField === 0) {
-					const { data } = await ClinicalRegisterService.getByPatientName(value);
-					setClinicalRegisters(formatData(data));
+					const { data } = await ClinicalRecordService.getByPatientName(value);
+					setClinicalRecords(formatData(data));
 				}
 				if (activeSearchField === 1) {
-					const { data } = await ClinicalRegisterService.getByPatientId(+value);
-					setClinicalRegisters(formatData(data));
+					const { data } = await ClinicalRecordService.getByPatientId(+value);
+					setClinicalRecords(formatData(data));
 				}
 				if (activeSearchField === 2) {
-					const { data } = await ClinicalRegisterService.getByDate(value);
-					setClinicalRegisters(formatData(data));
+					const { data } = await ClinicalRecordService.getByDate(value);
+					setClinicalRecords(formatData(data));
 				}
 				if (activeSearchField === 3) {
 					alert(value);
@@ -84,8 +86,8 @@ const ClinicalRegisterList = () => {
 		}
 	};
 
-	const formatData = (clinicalRegisters: ClinicalRegistersList[]) => {
-		return clinicalRegisters.map((clinicalRegister: ClinicalRegistersList) => {
+	const formatData = (clinicalRegisters: ClinicalRecordsList[]) => {
+		return clinicalRegisters.map((clinicalRegister: ClinicalRecordsList) => {
 			return {
 				prontuario: (
 					<TableText
@@ -95,7 +97,7 @@ const ClinicalRegisterList = () => {
 						{clinicalRegister.patient.id}
 					</TableText>
 				),
-				nome: clinicalRegister.patient.name,
+				nome: StringFormatter(clinicalRegister.patient.name),
 				quantidade: clinicalRegister.amount ? (
 					<ListRegisters
 						onClick={() => showPatientRegisters(clinicalRegister.patient.id, clinicalRegister.patient.name)}
@@ -114,8 +116,8 @@ const ClinicalRegisterList = () => {
 		setChangingState(true);
 
 		try {
-			const { data } = await ClinicalRegisterService.getPatientRegisters(patientId);
-			const formattedData = data.map((clinicalRegister: ClinicalRegistersList) => {
+			const { data } = await ClinicalRecordService.getPatientRegisters(patientId);
+			const formattedData = data.map((clinicalRegister: ClinicalRecordsList) => {
 				return {
 					dataHora: DateTimeFormatter(clinicalRegister.date, clinicalRegister.time),
 					descricao: (
@@ -123,10 +125,10 @@ const ClinicalRegisterList = () => {
 					),
 				};
 			});
-			setClinicalRegisters(formattedData);
+			setClinicalRecords(formattedData);
 			setColumns(['Data-Hora', 'Descrição']);
 			setTableTitle(patientName);
-			setShowListRegistersButton(true);
+			setShowListPatientsButton(true);
 			setSearchOptions([{ name: 'Data', labelText: 'Digite data do registro', active: true }]);
 			setInputType('date');
 			setActiveSearchField(3);
@@ -137,10 +139,10 @@ const ClinicalRegisterList = () => {
 		}
 	};
 
-	const listAllRegisters = async () => {
+	const listAllPatients = async () => {
 		setChangingState(true);
 		await getData();
-		setShowListRegistersButton(false);
+		setShowListPatientsButton(false);
 		setColumns(['Prontuario', 'Nome', 'Quantidade']);
 		setTableTitle('Registros Clínicos');
 		setSearchOptions(options);
@@ -169,9 +171,11 @@ const ClinicalRegisterList = () => {
 										onSearchValueChange={onSearchValueChange}
 									/>
 								</SearchBox>
-								{showListRegistersButton && (
+								{showListPatientsButton && (
 									<ButtonContainer>
-										<Button onClick={listAllRegisters}>Listar Registros</Button>
+										<Button onClick={listAllPatients}>
+											<RiUserReceivedLine /> Listar Pacientes
+										</Button>
 									</ButtonContainer>
 								)}
 							</Header>

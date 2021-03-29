@@ -9,12 +9,12 @@ import { Message } from '../../../assets/functions';
 import { Button, ConfirmButton } from '../../../assets/styles/global';
 import TextAreaComponent from '../../../components/form/TextArea';
 import Spinner from '../../../components/spinner';
-import ClinicalRegisterService from '../../../services/clinical-register';
+import ClinicalRecordService from '../../../services/clinical-record';
 import ScheduleService from '../../../services/schedule';
 import { Content, ButtonArea, ButtonsGroup, Container, FieldsArea, OldRegisters, PatientArea, TextArea } from './styles';
-import PreviousRegistersComponent from '../../../components/clinical-register/previous-registers';
+import PreviousRecordsComponent from '../../../components/clinical-record/previous-record';
 import { ConfirmModal, Error, PatientDetails } from '../../../components';
-import { PreviousRegisters } from '../../../@types/clinical-register';
+import { PreviousRecords } from '../../../@types/clinical-record';
 
 const Attendance = () => {
 	const { id } = useParams<RouteParams>();
@@ -23,7 +23,7 @@ const Attendance = () => {
 	const [scheduling, setScheduling] = useState({} as ScheduleDetails);
 	const [loading, setLoading] = useState(false);
 	const [hasError, setHasError] = useState(false);
-	const [previousRegisters, setPreviousRegisters] = useState<PreviousRegisters[]>([]);
+	const [previousRecords, setPreviousRecords] = useState<PreviousRecords[]>([]);
 
 	const [confirmModal, setConfirmModal] = useState(false);
 
@@ -43,8 +43,8 @@ const Attendance = () => {
 
 	const getPreviousRegisters = async (patientId: number, medicId: number) => {
 		try {
-			const { data } = await ClinicalRegisterService.getPreviousRegisters(patientId, medicId);
-			setPreviousRegisters(data);
+			const { data } = await ClinicalRecordService.getPreviousRegisters(patientId, medicId);
+			setPreviousRecords(data);
 		} catch {
 			Message('Não foi possível obter as informações dos registros anteriores do paciente', 1);
 		} finally {
@@ -92,11 +92,11 @@ const Attendance = () => {
 				description: formRef.current?.getFieldValue('description'),
 			};
 
-			const response = await ClinicalRegisterService.save(clinicalRegister);
-			const copyArray = [...previousRegisters];
+			const response = await ClinicalRecordService.save(clinicalRegister);
+			const copyArray = [...previousRecords];
 			copyArray.unshift(response.data);
 
-			setPreviousRegisters(copyArray);
+			setPreviousRecords(copyArray);
 			Message('Registro clínico salvo com sucesso', 0);
 			reset();
 		} catch (err) {
@@ -150,7 +150,7 @@ const Attendance = () => {
 							</FieldsArea>
 						</Content>
 						<OldRegisters>
-							<PreviousRegistersComponent previousRegisters={previousRegisters} />
+							<PreviousRecordsComponent previousRecords={previousRecords} />
 						</OldRegisters>
 					</Container>
 				</>

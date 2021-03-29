@@ -63,3 +63,62 @@ export const ConfirmButton = styled(BaseButton)`
 		background: #20a527;
 	}
 `;
+
+export const LinkButton = styled(Link)`
+	color: #fff;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 3.5rem;
+	transition: background-color 0.2s;
+	border-radius: 0.25rem;
+	border: none;
+	text-decoration: none;
+	width: 100%;
+	background: #1161ee;
+
+	&:hover {
+		background: #0b43a6;
+	}
+	cursor: pointer;
+	> :first-child {
+		margin-right: 1.25rem;
+	}
+`;
+
+/* ******************List Styles********************* */
+
+import { Link } from 'react-router-dom';
+
+export const Container = styled.section`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+`;
+
+export const Header = styled.header`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+`;
+
+export const Content = styled.main`
+	width: 70%;
+	margin: 20px 0;
+`;
+
+export const SearchBox = styled.div`
+	margin: 0 1.25rem;
+	width: 18.75rem;
+`;
+
+export const TableText = styled(Link)`
+	text-decoration: none;
+`;
+
+export const ButtonContainer = styled.div`
+	width: 200px;
+	margin: 0 1.25rem;
+`;

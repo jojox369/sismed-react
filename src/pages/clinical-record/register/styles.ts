@@ -23,7 +23,7 @@ export const Content = styled.div`
 export const PatientArea = styled.div`
 	margin: 0 1.25rem;
 `;
-export const ClinicalRegisterArea = styled.div`
+export const ClinicalRecordArea = styled.div`
 	margin: 0 1.25rem;
 	display: flex;
 	justify-content: flex-end;
