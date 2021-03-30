@@ -5,7 +5,7 @@ import { Button } from '../../../assets/styles/global';
 import { Error, SearchComponent, Spinner, Table } from '../../../components';
 import ClinicalRecordService from '../../../services/clinical-record';
 
-import { Container, Content, Header, SearchBox, TableText, ButtonContainer } from '../../../assets/styles/global';
+import { Container, Content, Header, SearchBox, TableLink, ButtonContainer } from '../../../assets/styles/global';
 import { ListRegisters } from './styles';
 import { RiUserReceivedLine } from 'react-icons/ri';
 
@@ -90,12 +90,12 @@ const ClinicalRegisterList = () => {
 		return clinicalRegisters.map((clinicalRegister: ClinicalRecordsList) => {
 			return {
 				prontuario: (
-					<TableText
+					<TableLink
 						to={`/clinical-record/save/${clinicalRegister.patient.id}`}
 						title='Clique para adicionar um novo registro clínico para esse paciente'
 					>
 						{clinicalRegister.patient.id}
-					</TableText>
+					</TableLink>
 				),
 				nome: StringFormatter(clinicalRegister.patient.name),
 				quantidade: clinicalRegister.amount ? (
@@ -121,7 +121,7 @@ const ClinicalRegisterList = () => {
 				return {
 					dataHora: DateTimeFormatter(clinicalRegister.date, clinicalRegister.time),
 					descricao: (
-						<TableText to={`clinical-record/edit/${clinicalRegister.id}`}> {CutString(clinicalRegister.description, 15)}</TableText>
+						<TableLink to={`clinical-record/edit/${clinicalRegister.id}`}> {CutString(clinicalRegister.description, 15)}</TableLink>
 					),
 				};
 			});

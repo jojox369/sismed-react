@@ -1,18 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { RiUserAddLine } from 'react-icons/ri';
-import { CellNumberFormatter, Message } from '../../../assets/functions';
-import { ButtonContainer, Container, Content, Header, LinkButton, SearchBox } from '../../../assets/styles/global';
+import { CpfFormatter, Message, StringFormatter } from '../../../assets/functions';
+import { ButtonContainer, Container, Content, Header, LinkButton, SearchBox, TableLink } from '../../../assets/styles/global';
 import { Error, SearchComponent, Spinner, Table } from '../../../components';
 import PatientService from '../../../services/patient';
 
 interface PatientList {
 	id: number;
 	name: string;
-	cellNumber: string;
+	cpf: string;
 	age: string;
 }
 
-const columns = ['Prontuário', 'Nome', 'Idade', 'Celular'];
+interface ListPatients {
+	nome: string;
+	prontuario: ReactElement;
+	idade: string;
+	cpf: string;
+}
+
+const columns = ['Prontuário', 'Nome', 'Idade', 'CPF'];
 
 const options = [
 	{ name: 'Paciente', labelText: 'Digite o nome do paciente', active: true },
@@ -22,22 +29,28 @@ const options = [
 
 const ListPatient = () => {
 	const [searchOptions, setSearchOptions] = useState(options);
-	const [patients, setPatients] = useState<PatientList[]>([]);
+	const [patients, setPatients] = useState<ListPatients[]>([]);
 	const [hasError, setHasError] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [searchInputLabel, setSearchInputLabel] = useState(options[0].labelText);
 	const [activeSearchField, setActiveSearchField] = useState(0);
 	const [maxLength, setMaxLength] = useState(60);
 
+	const formatPatientsData = (patients: PatientList[]) => {
+		const formattedData = patients.map((patient: PatientList) => ({
+			nome: StringFormatter(patient.name),
+			prontuario: <TableLink to={`patient/edit/${patient.id}`}>{patient.id}</TableLink>,
+			idade: patient.age,
+			cpf: CpfFormatter(patient.cpf),
+		}));
+
+		setPatients(formattedData);
+	};
+
 	const getData = async () => {
 		try {
 			const { data } = await PatientService.list();
-			const formattedData = data.map((patient: PatientList) => ({
-				...patient,
-				cellNumber: CellNumberFormatter(patient.cellNumber),
-			}));
-
-			setPatients(formattedData);
+			formatPatientsData(data);
 		} catch (error) {
 			console.log(error);
 			setHasError(true);
@@ -69,16 +82,17 @@ const ListPatient = () => {
 		if (value) {
 			try {
 				if (activeSearchField === 0) {
-					return;
+					const { data } = await PatientService.getByName(value);
+
+					formatPatientsData(data);
 				}
 				if (activeSearchField === 1) {
-					return;
+					const { data } = await PatientService.searchById(+value);
+					formatPatientsData(data);
 				}
 				if (activeSearchField === 2) {
-					return;
-				}
-				if (activeSearchField === 3) {
-					alert(value);
+					const { data } = await PatientService.searchByCpf(value);
+					formatPatientsData(data);
 				}
 			} catch {
 				Message('Erro ao tentar pesquisar os registros clínicos', 1);
@@ -108,7 +122,7 @@ const ListPatient = () => {
 							/>
 						</SearchBox>
 						<ButtonContainer>
-							<LinkButton to='#'>
+							<LinkButton to='/patient/register'>
 								<RiUserAddLine />
 								Novo Paciente
 							</LinkButton>

@@ -114,7 +114,7 @@ export const SearchBox = styled.div`
 	width: 18.75rem;
 `;
 
-export const TableText = styled(Link)`
+export const TableLink = styled(Link)`
 	text-decoration: none;
 `;
 

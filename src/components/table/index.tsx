@@ -73,7 +73,7 @@ const TableComponent: React.FC<Props> = ({ dataSource, columns, title, hasNoData
 					<tbody>
 						{dataSource.length === 0 && <NoData length={columns.length} label={hasNoDataLabel} />}
 
-						{dataSource.length > 0 && dataPaginated.map((record: any, i) => <Row key={i} record={record} />)}
+						{dataSource.length > 0 && dataPaginated.map((record: any, i) => <Row key={i} columns={columns} record={record} />)}
 					</tbody>
 				</Table>
 			</TableContainer>
