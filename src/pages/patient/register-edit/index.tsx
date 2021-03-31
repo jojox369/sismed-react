@@ -16,10 +16,6 @@ import {
 import { ButtonsContainerForm, ConfirmButton, Container, Content, Form, HeaderForm } from '../../../assets/styles/global';
 import { Input, Select } from '../../../components';
 
-interface SaveForm {
-	name: string;
-}
-
 const initialState = {
 	id: 0,
 	name: '',
@@ -53,8 +49,8 @@ const RegisterEditPatient = () => {
 	const [healthInsurances, setHealthInsurances] = useState<HealthInsurance[]>([]);
 	const [healthInsuranceTypes, setHealthInsuranceTypes] = useState<HealthInsuranceType[]>([]);
 
-	const onSubmit: SubmitHandler<SaveForm> = (data, { reset }) => {
-		return;
+	const onSubmit: SubmitHandler<Patient> = (data, { reset }) => {
+		console.log(data.healthInsuranceType.id);
 	};
 
 	useEffect(() => {
@@ -67,15 +63,15 @@ const RegisterEditPatient = () => {
 		<Container>
 			<HeaderForm>
 				<ButtonsContainerForm>
-					<ConfirmButton>Salvar</ConfirmButton>
+					<ConfirmButton form='form'>Salvar</ConfirmButton>
 				</ButtonsContainerForm>
 			</HeaderForm>
 			<Content>
 				<Form onSubmit={onSubmit} id='form' ref={formRef}>
 					<div>
-						<Input name='name' label='Nome' fieldActive={false} />
+						<Input name='name' label='Nome' fieldActive={false} required />
 						<Input name='dateBirth' label='Data de Nascimento' type='date' fieldActive={false} />
-						<Input name='cpf' label='CPF' mask='cpf' fieldActive={false} />
+						<Input name='cpf' label='CPF' mask='cpf' fieldActive={false} required />
 						<Input name='rg' label='RG' mask='rg' fieldActive={false} />
 						<Input name='emittingOrgan' label='Orgão Emissor' fieldActive={false} />
 						<Input name='emittingDate' label='Data de Emissão' fieldActive={false} />
@@ -91,7 +87,7 @@ const RegisterEditPatient = () => {
 					<div>
 						<Input name='phone' label='Telefone Fixo' mask='phone' fieldActive={false} />
 						<Input name='jobPhone' label='Telefone do Trabalho' mask='phone' fieldActive={false} />
-						<Input name='cell_number' label='Celular' mask='cellPhone' fieldActive={false} />
+						<Input name='cell_number' label='Celular' mask='cellPhone' fieldActive={false} required />
 						<Input name='email' type='email' label='Email' fieldActive={false} />
 						<Select name='sex' label='Sexo' options={sexTypeOptions()} fieldActive={false} defaultLabel='Selecione um' />
 						<Select
@@ -107,10 +103,17 @@ const RegisterEditPatient = () => {
 
 					<div>
 						<Input name='recommendation' label='Recomendação' fieldActive={false} />
-						<Select name='healthInsurance' label='Convênio' fieldActive={false} options={healthInsurances} defaultLabel='Selecione um' />
+						<Select
+							name='healthInsuranceType.healthInsurance.id'
+							label='Convênio'
+							fieldActive={false}
+							options={healthInsurances}
+							defaultLabel='Selecione um'
+							required
+						/>
 						{patient.healthInsuranceType.healthInsurance.id > 1 && (
 							<Select
-								name='healthInsuranceType'
+								name='healthInsuranceType.id'
 								label='Plano'
 								fieldActive={false}
 								options={healthInsuranceTypes}
@@ -123,12 +126,12 @@ const RegisterEditPatient = () => {
 					</div>
 					<div>
 						<Input name='zipCode' label='CEP' mask='zipCode' fieldActive={false} />
-						<Input name='street' label='Logradouro' fieldActive={false} />
-						<Input name='number' label='Número' fieldActive={false} />
-						<Input name='complement' label='Complemento' fieldActive={false} />
-						<Input name='district' label='Bairro' fieldActive={false} />
-						<Input name='city' label='Cidade' fieldActive={false} />
-						<Select name='state' label='Estado' fieldActive={false} options={stateOptions()} defaultLabel='Selecione um' />
+						<Input name='street' label='Logradouro' fieldActive={false} disabled />
+						<Input name='number' label='Número' fieldActive={false} disabled />
+						<Input name='complement' label='Complemento' fieldActive={false} disabled />
+						<Input name='district' label='Bairro' fieldActive={false} disabled />
+						<Input name='city' label='Cidade' fieldActive={false} disabled />
+						<Select name='state' label='Estado' fieldActive={false} options={stateOptions()} defaultLabel='Selecione um' disabled />
 					</div>
 				</Form>
 			</Content>

@@ -29,7 +29,7 @@ const SelectComponent: React.FC<Props> = ({ options, defaultLabel, fieldActive, 
 	}, [fieldName, registerField]);
 	const isFocused = focused || fieldActive;
 	return (
-		<Container error={error} focused={isFocused} required={props.required}>
+		<Container error={error} focused={isFocused} required={props.required} selectDisabled={props.disabled}>
 			<Label>{label}</Label>
 			<Select
 				defaultValue={defaultValue ? defaultValue : undefined}

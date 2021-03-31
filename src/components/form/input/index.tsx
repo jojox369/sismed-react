@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { InputHTMLAttributes, useCallback, useEffect, useRef, useState } from 'react'
 import { useField } from '@unform/core';
-import { InputContainer } from './styles';
+import { InputContainer, Input, Label } from './styles';
 
 import { cellPhone, cpf, currency, zipCode, phone } from '../../../assets/masks';
 
@@ -12,7 +12,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 	fieldActive: boolean;
 }
 
-const Input: React.FC<Props> = ({ label, mask, fieldActive, ...props }) => {
+const InputComponent: React.FC<Props> = ({ label, mask, fieldActive, ...props }) => {
 	const [focused, setFocused] = useState(false);
 	const { fieldName, registerField, defaultValue, error } = useField(props.name as string);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -65,21 +65,23 @@ const Input: React.FC<Props> = ({ label, mask, fieldActive, ...props }) => {
 
 	return (
 
-		<InputContainer focused={isFocused} error={error} required={props.required}>
-			<input
+		<InputContainer focused={isFocused} error={error} required={props.required} inputDisabled={props.disabled}>
+			<Input
 				onFocus={() => setFocused(true)}
 				onBlur={() => setFocused(false)}
-				onKeyUp={handleKeyUp} ref={inputRef}
+				onKeyUp={handleKeyUp} 
+				ref={inputRef}
+				focused={isFocused}
 				defaultValue={defaultValue}
 				autoComplete='off'
 				{...props}
 			/>
-			<label htmlFor={props.id}>
+			<Label htmlFor={props.id} focused={isFocused} error={error} required={props.required} inputDisabled={props.disabled}>
 				{renderLabel()}
-			</label>
+			</Label>
 		</InputContainer>
 
 	)
 }
 
-export default Input
+export default InputComponent

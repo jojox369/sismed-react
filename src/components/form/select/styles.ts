@@ -4,6 +4,7 @@ interface Props {
 	focused: boolean;
 	error?: string;
 	required?: boolean;
+	selectDisabled?: boolean;
 }
 
 export const Container = styled.section<Props>`
@@ -17,15 +18,15 @@ export const Container = styled.section<Props>`
 	position: relative;
 
 	&:hover {
-		background-color: rgba(255, 255, 255, 0.45);
-		box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);
+		background-color: ${props => (props.selectDisabled ? '#ffffff' : 'rgba(255, 255, 255, 0.45)')};
+		box-shadow: ${props => (props.selectDisabled ? 'none' : '0px 4px 20px 0px #0287ce')};
 	}
 
 	${props =>
 		props.focused &&
 		`
 			box-shadow: 0 0.25rem 1.25rem 0 #0287ce;
-	`}
+		`}
 
 	${props =>
 		props.required &&
@@ -35,6 +36,14 @@ export const Container = styled.section<Props>`
   			color: #ec392f;
 			}
 			
+	`}
+
+	${props =>
+		props.selectDisabled &&
+		`
+			& label{
+				color: #015e90;
+			}
 		`}
 `;
 
@@ -42,7 +51,7 @@ export const Select = styled.select`
 	width: 100%;
 	height: 3rem;
 	position: relative;
-	padding: 1rem 1rem 0.5rem 1rem;
+	padding: 0px 16px;
 	margin: 0.625rem 0;
 	border: none;
 	border-radius: 0.25rem;

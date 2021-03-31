@@ -1,126 +1,61 @@
 import styled from 'styled-components';
 
-interface DivProps {
+interface Props {
 	focused: boolean;
 	error?: string;
 	required?: boolean;
+	inputDisabled?: boolean;
 }
-export const InputContainer = styled.div<DivProps>`
+export const InputContainer = styled.div<Props>`
 	width: 100%;
-	height: 56px;
-	border-radius: 4px;
+	height: 3.5rem;
+	border-radius: 0.25rem;
 	position: relative;
 	background-color: ${props => (props.focused ? '#fff' : 'rgba(255, 255, 255, 0.8)')};
 	margin-top: 1.25rem;
 	transition: 0.3s background-color ease-in-out, 0.3s box-shadow ease-in-out;
 
 	&:hover {
-		/* background-color: rgba(255, 255, 255, 0.45);
-		box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05); */
+		background-color: ${props => (props.inputDisabled ? '#ffffff' : 'rgba(255, 255, 255, 0.45)')};
+		box-shadow: ${props => (props.inputDisabled ? 'none' : '0px 4px 20px 0px #0287ce')};
+	}
+`;
+
+export const Input = styled.input<Props>`
+	width: 100%;
+	height: 3.5rem;
+	position: relative;
+	padding: ${props => (props.focused ? '24px 16px 8px 16px' : '0px 16px')};
+	border: none;
+	border-radius: 0.25rem;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: normal;
+	background-color: transparent;
+	color: #282828;
+	outline: none;
+	box-shadow: ${props => (props.error ? '0px 4px 20px 0px  #ec392f' : '0px 4px 20px 0px transparent')};
+	transition: 0.3s background-color ease-in-out, 0.3s box-shadow ease-in-out, 0.1s padding ease-in-out;
+	-webkit-appearance: none;
+
+	&:focus:not(:read-only) {
 		box-shadow: 0px 4px 20px 0px #0287ce;
 	}
 
-	& input {
-		width: 100%;
-		height: 56px;
-		position: relative;
-		padding: 0px 16px;
-		border: none;
-		border-radius: 4px;
-		font-size: 16px;
-		font-weight: 400;
-		line-height: normal;
-		background-color: transparent;
-		color: #282828;
-		outline: none;
-		box-shadow: ${props => (props.error ? '0px 4px 20px 0px  #ec392f' : '0px 4px 20px 0px transparent')};
-		transition: 0.3s background-color ease-in-out, 0.3s box-shadow ease-in-out, 0.1s padding ease-in-out;
-		-webkit-appearance: none;
-	}
-
-	& input:disabled::-webkit-input-placeholder {
-		color: -internal-light-dark(graytext, rgb(170, 170, 170));
-	}
-
-	& input:enabled::-webkit-input-placeholder {
-		color: ${props => (props.error ? '#ec392f' : '#0287CE')};
-	}
-
-	& input:focus::-webkit-input-placeholder {
-		color: rgba(255, 255, 255, 0.8);
-	}
-	& input::-moz-placeholder {
-		color: rgba(255, 255, 255, 0.8);
-	}
-	& input:-ms-input-placeholder {
-		color: rgba(255, 255, 255, 0.8);
-	}
-	& input:-moz-placeholder {
-		color: rgba(255, 255, 255, 0.8);
-	}
-
-	& input + label {
-		position: absolute;
-		top: 15px;
-		left: 16px;
-		font-size: 15px;
-		font-weight: 600;
-		line-height: 24px;
-		color: #0287ce;
-		pointer-events: none;
-		transition: 0.1s all ease-in-out;
-	}
-
-	& input:focus:not(:read-only) {
-		box-shadow: 0px 4px 20px 0px #0287ce;
-	}
-
-	& input:read-only {
+	&:read-only {
 		cursor: default;
 	}
+`;
 
-	${props =>
-		props.focused &&
-		`
-			background-color: #ffffff;
-			box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.2);
-			& input{
-				padding: 24px 16px 8px 16px;
-				
-			}
-			& input + label{
-				top: 4px;
-				opacity: 1;
-				color: #0287CE;
-				font-size: 12px;
-
-			}
-			& input:enabled::-webkit-input-placeholder {
-  			color: transparent;
-			}	
-		`}
-
-	${props =>
-		props.error &&
-		`
-			& input::-webkit-input-placeholder {
-  			color: #ec392f;
-			}
-			& input + label{
-  			color: ${props.focused ? '#0287CE' : '#ec392f'};
-
-			}
-`}
-
-
-
-	${props =>
-		props.required &&
-		`
-		& input + label::after {
-				content:' *';
-  			color: #ec392f;
-			}
-			
-		`}
+export const Label = styled.label<Props>`
+	position: absolute;
+	top: ${props => (props.focused ? '4px' : '15px')};
+	left: 16px;
+	font-size: ${props => (props.focused ? '12px' : '15px')};
+	font-weight: 600;
+	line-height: 24px;
+	color: ${props => (props.inputDisabled ? '#015e90' : props.error && props.focused ? '#ec392f' : '#0287ce')};
+	pointer-events: none;
+	transition: 0.1s all ease-in-out;
+	${props => props.required && `::after { content:' *'; color: #ec392f; }`}
 `;
