@@ -14,6 +14,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 
 const InputComponent: React.FC<Props> = ({ label, mask, fieldActive, ...props }) => {
 	const [focused, setFocused] = useState(false);
+	const [hasValue, setHasValue] = useState(false)
 	const { fieldName, registerField, defaultValue, error } = useField(props.name as string);
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -25,7 +26,7 @@ const InputComponent: React.FC<Props> = ({ label, mask, fieldActive, ...props })
 		})
 	}, [fieldName, registerField])
 
-	const isFocused = focused || fieldActive || props.type === 'date'
+	
 
 	const handleKeyUp = useCallback((e: React.FormEvent<HTMLInputElement>) => {
 		if (mask === "zipCode") {
@@ -62,6 +63,17 @@ const InputComponent: React.FC<Props> = ({ label, mask, fieldActive, ...props })
 
 	}
 
+	const isFocused = focused || fieldActive || props.type === 'date' || hasValue
+	const onChange = (e:  React.ChangeEvent<HTMLInputElement>)=>{
+		const {value} = e.target
+		if(value){
+			setHasValue(true)
+		}else{
+			setHasValue(false)
+
+		}
+	}
+
 
 	return (
 
@@ -74,6 +86,7 @@ const InputComponent: React.FC<Props> = ({ label, mask, fieldActive, ...props })
 				focused={isFocused}
 				defaultValue={defaultValue}
 				autoComplete='off'
+				onChange={onChange}
 				{...props}
 			/>
 			<Label htmlFor={props.id} focused={isFocused} error={error} required={props.required} inputDisabled={props.disabled}>

@@ -1,26 +1,12 @@
-import { AxiosResponse } from 'axios';
 import api from './api';
 
-const HetalhInsurance = {
-	getAll: async (): Promise<AxiosResponse<any>> => {
-		const response = await api.get('convenio/');
-		return response;
-	},
+const baseURL = '/healthInsurance';
 
-	getById: async (convenioId: number): Promise<AxiosResponse<any>> => {
-		const response = await api.get(`convenio/${convenioId}/`);
-		return response;
-	},
-
-	getTypes: async (convenioId: number): Promise<AxiosResponse<any>> => {
-		const response = await api.get(`tiposConvenio/${convenioId}`);
-		return response;
-	},
-
-	getProcedures: async (convenioId: number): Promise<AxiosResponse<any>> => {
-		const response = await api.get(`procedimento/${convenioId}`);
+const healthInsurance = {
+	searchAll: async () => {
+		const response = await api.get(`${baseURL}?search=true`);
 		return response;
 	},
 };
 
-export default HetalhInsurance;
+export default healthInsurance;
