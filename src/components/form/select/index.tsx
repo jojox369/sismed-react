@@ -4,7 +4,7 @@ import { StringFormatter } from '../../../assets/functions';
 import { useField } from '@unform/core';
 
 export interface SelectOptions {
-	id: number;
+	id: number | string;
 	name: string;
 }
 

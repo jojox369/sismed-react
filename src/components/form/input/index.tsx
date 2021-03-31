@@ -3,11 +3,11 @@ import React, { InputHTMLAttributes, useCallback, useEffect, useRef, useState } 
 import { useField } from '@unform/core';
 import { InputContainer } from './styles';
 
-import { cellPhone, cpf, currency, zipCode } from '../../../assets/masks';
+import { cellPhone, cpf, currency, zipCode, phone } from '../../../assets/masks';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
 	label: string;
-	mask?: 'zipCode' | 'cpf' | 'rg' | 'cnpj' | 'currency' | 'cellPhone';
+	mask?: 'zipCode' | 'cpf' | 'rg' | 'cnpj' | 'currency' | 'cellPhone' | 'phone';
 
 	fieldActive: boolean;
 }
@@ -39,6 +39,9 @@ const Input: React.FC<Props> = ({ label, mask, fieldActive, ...props }) => {
 		}
 		if(mask ==='cellPhone'){
 			cellPhone(e)
+		}
+		if(mask ==='phone'){
+			phone(e)
 		}
 	}, [mask])
 

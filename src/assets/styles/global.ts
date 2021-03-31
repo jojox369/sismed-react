@@ -1,5 +1,6 @@
 import styled, { createGlobalStyle } from 'styled-components';
-
+import { Form as UnForm } from '@unform/web';
+import { Link } from 'react-router-dom';
 export const GlobalStyles = createGlobalStyle`
 * {
   margin: 0;
@@ -88,8 +89,6 @@ export const LinkButton = styled(Link)`
 
 /* ******************List Styles********************* */
 
-import { Link } from 'react-router-dom';
-
 export const Container = styled.section`
 	display: flex;
 	justify-content: center;
@@ -105,7 +104,6 @@ export const Header = styled.header`
 `;
 
 export const Content = styled.main`
-	width: 70%;
 	margin: 20px 0;
 `;
 
@@ -121,4 +119,33 @@ export const TableLink = styled(Link)`
 export const ButtonContainer = styled.div`
 	width: 200px;
 	margin: 0 1.25rem;
+`;
+
+/* ***************** Form Style ***************** */
+export const HeaderForm = styled.header`
+	padding: 3rem 0;
+	width: 100%;
+	display: flex;
+	justify-content: flex-end;
+	align-self: flex-end;
+	> * {
+		width: 9.375rem;
+		margin-right: 2.5rem;
+	}
+`;
+
+export const ButtonsContainerForm = styled.div`
+	> * {
+		width: 9.375rem;
+		margin-right: 2.5rem;
+	}
+`;
+
+export const Form = styled(UnForm)`
+	display: flex;
+
+	> * {
+		margin: 0 1rem;
+		width: 20rem;
+	}
 `;
