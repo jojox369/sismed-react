@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 
 interface Props {
-	focused: boolean;
+	focused?: boolean;
 	error?: string;
 	required?: boolean;
 	selectDisabled?: boolean;
+	inputDisabled?: boolean;
 }
 
 export const Container = styled.section<Props>`
@@ -47,7 +48,7 @@ export const Container = styled.section<Props>`
 		`}
 `;
 
-export const Select = styled.select`
+export const Select = styled.select<Props>`
 	width: 100%;
 	height: 3rem;
 	position: relative;
@@ -59,22 +60,28 @@ export const Select = styled.select`
 	font-weight: 400;
 	line-height: normal;
 	background-color: transparent;
-	color: #282828;
+	color: ${props => (props.error ? '#ec392f' : '#282828')};
 	outline: none;
 	text-align-last: left;
 `;
 export const Option = styled.option`
 	text-align: left;
+	color: red;
 `;
 
-export const Label = styled.label`
+export const Label = styled.label<Props>`
 	position: absolute;
 	top: 0.25rem;
 	left: 1.3125rem;
 	font-size: 0.75rem;
 	font-weight: 600;
 	line-height: 1.5rem;
-	color: #0287ce;
+	color: ${props => (props.error ? '#ec392f' : '#0287ce')};
+	${props => props.required && `::after { content:' *'; color: #ec392f; }`}
 	pointer-events: none;
 	opacity: 1;
+`;
+
+export const OptionText = styled.label<Props>`
+	color: ${props => (props.error ? '#ec392f' : '#0287ce')};
 `;

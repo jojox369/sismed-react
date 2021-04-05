@@ -1,5 +1,4 @@
-/* eslint-disable prettier/prettier */
-import React, { InputHTMLAttributes, useCallback, useEffect, useRef, useState } from 'react'
+import React, { InputHTMLAttributes, useCallback, useEffect, useRef, useState } from 'react';
 import { useField } from '@unform/core';
 import { InputContainer, Input, Label } from './styles';
 
@@ -13,40 +12,44 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const InputComponent: React.FC<Props> = ({ label, mask, fieldActive, ...props }) => {
-	const [focused, setFocused] = useState(false);
-	const [hasValue, setHasValue] = useState(false)
-	const { fieldName, registerField, defaultValue, error } = useField(props.name as string);
 	const inputRef = useRef<HTMLInputElement>(null);
+	const [focused, setFocused] = useState(false);
+	const { fieldName, registerField, defaultValue, error } = useField(props.name as string);
+	const [hasValue, setHasValue] = useState(false);
+	const [hasError, setHasError] = useState(error);
 
 	useEffect(() => {
 		registerField({
 			name: fieldName,
 			ref: inputRef.current,
-			path: 'value'
-		})
-	}, [fieldName, registerField])
+			path: 'value',
+		});
+	}, [fieldName, registerField]);
 
-	
+	useEffect(() => {
+		setHasError(error);
+	}, [error]);
 
-	const handleKeyUp = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-		if (mask === "zipCode") {
-			zipCode(e);
-		}
-		if (mask === "currency") {
-			currency(e);
-		}
-		if (mask === "cpf") {
-			cpf(e);
-		}
-		if(mask ==='cellPhone'){
-			cellPhone(e)
-		}
-		if(mask ==='phone'){
-			phone(e)
-		}
-	}, [mask])
-
-
+	const handleKeyUp = useCallback(
+		(e: React.FormEvent<HTMLInputElement>) => {
+			if (mask === 'zipCode') {
+				zipCode(e);
+			}
+			if (mask === 'currency') {
+				currency(e);
+			}
+			if (mask === 'cpf') {
+				cpf(e);
+			}
+			if (mask === 'cellPhone') {
+				cellPhone(e);
+			}
+			if (mask === 'phone') {
+				phone(e);
+			}
+		},
+		[mask],
+	);
 
 	const renderLabel = () => {
 		if (label) {
@@ -60,41 +63,40 @@ const InputComponent: React.FC<Props> = ({ label, mask, fieldActive, ...props })
 
 			return label;
 		}
+	};
 
-	}
+	const isFocused = focused || fieldActive || props.type === 'date' || hasValue;
 
-	const isFocused = focused || fieldActive || props.type === 'date' || hasValue
-	const onChange = (e:  React.ChangeEvent<HTMLInputElement>)=>{
-		const {value} = e.target
-		if(value){
-			setHasValue(true)
-		}else{
-			setHasValue(false)
-
+	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { value } = e.target;
+		if (value) {
+			setHasValue(true);
+			setHasError('');
+		} else {
+			setHasValue(false);
+			setHasError(error);
 		}
-	}
-
+	};
 
 	return (
-
-		<InputContainer focused={isFocused} error={error} required={props.required} inputDisabled={props.disabled}>
+		<InputContainer focused={isFocused} error={hasError} required={props.required} inputDisabled={props.disabled}>
 			<Input
 				onFocus={() => setFocused(true)}
 				onBlur={() => setFocused(false)}
-				onKeyUp={handleKeyUp} 
+				onKeyUp={handleKeyUp}
 				ref={inputRef}
 				focused={isFocused}
 				defaultValue={defaultValue}
 				autoComplete='off'
 				onChange={onChange}
+				error={hasError}
 				{...props}
 			/>
-			<Label htmlFor={props.id} focused={isFocused} error={error} required={props.required} inputDisabled={props.disabled}>
+			<Label htmlFor={props.id} focused={isFocused} error={hasError} required={props.required} inputDisabled={props.disabled}>
 				{renderLabel()}
 			</Label>
 		</InputContainer>
+	);
+};
 
-	)
-}
-
-export default InputComponent
+export default InputComponent;

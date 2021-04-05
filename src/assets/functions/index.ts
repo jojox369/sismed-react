@@ -1,4 +1,5 @@
 import { store } from 'react-notifications-component';
+import AddressService from '../../services/address';
 
 export const Message = (message: string, type: number) => {
 	let title = '';
@@ -92,4 +93,41 @@ export const TimeFormatter = (time: string) => {
 
 export const DateTimeFormatter = (date: string, time: string) => {
 	return `${BrDateFormatter(date)} - ${TimeFormatter(time)}`;
+};
+
+export const GetAddress = async (zipCode: string) => {
+	const validateZipCode = /^[0-9]{8}$/;
+	if (validateZipCode.test(zipCode.replace(/\D/g, ''))) {
+		try {
+			const { data } = await AddressService.getAddress(zipCode);
+			return {
+				zipCode: data.cep,
+				street: data.logradouro,
+				complement: data.complemento,
+				neighborhood: data.bairro,
+				city: data.localidade,
+				state: data.uf,
+			};
+		} catch {
+			Message('Erro ao tentar buscar o Cep', 1);
+			return {
+				zipCode: '',
+				street: '',
+				complement: '',
+				neighborhood: '',
+				city: '',
+				state: '',
+			};
+		}
+	} else {
+		Message('Cep Inválido', 1);
+		return {
+			zipCode: '',
+			street: '',
+			complement: '',
+			neighborhood: '',
+			city: '',
+			state: '',
+		};
+	}
 };
