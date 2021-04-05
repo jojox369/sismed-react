@@ -13,9 +13,10 @@ interface Props extends React.SelectHTMLAttributes<HTMLSelectElement> {
 	defaultLabel?: string;
 	label: string;
 	fieldActive: boolean;
+	isRequired?: boolean;
 }
 
-const SelectComponent: React.FC<Props> = ({ options, defaultLabel, fieldActive, label, ...props }) => {
+const SelectComponent: React.FC<Props> = ({ options, defaultLabel, fieldActive, label, isRequired, ...props }) => {
 	const { fieldName, registerField, defaultValue, error } = useField(props.name as string);
 	const inputRef = useRef<HTMLSelectElement>(null);
 	const [focused, setFocused] = useState(false);
@@ -48,9 +49,10 @@ const SelectComponent: React.FC<Props> = ({ options, defaultLabel, fieldActive, 
 			return label;
 		}
 	};
+
 	return (
-		<Container error={error} focused={isFocused} required={props.required} selectDisabled={props.disabled}>
-			<Label htmlFor={props.id} error={hasError} required={props.required}>
+		<Container error={error} focused={isFocused} selectDisabled={props.disabled}>
+			<Label htmlFor={props.id} error={hasError} isRequired={isRequired}>
 				{renderLabel()}
 			</Label>
 			<Select

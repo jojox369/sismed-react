@@ -2,16 +2,17 @@ import React, { InputHTMLAttributes, useCallback, useEffect, useRef, useState } 
 import { useField } from '@unform/core';
 import { InputContainer, Input, Label } from './styles';
 
-import { cellPhone, cpf, currency, zipCode, phone } from '../../../assets/masks';
+import { cellPhone, cpf, currency, zipCode, phone, textInput, rg } from '../../../assets/masks';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
 	label: string;
-	mask?: 'zipCode' | 'cpf' | 'rg' | 'cnpj' | 'currency' | 'cellPhone' | 'phone';
+	mask?: 'zipCode' | 'cpf' | 'rg' | 'cnpj' | 'currency' | 'cellPhone' | 'phone' | 'text';
 
 	fieldActive: boolean;
+	isRequired?: boolean;
 }
 
-const InputComponent: React.FC<Props> = ({ label, mask, fieldActive, ...props }) => {
+const InputComponent: React.FC<Props> = ({ label, mask, fieldActive, isRequired, ...props }) => {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [focused, setFocused] = useState(false);
 	const { fieldName, registerField, defaultValue, error } = useField(props.name as string);
@@ -34,18 +35,18 @@ const InputComponent: React.FC<Props> = ({ label, mask, fieldActive, ...props })
 		(e: React.FormEvent<HTMLInputElement>) => {
 			if (mask === 'zipCode') {
 				zipCode(e);
-			}
-			if (mask === 'currency') {
+			} else if (mask === 'currency') {
 				currency(e);
-			}
-			if (mask === 'cpf') {
+			} else if (mask === 'cpf') {
 				cpf(e);
-			}
-			if (mask === 'cellPhone') {
+			} else if (mask === 'rg') {
+				rg(e);
+			} else if (mask === 'cellPhone') {
 				cellPhone(e);
-			}
-			if (mask === 'phone') {
+			} else if (mask === 'phone') {
 				phone(e);
+			} else if (mask === 'text') {
+				textInput(e);
 			}
 		},
 		[mask],
@@ -79,7 +80,7 @@ const InputComponent: React.FC<Props> = ({ label, mask, fieldActive, ...props })
 	};
 
 	return (
-		<InputContainer focused={isFocused} error={hasError} required={props.required} inputDisabled={props.disabled}>
+		<InputContainer focused={isFocused} error={hasError} required={isRequired} inputDisabled={props.disabled}>
 			<Input
 				onFocus={() => setFocused(true)}
 				onBlur={() => setFocused(false)}
@@ -92,7 +93,7 @@ const InputComponent: React.FC<Props> = ({ label, mask, fieldActive, ...props })
 				error={hasError}
 				{...props}
 			/>
-			<Label htmlFor={props.id} focused={isFocused} error={hasError} required={props.required} inputDisabled={props.disabled}>
+			<Label htmlFor={props.id} focused={isFocused} error={hasError} required={isRequired} inputDisabled={props.disabled}>
 				{renderLabel()}
 			</Label>
 		</InputContainer>

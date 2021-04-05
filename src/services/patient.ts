@@ -1,3 +1,4 @@
+import { PatientSave } from '../@types/patient';
 import api from './api';
 
 const baseURL = '/patient';
@@ -30,6 +31,11 @@ const Patient = {
 
 	getNextId: async () => {
 		const response = await api.get(`${baseURL}/nextId`);
+		return response;
+	},
+
+	save: async (patient: PatientSave) => {
+		const response = await api.post(`${baseURL}/`, patient);
 		return response;
 	},
 };

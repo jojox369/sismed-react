@@ -3,9 +3,10 @@ import styled from 'styled-components';
 interface Props {
 	focused?: boolean;
 	error?: string;
-	required?: boolean;
+
 	selectDisabled?: boolean;
 	inputDisabled?: boolean;
+	isRequired?: boolean;
 }
 
 export const Container = styled.section<Props>`
@@ -15,29 +16,13 @@ export const Container = styled.section<Props>`
 	background-color: #fff;
 	transition: box-shadow 0.2s;
 	margin-top: 1.25rem;
-
+	box-shadow: ${props => (props.error && props.focused ? '0px 4px 20px 0px  #ec392f' : '0px 4px 20px 0px transparent')};
 	position: relative;
 
 	&:hover {
 		background-color: ${props => (props.selectDisabled ? '#ffffff' : 'rgba(255, 255, 255, 0.45)')};
-		box-shadow: ${props => (props.selectDisabled ? 'none' : '0px 4px 20px 0px #0287ce')};
+		box-shadow: ${props => (props.inputDisabled ? 'none' : props.error ? '0px 4px 20px 0px  #ec392f' : '0px 4px 20px 0px #0287ce')};
 	}
-
-	${props =>
-		props.focused &&
-		`
-			box-shadow: 0 0.25rem 1.25rem 0 #0287ce;
-		`}
-
-	${props =>
-		props.required &&
-		`
-		& label::after {
-				content:' *';
-  			color: #ec392f;
-			}
-			
-	`}
 
 	${props =>
 		props.selectDisabled &&
@@ -66,7 +51,6 @@ export const Select = styled.select<Props>`
 `;
 export const Option = styled.option`
 	text-align: left;
-	color: red;
 `;
 
 export const Label = styled.label<Props>`
@@ -77,7 +61,7 @@ export const Label = styled.label<Props>`
 	font-weight: 600;
 	line-height: 1.5rem;
 	color: ${props => (props.error ? '#ec392f' : '#0287ce')};
-	${props => props.required && `::after { content:' *'; color: #ec392f; }`}
+	${props => props.isRequired && `::after { content:' *'; color: #ec392f; }`}
 	pointer-events: none;
 	opacity: 1;
 `;
