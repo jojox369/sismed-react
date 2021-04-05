@@ -18,32 +18,41 @@ import { Input, Select, Error, Spinner } from '../../../components';
 import * as Yup from 'yup';
 import HealthInsuranceService from '../../../services/health-insurance';
 import HealthInsuranceTypeService from '../../../services/health-insurance-type';
+import PatientService from '../../../services/patient';
 import { Message, GetAddress } from '../../../assets/functions';
 
 const initialState = {
 	id: 0,
-	name: '',
-	cellNumber: '',
-	cpf: '',
-	dateBirth: '',
-	email: '',
-	emittingDate: '',
-	emittingOrgan: '',
-	healthInsuranceNumber: '',
-	jobPhone: '',
-	maritalStatus: '',
-	nationality: '',
-	naturalness: '',
-	phone: '',
-	profession: '',
-	recommendation: '',
-	rg: '',
-	schooling: '',
-	sex: '',
-	situation: '',
-	validity: '',
-	address: { zipCode: '', street: '', number: '', complement: '', neighborhood: '', city: '', state: '' },
-	healthInsuranceType: { id: 0, name: '', healthInsurance: { id: 0, name: '' } },
+	name: undefined,
+	cellNumber: undefined,
+	cpf: undefined,
+	dateBirth: undefined,
+	email: undefined,
+	emittingDate: undefined,
+	emittingOrgan: undefined,
+	healthInsuranceNumber: undefined,
+	jobPhone: undefined,
+	maritalStatus: undefined,
+	nationality: undefined,
+	naturalness: undefined,
+	phone: undefined,
+	profession: undefined,
+	recommendation: undefined,
+	rg: undefined,
+	schooling: undefined,
+	sex: undefined,
+	situation: undefined,
+	validity: undefined,
+	address: {
+		zipCode: undefined,
+		street: undefined,
+		number: undefined,
+		complement: undefined,
+		neighborhood: undefined,
+		city: undefined,
+		state: undefined,
+	},
+	healthInsuranceType: { id: undefined, name: undefined, healthInsurance: { id: undefined, name: undefined } },
 };
 
 const RegisterEditPatient = () => {
@@ -81,6 +90,8 @@ const RegisterEditPatient = () => {
 		} else {
 			setShowInsuranceTypes(false);
 		}
+		const errors = formRef.current?.getErrors();
+		formRef.current?.setErrors({ ...errors, 'healthInsuranceType.healthInsurance.id': '' });
 	};
 
 	useEffect(() => {
@@ -104,17 +115,28 @@ const RegisterEditPatient = () => {
 	const onSubmit: SubmitHandler<Patient> = async (data, { reset }) => {
 		const verifyData = {
 			...data,
+			sex: data.sex === 'Selecione um' ? '' : data.sex,
+			maritalStatus: data.maritalStatus === 'Selecione um' ? '' : data.maritalStatus,
+			nationality: data.nationality === 'Selecione um' ? '' : data.nationality,
+			schooling: data.schooling === 'Selecione um' ? '' : data.schooling,
 			healthInsuranceType: {
 				...data.healthInsuranceType,
 				healthInsurance: {
-					...data.healthInsuranceType.healthInsurance,
-					id: data.nationality?.toLowerCase() === 'selecione um' ? '' : data.nationality,
+					...data.healthInsuranceType?.healthInsurance,
+					id:
+						data.healthInsuranceType.healthInsurance.id?.toString().toLowerCase() === 'Selecione um'
+							? ''
+							: data.healthInsuranceType.healthInsurance.id?.toString(),
 				},
+			},
+			address: {
+				...data.address,
+				state: data.address?.state === 'Selecione um' ? '' : data.address?.state,
 			},
 		};
 		const schema = Yup.object().shape({
 			name: Yup.string().required('Este campo é obrigatório'),
-			cellPhone: Yup.string(),
+			cellNumber: Yup.string().required('Este campo é obrigatório'),
 			cpf: Yup.string(),
 			dateBirth: Yup.string(),
 			email: Yup.string(),
@@ -147,16 +169,42 @@ const RegisterEditPatient = () => {
 				healthInsurance: Yup.object().shape({ id: Yup.string().required('Este campo é obrigatório') }),
 			}),
 		});
+
 		try {
 			await schema.validate(verifyData, { abortEarly: false });
+			setLoading(true);
+			const savePatient = {
+				...verifyData,
+				cellNumber: verifyData.cellNumber.replace(/\D/g, ''),
+				phone: verifyData.phone.replace(/\D/g, ''),
+				jobPhone: verifyData.jobPhone?.replace(/\D/g, ''),
+				healthInsuranceTypeId:
+					data.healthInsuranceType.healthInsurance.id.toString() === '1'
+						? +data.healthInsuranceType.healthInsurance.id
+						: +data.healthInsuranceType.id,
+			};
+
+			if (!id) {
+				await PatientService.save(savePatient);
+
+				Message('Paciente salvo com sucesso', 0);
+				reset();
+				setLoading(false);
+			}
 		} catch (err) {
 			const validationErrors: Record<string, any> = {};
+
 			if (err instanceof Yup.ValidationError) {
 				err.inner.forEach(error => {
+					console.log(error.path);
+
 					validationErrors[error.path as string] = error.message;
 				});
+
 				formRef.current?.setErrors(validationErrors);
 			}
+
+			setLoading(false);
 		}
 	};
 
@@ -172,13 +220,13 @@ const RegisterEditPatient = () => {
 					<Content>
 						<Form onSubmit={onSubmit} id='form' ref={formRef}>
 							<div>
-								<Input name='name' label='Nome' fieldActive={false} defaultValue={patient.name} />
+								<Input name='name' label='Nome' mask='text' fieldActive={false} defaultValue={patient.name} isRequired={true} />
 								<Input name='dateBirth' label='Data de Nascimento' type='date' fieldActive={false} defaultValue={patient.dateBirth} />
 								<Input name='cpf' label='CPF' mask='cpf' fieldActive={false} defaultValue={patient.cpf} />
 								<Input name='rg' label='RG' mask='rg' fieldActive={false} defaultValue={patient.rg} />
-								<Input name='emittingOrgan' label='Orgão Emissor' fieldActive={false} defaultValue={patient.emittingOrgan} />
+								<Input name='emittingOrgan' mask='text' label='Orgão Emissor' fieldActive={false} defaultValue={patient.emittingOrgan} />
 								<Input name='emittingDate' label='Data de Emissão' fieldActive={false} defaultValue={patient.emittingDate} />
-								<Input name='naturalness' label='Naturalidade' fieldActive={false} defaultValue={patient.naturalness} />
+								<Input name='naturalness' mask='text' label='Naturalidade' fieldActive={false} defaultValue={patient.naturalness} />
 								<Select
 									name='nationality'
 									label='Nacionalidade'
@@ -191,7 +239,14 @@ const RegisterEditPatient = () => {
 							<div>
 								<Input name='phone' label='Telefone Fixo' mask='phone' fieldActive={false} defaultValue={patient.phone} />
 								<Input name='jobPhone' label='Telefone do Trabalho' mask='phone' fieldActive={false} defaultValue={patient.jobPhone} />
-								<Input name='cellNumber' label='Celular' mask='cellPhone' fieldActive={false} defaultValue={patient.cellNumber} />
+								<Input
+									name='cellNumber'
+									label='Celular'
+									mask='cellPhone'
+									fieldActive={false}
+									defaultValue={patient.cellNumber}
+									isRequired={true}
+								/>
 								<Input name='email' type='email' label='Email' fieldActive={false} defaultValue={patient.email} />
 								<Select
 									name='sex'
@@ -230,6 +285,7 @@ const RegisterEditPatient = () => {
 									options={healthInsurances}
 									defaultLabel='Selecione um'
 									defaultValue={patient.healthInsuranceType.healthInsurance.id}
+									isRequired={true}
 								/>
 								{showInsuranceTypes && (
 									<Select
