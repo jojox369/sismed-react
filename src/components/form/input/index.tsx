@@ -66,7 +66,7 @@ const InputComponent: React.FC<Props> = ({ label, mask, fieldActive, isRequired,
 		}
 	};
 
-	const isFocused = focused || fieldActive || props.type === 'date' || hasValue;
+	const isFocused = focused || fieldActive || props.type === 'date' || hasValue || !!props.defaultValue;
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value } = e.target;

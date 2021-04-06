@@ -38,6 +38,11 @@ const Patient = {
 		const response = await api.post(`${baseURL}/`, patient);
 		return response;
 	},
+
+	update: async (patient: PatientSave) => {
+		const response = await api.put(`${baseURL}/`, patient);
+		return response;
+	},
 };
 
 export default Patient;

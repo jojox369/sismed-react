@@ -13,59 +13,86 @@ import {
 	situationsOptions,
 	stateOptions,
 } from '../../../assets/select-options';
-import { ButtonsContainerForm, ConfirmButton, Container, Content, Form, HeaderForm } from '../../../assets/styles/global';
+import {
+	ButtonsContainerForm,
+	ConfirmButton,
+	Container,
+	Content,
+	DangerButton,
+	Form,
+	HeaderForm,
+	PageTitle,
+	Title,
+} from '../../../assets/styles/global';
 import { Input, Select, Error, Spinner } from '../../../components';
 import * as Yup from 'yup';
 import HealthInsuranceService from '../../../services/health-insurance';
 import HealthInsuranceTypeService from '../../../services/health-insurance-type';
 import PatientService from '../../../services/patient';
-import { Message, GetAddress } from '../../../assets/functions';
+import {
+	Message,
+	GetAddress,
+	StringFormatter,
+	CpfFormatter,
+	RgFormatter,
+	PhoneFormatter,
+	CellNumberFormatter,
+	ZipCodeFormatter,
+} from '../../../assets/functions';
 
 const initialState = {
 	id: 0,
-	name: undefined,
-	cellNumber: undefined,
-	cpf: undefined,
-	dateBirth: undefined,
-	email: undefined,
-	emittingDate: undefined,
-	emittingOrgan: undefined,
-	healthInsuranceNumber: undefined,
-	jobPhone: undefined,
-	maritalStatus: undefined,
-	nationality: undefined,
-	naturalness: undefined,
-	phone: undefined,
-	profession: undefined,
-	recommendation: undefined,
-	rg: undefined,
-	schooling: undefined,
-	sex: undefined,
-	situation: undefined,
-	validity: undefined,
+	name: '',
+	cellNumber: '',
+	cpf: '',
+	dateBirth: '',
+	email: '',
+	emittingDate: '',
+	emittingOrgan: '',
+	healthInsuranceNumber: '',
+	jobPhone: '',
+	maritalStatus: '',
+	nationality: '',
+	naturalness: '',
+	phone: '',
+	profession: '',
+	recommendation: '',
+	rg: '',
+	schooling: '',
+	sex: '',
+	situation: '',
+	validity: '',
 	address: {
-		zipCode: undefined,
-		street: undefined,
-		number: undefined,
-		complement: undefined,
-		neighborhood: undefined,
-		city: undefined,
-		state: undefined,
+		zipCode: '',
+		street: '',
+		number: '',
+		complement: '',
+		neighborhood: '',
+		city: '',
+		state: '',
 	},
-	healthInsuranceType: { id: undefined, name: undefined, healthInsurance: { id: undefined, name: undefined } },
+	healthInsuranceType: { id: 0, name: '', healthInsurance: { id: 0, name: '' } },
 };
 
 const RegisterEditPatient = () => {
 	const { id } = useParams<RouteParams>();
 	const formRef = useRef<FormHandles>(null);
 	const [patient, setPatient] = useState(initialState);
-	const [showInsuranceTypes, setShowInsuranceTypes] = useState(false);
 	const [healthInsurances, setHealthInsurances] = useState<HealthInsurance[]>([]);
 	const [healthInsuranceTypes, setHealthInsuranceTypes] = useState<HealthInsuranceType[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [hasError, setHasError] = useState(false);
 
 	const getData = async () => {
+		if (id) {
+			try {
+				const { data } = await PatientService.getById(+id);
+				setPatient(data);
+			} catch {
+				Message('Erro ao tentar buscar as informações do paciente', 1);
+				setHasError(true);
+			}
+		}
 		try {
 			const { data } = await HealthInsuranceService.searchAll();
 			const testArray = [...data, { id: 2, name: 'Teste On Change' }];
@@ -79,16 +106,17 @@ const RegisterEditPatient = () => {
 	};
 
 	const onInsuranceChange = async (id: number) => {
+		setPatient({
+			...patient,
+			healthInsuranceType: { ...patient.healthInsuranceType, healthInsurance: { ...patient.healthInsuranceType.healthInsurance, id } },
+		});
 		if (id > 1) {
 			try {
 				const { data } = await HealthInsuranceTypeService.listByInsurance(id);
 				setHealthInsuranceTypes(data);
-				setShowInsuranceTypes(true);
 			} catch {
 				Message('Erro ao tentar listar os planos do convênio', 1);
 			}
-		} else {
-			setShowInsuranceTypes(false);
 		}
 		const errors = formRef.current?.getErrors();
 		formRef.current?.setErrors({ ...errors, 'healthInsuranceType.healthInsurance.id': '' });
@@ -172,9 +200,12 @@ const RegisterEditPatient = () => {
 
 		try {
 			await schema.validate(verifyData, { abortEarly: false });
+
 			setLoading(true);
-			const savePatient = {
+
+			let savePatient = {
 				...verifyData,
+
 				cellNumber: verifyData.cellNumber.replace(/\D/g, ''),
 				phone: verifyData.phone.replace(/\D/g, ''),
 				jobPhone: verifyData.jobPhone?.replace(/\D/g, ''),
@@ -187,21 +218,30 @@ const RegisterEditPatient = () => {
 			if (!id) {
 				await PatientService.save(savePatient);
 
-				Message('Paciente salvo com sucesso', 0);
+				Message('Paciente salvo com sucesso!', 0);
+
 				reset();
-				setLoading(false);
+			} else {
+				savePatient = { ...savePatient, id: +id };
+				const { data } = await PatientService.update(savePatient);
+				setPatient(data);
+				Message('Paciente atualizado com sucesso!', 0);
 			}
+
+			setLoading(false);
 		} catch (err) {
 			const validationErrors: Record<string, any> = {};
 
 			if (err instanceof Yup.ValidationError) {
 				err.inner.forEach(error => {
-					console.log(error.path);
-
 					validationErrors[error.path as string] = error.message;
 				});
 
 				formRef.current?.setErrors(validationErrors);
+			}
+
+			if (err.response) {
+				Message(`Erro ao tentar ${id ? 'atualizar' : 'cadastrar'} o paciente`, 1);
 			}
 
 			setLoading(false);
@@ -213,20 +253,45 @@ const RegisterEditPatient = () => {
 			{!loading && !hasError && (
 				<Container>
 					<HeaderForm>
+						<PageTitle>
+							<Title>
+								<strong>{id ? 'Editar' : 'Cadastrar'} |</strong> Paciente
+							</Title>
+						</PageTitle>
 						<ButtonsContainerForm>
+							<DangerButton>Excluir</DangerButton>
 							<ConfirmButton form='form'>Salvar</ConfirmButton>
 						</ButtonsContainerForm>
 					</HeaderForm>
 					<Content>
 						<Form onSubmit={onSubmit} id='form' ref={formRef}>
 							<div>
-								<Input name='name' label='Nome' mask='text' fieldActive={false} defaultValue={patient.name} isRequired={true} />
+								<Input
+									name='name'
+									label='Nome'
+									mask='text'
+									fieldActive={false}
+									defaultValue={StringFormatter(patient.name)}
+									isRequired={true}
+								/>
 								<Input name='dateBirth' label='Data de Nascimento' type='date' fieldActive={false} defaultValue={patient.dateBirth} />
-								<Input name='cpf' label='CPF' mask='cpf' fieldActive={false} defaultValue={patient.cpf} />
-								<Input name='rg' label='RG' mask='rg' fieldActive={false} defaultValue={patient.rg} />
-								<Input name='emittingOrgan' mask='text' label='Orgão Emissor' fieldActive={false} defaultValue={patient.emittingOrgan} />
-								<Input name='emittingDate' label='Data de Emissão' fieldActive={false} defaultValue={patient.emittingDate} />
-								<Input name='naturalness' mask='text' label='Naturalidade' fieldActive={false} defaultValue={patient.naturalness} />
+								<Input name='cpf' label='CPF' mask='cpf' fieldActive={false} defaultValue={CpfFormatter(patient.cpf)} />
+								<Input name='rg' label='RG' mask='rg' fieldActive={false} defaultValue={RgFormatter(patient.rg)} />
+								<Input
+									name='emittingOrgan'
+									mask='text'
+									label='Orgão Emissor'
+									fieldActive={false}
+									defaultValue={StringFormatter(patient.emittingOrgan)}
+								/>
+								<Input name='emittingDate' type='date' label='Data de Emissão' fieldActive={false} defaultValue={patient.emittingDate} />
+								<Input
+									name='naturalness'
+									mask='text'
+									label='Naturalidade'
+									fieldActive={false}
+									defaultValue={StringFormatter(patient.naturalness)}
+								/>
 								<Select
 									name='nationality'
 									label='Nacionalidade'
@@ -237,17 +302,29 @@ const RegisterEditPatient = () => {
 								/>
 							</div>
 							<div>
-								<Input name='phone' label='Telefone Fixo' mask='phone' fieldActive={false} defaultValue={patient.phone} />
-								<Input name='jobPhone' label='Telefone do Trabalho' mask='phone' fieldActive={false} defaultValue={patient.jobPhone} />
+								<Input name='phone' label='Telefone Fixo' mask='phone' fieldActive={false} defaultValue={PhoneFormatter(patient.phone)} />
+								<Input
+									name='jobPhone'
+									label='Telefone do Trabalho'
+									mask='phone'
+									fieldActive={false}
+									defaultValue={PhoneFormatter(patient.jobPhone)}
+								/>
 								<Input
 									name='cellNumber'
 									label='Celular'
 									mask='cellPhone'
 									fieldActive={false}
-									defaultValue={patient.cellNumber}
+									defaultValue={CellNumberFormatter(patient.cellNumber)}
 									isRequired={true}
 								/>
-								<Input name='email' type='email' label='Email' fieldActive={false} defaultValue={patient.email} />
+								<Input
+									name='email'
+									type='email'
+									label='Email'
+									fieldActive={false}
+									defaultValue={patient.email ? patient.email.toLowerCase() : ''}
+								/>
 								<Select
 									name='sex'
 									label='Sexo'
@@ -272,11 +349,16 @@ const RegisterEditPatient = () => {
 									defaultLabel='Selecione um'
 									defaultValue={patient.schooling}
 								/>
-								<Input name='profession' label='Profissão' fieldActive={false} defaultValue={patient.profession} />
+								<Input name='profession' label='Profissão' fieldActive={false} defaultValue={StringFormatter(patient.profession)} />
 							</div>
 
 							<div>
-								<Input name='recommendation' label='Recomendação' fieldActive={false} defaultValue={patient.recommendation} />
+								<Input
+									name='recommendation'
+									label='Recomendação'
+									fieldActive={false}
+									defaultValue={StringFormatter(patient.recommendation)}
+								/>
 								<Select
 									onChange={e => onInsuranceChange(+e.target.value)}
 									name='healthInsuranceType.healthInsurance.id'
@@ -287,7 +369,7 @@ const RegisterEditPatient = () => {
 									defaultValue={patient.healthInsuranceType.healthInsurance.id}
 									isRequired={true}
 								/>
-								{showInsuranceTypes && (
+								{patient.healthInsuranceType.healthInsurance.id > 1 && (
 									<Select
 										name='healthInsuranceType.id'
 										label='Plano'
@@ -297,13 +379,17 @@ const RegisterEditPatient = () => {
 										defaultValue={patient.healthInsuranceType.id}
 									/>
 								)}
-								<Input
-									name='healthInsuranceNumber'
-									label='Carteira Convenio'
-									fieldActive={false}
-									defaultValue={patient.healthInsuranceNumber}
-								/>
-								<Input name='validity' type='date' label='Validade' fieldActive={false} defaultValue={patient.validity} />
+								{patient.healthInsuranceType.healthInsurance.id > 1 && (
+									<>
+										<Input
+											name='healthInsuranceNumber'
+											label='Carteira Convenio'
+											fieldActive={false}
+											defaultValue={patient.healthInsuranceNumber}
+										/>
+										<Input name='validity' type='date' label='Validade' fieldActive={false} defaultValue={patient.validity} />
+									</>
+								)}
 								{id && (
 									<Select
 										name='situation'
@@ -321,28 +407,33 @@ const RegisterEditPatient = () => {
 									mask='zipCode'
 									fieldActive={false}
 									onBlur={e => address(e.target.value)}
-									defaultValue={patient.address.zipCode}
+									defaultValue={ZipCodeFormatter(patient.address.zipCode)}
 								/>
 								<Input
 									name='address.street'
 									label='Logradouro'
 									fieldActive={!!patient.address.street}
-									defaultValue={patient.address.street}
+									defaultValue={StringFormatter(patient.address.street)}
 								/>
 								<Input name='address.number' label='Número' fieldActive={!!patient.address.number} defaultValue={patient.address.number} />
 								<Input
 									name='address.complement'
 									label='Complemento'
 									fieldActive={!!patient.address.complement}
-									defaultValue={patient.address.complement}
+									defaultValue={StringFormatter(patient.address.complement)}
 								/>
 								<Input
 									name='address.neighborhood'
 									label='Bairro'
 									fieldActive={!!patient.address.neighborhood}
-									defaultValue={patient.address.neighborhood}
+									defaultValue={StringFormatter(patient.address.neighborhood)}
 								/>
-								<Input name='address.city' label='Cidade' fieldActive={!!patient.address.city} defaultValue={patient.address.city} />
+								<Input
+									name='address.city'
+									label='Cidade'
+									fieldActive={!!patient.address.city}
+									defaultValue={StringFormatter(patient.address.city)}
+								/>
 								<Select
 									name='address.state'
 									label='Estado'

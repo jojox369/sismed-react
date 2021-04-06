@@ -126,17 +126,27 @@ export const HeaderForm = styled.header`
 	padding: 3rem 0;
 	width: 100%;
 	display: flex;
-	justify-content: flex-end;
-	align-self: flex-end;
-	> * {
-		width: 9.375rem;
-		margin-right: 2.5rem;
-	}
+	justify-content: space-between;
+	align-items: center;
+`;
+
+export const PageTitle = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-left: 2.5rem;
+`;
+export const Title = styled.h1`
+	font-weight: normal;
 `;
 
 export const ButtonsContainerForm = styled.div`
+	display: flex;
 	> * {
 		width: 9.375rem;
+		margin-right: 1rem;
+	}
+	> :last-child {
 		margin-right: 2.5rem;
 	}
 `;

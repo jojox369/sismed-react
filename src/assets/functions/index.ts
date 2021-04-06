@@ -48,7 +48,7 @@ export const BrDateFormatter = (date: string) => {
 };
 
 export const CellNumberFormatter = (cell: string) => {
-	return cell ? cell.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/g, '($1) $2 $3-$4') : 'Não Cadastrado';
+	return cell ? cell.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/g, '($1) $2 $3-$4') : '';
 };
 
 export const VerifyScheduleFields = (field: number | undefined) => {
@@ -66,25 +66,29 @@ export const CutString = (note: string | null, length: number) => {
 };
 
 export const StringFormatter = (string: string) => {
-	return string.toLowerCase().replace(/(?:^|\s)(?!da|de|do)\S/g, l => l.toUpperCase());
+	return string ? string.toLowerCase().replace(/(?:^|\s)\S/g, l => l.toUpperCase()) : '';
 };
 
 export const CpfFormatter = (cpf: string): string => {
-	return cpf ? cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, '$1.$2.$3-$4') : 'Não Cadastrado';
+	return cpf ? cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, '$1.$2.$3-$4') : '';
 };
 
 export const RgFormatter = (rg: string): string => {
-	return rg ? rg.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/g, '$1.$2.$3-$4') : 'Não Cadastrado';
+	return rg ? rg.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/g, '$1.$2.$3-$4') : '';
 };
 
 export const PhoneFormatter = (phone: string): string => {
-	let phoneFormatted;
-	if (phone.length > 10) {
-		phoneFormatted = phone.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/g, '($1) $2 $3-$4');
+	if (phone) {
+		let phoneFormatted;
+		if (phone.length > 10) {
+			phoneFormatted = phone.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/g, '($1) $2 $3-$4');
+		} else {
+			phoneFormatted = phone.replace(/(\d{2})(\d{4})(\d{4})/g, '($1) $2-$3');
+		}
+		return phoneFormatted;
 	} else {
-		phoneFormatted = phone.replace(/(\d{2})(\d{4})(\d{4})/g, '($1) $2-$3');
+		return '';
 	}
-	return phoneFormatted;
 };
 
 export const TimeFormatter = (time: string) => {
@@ -93,6 +97,10 @@ export const TimeFormatter = (time: string) => {
 
 export const DateTimeFormatter = (date: string, time: string) => {
 	return `${BrDateFormatter(date)} - ${TimeFormatter(time)}`;
+};
+
+export const ZipCodeFormatter = (zipCode: string) => {
+	return zipCode ? zipCode.replace(/(\d{5})(\d{3})/g, '$1-$2') : '';
 };
 
 export const GetAddress = async (zipCode: string) => {
