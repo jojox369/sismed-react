@@ -1,6 +1,6 @@
 import { FormHandles, SubmitHandler } from '@unform/core';
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { Patient } from '../../../@types/patient';
 import { HealthInsurance } from '../../../@types/health-insurance';
 import { HealthInsuranceType } from '../../../@types/health-insurance-type';
@@ -24,7 +24,7 @@ import {
 	PageTitle,
 	Title,
 } from '../../../assets/styles/global';
-import { Input, Select, Error, Spinner } from '../../../components';
+import { Input, Select, Error, Spinner, ConfirmModal } from '../../../components';
 import * as Yup from 'yup';
 import HealthInsuranceService from '../../../services/health-insurance';
 import HealthInsuranceTypeService from '../../../services/health-insurance-type';
@@ -77,11 +77,13 @@ const initialState = {
 const RegisterEditPatient = () => {
 	const { id } = useParams<RouteParams>();
 	const formRef = useRef<FormHandles>(null);
+	const history = useHistory();
 	const [patient, setPatient] = useState(initialState);
 	const [healthInsurances, setHealthInsurances] = useState<HealthInsurance[]>([]);
 	const [healthInsuranceTypes, setHealthInsuranceTypes] = useState<HealthInsuranceType[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [hasError, setHasError] = useState(false);
+	const [confirmModal, setConfirmModal] = useState(false);
 
 	const getData = async () => {
 		if (id) {
@@ -137,6 +139,19 @@ const RegisterEditPatient = () => {
 			formRef.current?.setFieldValue('address.city', city);
 			formRef.current?.setFieldValue('address.state', state);
 			formRef.current?.getFieldRef('address.number').focus();
+		}
+	};
+
+	const deletePatient = async () => {
+		setLoading(true);
+		setConfirmModal(false);
+		try {
+			await PatientService.delete(+id);
+			Message('Paciente excluído com sucesso!', 0);
+			history.push('/patient');
+		} catch {
+			Message('Erro ao tentar excluir o paciente', 1);
+			setLoading(false);
 		}
 	};
 
@@ -252,6 +267,14 @@ const RegisterEditPatient = () => {
 		<>
 			{!loading && !hasError && (
 				<Container>
+					<ConfirmModal
+						handleClose={() => setConfirmModal(false)}
+						isOpen={confirmModal}
+						confirmButtonTitle='Excluir'
+						onClickConfirmButton={deletePatient}
+					>
+						Tem certeza que deseja excluir o paciente?
+					</ConfirmModal>
 					<HeaderForm>
 						<PageTitle>
 							<Title>
@@ -259,7 +282,7 @@ const RegisterEditPatient = () => {
 							</Title>
 						</PageTitle>
 						<ButtonsContainerForm>
-							<DangerButton>Excluir</DangerButton>
+							<DangerButton onClick={() => setConfirmModal(true)}>Excluir</DangerButton>
 							<ConfirmButton form='form'>Salvar</ConfirmButton>
 						</ButtonsContainerForm>
 					</HeaderForm>

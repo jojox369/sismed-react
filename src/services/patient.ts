@@ -43,6 +43,11 @@ const Patient = {
 		const response = await api.put(`${baseURL}/`, patient);
 		return response;
 	},
+
+	delete: async (patientId: number) => {
+		const response = await api.delete(`${baseURL}/${patientId}`);
+		return response;
+	},
 };
 
 export default Patient;
