@@ -19,10 +19,10 @@ interface ListPatients {
 	cargo: string;
 }
 
-const columns = ['Matricula', 'Nome', 'CPF', 'Cargo'];
+const columns = ['Matrícula', 'Nome', 'CPF', 'Cargo'];
 const options = [
-	{ name: 'Paciente', labelText: 'Digite o nome do funcionário', active: true },
-	{ name: 'Prontuario', labelText: 'Digite o prontuario do funcionário', active: false },
+	{ name: 'Funcionário', labelText: 'Digite o nome do funcionário', active: true },
+	{ name: 'Matrícula', labelText: 'Digite o prontuario do funcionário', active: false },
 	{ name: 'CPF', labelText: 'Digite o cpf do funcionário', active: false },
 ];
 const List = () => {
@@ -37,7 +37,7 @@ const List = () => {
 	const formatData = (data: EmployeeList[]) => {
 		const formattedData = data.map(employee => ({
 			nome: employee.name,
-			matricula: <TableLink to={`emplouee/edit/${employee.id}`}> {employee.id}</TableLink>,
+			matricula: <TableLink to={`employee/edit/${employee.id}`}> {employee.id}</TableLink>,
 			cpf: CpfFormatter(employee.cpf),
 			cargo: employee.profile === 3 ? 'Funcionário(a)' : 'Médico(a)',
 		}));
@@ -79,16 +79,20 @@ const List = () => {
 		if (value) {
 			try {
 				if (activeSearchField === 0) {
-					return;
+					const { data } = await EmployeeService.searchByName(value);
+
+					formatData(data);
 				}
 				if (activeSearchField === 1) {
-					return;
+					const { data } = await EmployeeService.searchById(+value);
+					formatData(data);
 				}
 				if (activeSearchField === 2) {
-					return;
+					const { data } = await EmployeeService.searchByCpf(value);
+					formatData(data);
 				}
 			} catch {
-				Message('Erro ao tentar pesquisar os registros clínicos', 1);
+				Message('Erro ao tentar pesquisar os funcionários', 1);
 			}
 		} else {
 			getData();

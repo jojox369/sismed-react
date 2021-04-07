@@ -6,7 +6,8 @@ import * as BiIcons from 'react-icons/bi';
 import * as RiIcons from 'react-icons/ri';
 import * as FiIcons from 'react-icons/fi';
 import { logout } from '../../redux/User/User.actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { userLogged } from '../../redux/User/User.selects';
 
 const HomeIcon = <FaIcons.FaHome />;
 const ScheduleIcon = <FaIcons.FaCalendarAlt />;
@@ -78,6 +79,7 @@ const SidebarData = [
 const SideBar: React.FC = () => {
 	const location = useLocation();
 	const dispatch = useDispatch();
+	const { profile } = useSelector(userLogged);
 
 	const userLogout = () => {
 		dispatch(logout());
@@ -93,14 +95,27 @@ const SideBar: React.FC = () => {
 					SISMED
 				</MenuLogo>
 				{SidebarData.map((item, index) => {
-					return (
-						<SidebarMenuItem key={index} active={location.pathname === item.link ? true : false}>
-							<Icon>{item.icon}</Icon>
-							<SidebarMenuItemLabel to={item.link} onClick={item.onClick ? userLogout : undefined}>
-								{item.title}
-							</SidebarMenuItemLabel>
-						</SidebarMenuItem>
-					);
+					if (index === 5) {
+						if (profile !== 3) {
+							return (
+								<SidebarMenuItem key={index} active={location.pathname === item.link ? true : false}>
+									<Icon>{item.icon}</Icon>
+									<SidebarMenuItemLabel to={item.link} onClick={item.onClick ? userLogout : undefined}>
+										{item.title}
+									</SidebarMenuItemLabel>
+								</SidebarMenuItem>
+							);
+						}
+					} else {
+						return (
+							<SidebarMenuItem key={index} active={location.pathname === item.link ? true : false}>
+								<Icon>{item.icon}</Icon>
+								<SidebarMenuItemLabel to={item.link} onClick={item.onClick ? userLogout : undefined}>
+									{item.title}
+								</SidebarMenuItemLabel>
+							</SidebarMenuItem>
+						);
+					}
 				})}
 			</SidebarMenu>
 		</SidebarContainer>
