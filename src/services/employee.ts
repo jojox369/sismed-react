@@ -3,6 +3,11 @@ import api from './api';
 const baseURL = '/employee';
 
 const Employee = {
+	list: async () => {
+		const response = await api.get(`${baseURL}`);
+		return response;
+	},
+
 	getMedics: async () => {
 		const response = await api.get(`${baseURL}?medic=true`);
 		return response;

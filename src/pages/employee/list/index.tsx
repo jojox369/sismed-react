@@ -1,56 +1,53 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RiUserAddLine } from 'react-icons/ri';
-import { CpfFormatter, Message, StringFormatter } from '../../../assets/functions';
+import { CpfFormatter, Message } from '../../../assets/functions';
 import { ButtonContainer, Container, Content, Header, LinkButton, SearchBox, TableLink } from '../../../assets/styles/global';
-import { Error, SearchComponent, Spinner, Table } from '../../../components';
-import PatientService from '../../../services/patient';
+import { SearchComponent, Spinner, Table, Error } from '../../../components';
+import EmployeeService from '../../../services/employee';
 
-interface PatientList {
+interface EmployeeList {
 	id: number;
 	name: string;
 	cpf: string;
-	age: string;
+	profile: number;
 }
 
 interface ListPatients {
 	nome: string;
-	prontuario: ReactElement;
-	idade: string;
+	matricula: React.ReactElement;
 	cpf: string;
+	cargo: string;
 }
 
-const columns = ['Prontuário', 'Nome', 'Idade', 'CPF'];
-
+const columns = ['Matricula', 'Nome', 'CPF', 'Cargo'];
 const options = [
-	{ name: 'Paciente', labelText: 'Digite o nome do paciente', active: true },
-	{ name: 'Prontuario', labelText: 'Digite o prontuario do paciente', active: false },
-	{ name: 'CPF', labelText: 'Digite o cpf do paciente', active: false },
+	{ name: 'Paciente', labelText: 'Digite o nome do funcionário', active: true },
+	{ name: 'Prontuario', labelText: 'Digite o prontuario do funcionário', active: false },
+	{ name: 'CPF', labelText: 'Digite o cpf do funcionário', active: false },
 ];
-
-const ListPatient = () => {
+const List = () => {
 	const [searchOptions, setSearchOptions] = useState(options);
-	const [patients, setPatients] = useState<ListPatients[]>([]);
+	const [employees, setEmployees] = useState<ListPatients[]>([]);
 	const [hasError, setHasError] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [searchInputLabel, setSearchInputLabel] = useState(options[0].labelText);
 	const [activeSearchField, setActiveSearchField] = useState(0);
 	const [maxLength, setMaxLength] = useState(60);
 
-	const formatPatientsData = (patients: PatientList[]) => {
-		const formattedData = patients.map((patient: PatientList) => ({
-			nome: StringFormatter(patient.name),
-			prontuario: <TableLink to={`patient/edit/${patient.id}`}>{patient.id}</TableLink>,
-			idade: patient.age,
-			cpf: CpfFormatter(patient.cpf),
+	const formatData = (data: EmployeeList[]) => {
+		const formattedData = data.map(employee => ({
+			nome: employee.name,
+			matricula: <TableLink to={`emplouee/edit/${employee.id}`}> {employee.id}</TableLink>,
+			cpf: CpfFormatter(employee.cpf),
+			cargo: employee.profile === 3 ? 'Funcionário(a)' : 'Médico(a)',
 		}));
-
-		setPatients(formattedData);
+		setEmployees(formattedData);
 	};
 
 	const getData = async () => {
 		try {
-			const { data } = await PatientService.list();
-			formatPatientsData(data);
+			const { data } = await EmployeeService.list();
+			formatData(data);
 		} catch (error) {
 			console.log(error);
 			setHasError(true);
@@ -82,20 +79,16 @@ const ListPatient = () => {
 		if (value) {
 			try {
 				if (activeSearchField === 0) {
-					const { data } = await PatientService.getByName(value);
-
-					formatPatientsData(data);
+					return;
 				}
 				if (activeSearchField === 1) {
-					const { data } = await PatientService.searchById(+value);
-					formatPatientsData(data);
+					return;
 				}
 				if (activeSearchField === 2) {
-					const { data } = await PatientService.searchByCpf(value);
-					formatPatientsData(data);
+					return;
 				}
 			} catch {
-				Message('Erro ao tentar pesquisar os pacientes', 1);
+				Message('Erro ao tentar pesquisar os registros clínicos', 1);
 			}
 		} else {
 			getData();
@@ -122,14 +115,14 @@ const ListPatient = () => {
 							/>
 						</SearchBox>
 						<ButtonContainer>
-							<LinkButton to='/patient/register'>
+							<LinkButton to='/employee/register'>
 								<RiUserAddLine />
-								Novo Paciente
+								Novo Funcionário
 							</LinkButton>
 						</ButtonContainer>
 					</Header>
 					<Content>
-						<Table dataSource={patients} title='Pacientes' hasNoDataLabel='Sem pacientes para listar' columns={columns} />
+						<Table dataSource={employees} title='Funcionários' hasNoDataLabel='Sem funcionários para listar' columns={columns} />
 					</Content>
 				</Container>
 			)}
@@ -139,4 +132,4 @@ const ListPatient = () => {
 	);
 };
 
-export default ListPatient;
+export default List;

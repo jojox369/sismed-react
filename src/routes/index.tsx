@@ -10,10 +10,11 @@ import RouteAuthenticated from './AuthenticatedRoute';
 import ScheduleRoutes from './schedule.routes';
 import ClinicalRegisterRoutes from './clinical.record.routes';
 import PatientRoutes from './patient.routes';
+import EmployeeRoutes from './employee.routes';
 import RouteUnauthenticated from './UnauthenticatedRoute';
 
 const Routes = (): JSX.Element => {
-	const { token } = useSelector(userLogged);
+	const { token, profile } = useSelector(userLogged);
 	const [url, setUrl] = useState('/');
 
 	useEffect(() => {
@@ -31,8 +32,9 @@ const Routes = (): JSX.Element => {
 			<RouteAuthenticated path='/' exact component={Home} />
 
 			<RouteAuthenticated path='/schedule' component={ScheduleRoutes} />
-			<RouteAuthenticated path='/clinical-record' component={ClinicalRegisterRoutes} />
+			{profile !== 3 && <RouteAuthenticated path='/clinical-record' component={ClinicalRegisterRoutes} />}
 			<RouteAuthenticated path='/patient' component={PatientRoutes} />
+			<RouteAuthenticated path='/employee' component={EmployeeRoutes} />
 
 			<Redirect to={url} />
 		</Switch>

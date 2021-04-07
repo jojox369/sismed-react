@@ -2,6 +2,8 @@ import styled from 'styled-components';
 
 export const TableContainer = styled.section`
 	width: 100%;
+	max-height: 500px;
+	overflow-y: auto;
 `;
 
 export const Table = styled.table`

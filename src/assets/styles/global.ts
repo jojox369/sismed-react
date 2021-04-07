@@ -104,7 +104,9 @@ export const Header = styled.header`
 `;
 
 export const Content = styled.main`
-	margin: 20px 0;
+	margin: 1.25rem 0;
+	padding: 0 1.25rem;
+	width: 100%;
 `;
 
 export const SearchBox = styled.div`
@@ -117,7 +119,7 @@ export const TableLink = styled(Link)`
 `;
 
 export const ButtonContainer = styled.div`
-	width: 200px;
+	width: 12.5rem;
 	margin: 0 1.25rem;
 `;
 
