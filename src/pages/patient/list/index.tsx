@@ -23,18 +23,15 @@ const columns = ['Prontuário', 'Nome', 'Idade', 'CPF'];
 
 const options = [
 	{ name: 'Paciente', labelText: 'Digite o nome do paciente', active: true },
-	{ name: 'Prontuario', labelText: 'Digite o prontuario do paciente', active: false },
-	{ name: 'CPF', labelText: 'Digite o cpf do paciente', active: false },
+	{ name: 'Prontuario', labelText: 'Digite o prontuario do paciente', active: false, onlyNumbers: true },
+	{ name: 'CPF', labelText: 'Digite o cpf do paciente', active: false, onlyNumbers: true, maxLength: 11 },
 ];
 
 const ListPatient = () => {
-	const [searchOptions, setSearchOptions] = useState(options);
 	const [patients, setPatients] = useState<ListPatients[]>([]);
 	const [hasError, setHasError] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [searchInputLabel, setSearchInputLabel] = useState(options[0].labelText);
 	const [activeSearchField, setActiveSearchField] = useState(0);
-	const [maxLength, setMaxLength] = useState(60);
 
 	const formatPatientsData = (patients: PatientList[]) => {
 		const formattedData = patients.map((patient: PatientList) => ({
@@ -58,24 +55,6 @@ const ListPatient = () => {
 		} finally {
 			setLoading(false);
 		}
-	};
-
-	const onClickSearchItem = (arrayPosition: number) => {
-		const arrayCopy = searchOptions.map(element => {
-			if (element.active) {
-				element.active = false;
-			}
-			return element;
-		});
-		arrayCopy[arrayPosition].active = true;
-		setSearchOptions(arrayCopy);
-		setSearchInputLabel(arrayCopy[arrayPosition].labelText);
-		if (arrayPosition === 2) {
-			setMaxLength(11);
-		} else {
-			setMaxLength(60);
-		}
-		setActiveSearchField(arrayPosition);
 	};
 
 	const onSearchValueChange = async (value: string) => {
@@ -114,11 +93,9 @@ const ListPatient = () => {
 					<Header>
 						<SearchBox>
 							<SearchComponent
-								options={searchOptions}
-								onClickItem={onClickSearchItem}
-								inputLabel={searchInputLabel}
+								options={options}
+								onClickItem={activeField => setActiveSearchField(activeField)}
 								onSearchValueChange={onSearchValueChange}
-								inputMaxLength={maxLength}
 							/>
 						</SearchBox>
 						<ButtonContainer>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ClinicalRecordsList } from '../../../@types/clinical-record';
-import { CutString, DateTimeFormatter, Message, StringFormatter } from '../../../assets/functions';
+import { BrDateFormatter, CutString, Message, StringFormatter, TimeFormatter } from '../../../assets/functions';
 import { Button } from '../../../assets/styles/global';
 import { Error, SearchComponent, Spinner, Table } from '../../../components';
 import ClinicalRecordService from '../../../services/clinical-record';
@@ -10,15 +10,14 @@ import { ListRegisters } from './styles';
 import { RiUserReceivedLine } from 'react-icons/ri';
 
 const options = [
-	{ name: 'Paciente', labelText: 'Digite o nome do paciente', active: true },
-	{ name: 'Prontuario', labelText: 'Digite o prontuario do paciente', active: false },
-	{ name: 'Data', labelText: 'Digite data do registro', active: false },
+	{ name: 'Paciente', labelText: 'Digite o nome do paciente', active: true, onlyNumbers: false },
+	{ name: 'Prontuario', labelText: 'Digite o prontuario do paciente', active: false, onlyNumbers: true },
+	{ name: 'Data', labelText: 'Digite data do registro', active: false, inputType: 'date' },
 ];
 
 const ClinicalRegisterList = () => {
 	const [searchOptions, setSearchOptions] = useState(options);
-	const [searchInputLabel, setSearchInputLabel] = useState(options[0].labelText);
-	const [inputType, setInputType] = useState('text');
+
 	const [activeSearchField, setActiveSearchField] = useState(0);
 	const [clinicalRegisters, setClinicalRecords] = useState<Array<Record<string, any>>>([{}]);
 	const [hasError, setHasError] = useState(false);
@@ -40,24 +39,6 @@ const ClinicalRegisterList = () => {
 		} finally {
 			setLoading(false);
 		}
-	};
-
-	const onClickSearchItem = (arrayPosition: number) => {
-		const arrayCopy = searchOptions.map(element => {
-			if (element.active) {
-				element.active = false;
-			}
-			return element;
-		});
-		arrayCopy[arrayPosition].active = true;
-		setSearchOptions(arrayCopy);
-		setSearchInputLabel(arrayCopy[arrayPosition].labelText);
-		if (arrayPosition === 2) {
-			setInputType('date');
-		} else {
-			setInputType('text');
-		}
-		setActiveSearchField(arrayPosition);
 	};
 
 	const onSearchValueChange = async (value: string) => {
@@ -117,20 +98,21 @@ const ClinicalRegisterList = () => {
 
 		try {
 			const { data } = await ClinicalRecordService.getPatientRegisters(patientId);
+
 			const formattedData = data.map((clinicalRegister: ClinicalRecordsList) => {
 				return {
-					dataHora: DateTimeFormatter(clinicalRegister.date, clinicalRegister.time),
+					data: BrDateFormatter(clinicalRegister.date),
+					hora: TimeFormatter(clinicalRegister.time),
 					descricao: (
 						<TableLink to={`clinical-record/edit/${clinicalRegister.id}`}> {CutString(clinicalRegister.description, 15)}</TableLink>
 					),
 				};
 			});
 			setClinicalRecords(formattedData);
-			setColumns(['Data-Hora', 'Descrição']);
+			setColumns(['Data', 'Hora', 'Descrição']);
 			setTableTitle(patientName);
 			setShowListPatientsButton(true);
-			setSearchOptions([{ name: 'Data', labelText: 'Digite data do registro', active: true }]);
-			setInputType('date');
+			setSearchOptions([{ name: 'Data', labelText: 'Digite data do registro', active: true, inputType: 'date' }]);
 			setActiveSearchField(3);
 		} catch (err) {
 			Message('Erro ao tentar listar os registros do paciente selecionado', 1);
@@ -146,7 +128,6 @@ const ClinicalRegisterList = () => {
 		setColumns(['Prontuario', 'Nome', 'Quantidade']);
 		setTableTitle('Registros Clínicos');
 		setSearchOptions(options);
-		setInputType('text');
 		setChangingState(false);
 	};
 
@@ -165,9 +146,7 @@ const ClinicalRegisterList = () => {
 								<SearchBox>
 									<SearchComponent
 										options={searchOptions}
-										onClickItem={onClickSearchItem}
-										inputLabel={searchInputLabel}
-										inputType={inputType}
+										onClickItem={activeField => setActiveSearchField(activeField)}
 										onSearchValueChange={onSearchValueChange}
 									/>
 								</SearchBox>

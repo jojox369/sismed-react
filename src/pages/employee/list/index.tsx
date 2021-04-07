@@ -21,18 +21,15 @@ interface ListPatients {
 
 const columns = ['Matrícula', 'Nome', 'CPF', 'Cargo'];
 const options = [
-	{ name: 'Funcionário', labelText: 'Digite o nome do funcionário', active: true },
-	{ name: 'Matrícula', labelText: 'Digite o prontuario do funcionário', active: false },
-	{ name: 'CPF', labelText: 'Digite o cpf do funcionário', active: false },
+	{ name: 'Funcionário', labelText: 'Digite o nome do funcionário', active: true, onlyNumbers: false },
+	{ name: 'Matrícula', labelText: 'Digite a matricula do funcionário', active: false, onlyNumbers: true },
+	{ name: 'CPF', labelText: 'Digite o cpf do funcionário', active: false, mask: 'cpf', maxLength: 11, onlyNumbers: true },
 ];
 const List = () => {
-	const [searchOptions, setSearchOptions] = useState(options);
 	const [employees, setEmployees] = useState<ListPatients[]>([]);
 	const [hasError, setHasError] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [searchInputLabel, setSearchInputLabel] = useState(options[0].labelText);
 	const [activeSearchField, setActiveSearchField] = useState(0);
-	const [maxLength, setMaxLength] = useState(60);
 
 	const formatData = (data: EmployeeList[]) => {
 		const formattedData = data.map(employee => ({
@@ -49,7 +46,6 @@ const List = () => {
 			const { data } = await EmployeeService.list();
 			formatData(data);
 		} catch (error) {
-			console.log(error);
 			setHasError(true);
 			Message('Erro ao listar os pacientes', 1);
 		} finally {
@@ -57,30 +53,11 @@ const List = () => {
 		}
 	};
 
-	const onClickSearchItem = (arrayPosition: number) => {
-		const arrayCopy = searchOptions.map(element => {
-			if (element.active) {
-				element.active = false;
-			}
-			return element;
-		});
-		arrayCopy[arrayPosition].active = true;
-		setSearchOptions(arrayCopy);
-		setSearchInputLabel(arrayCopy[arrayPosition].labelText);
-		if (arrayPosition === 2) {
-			setMaxLength(11);
-		} else {
-			setMaxLength(60);
-		}
-		setActiveSearchField(arrayPosition);
-	};
-
 	const onSearchValueChange = async (value: string) => {
 		if (value) {
 			try {
 				if (activeSearchField === 0) {
 					const { data } = await EmployeeService.searchByName(value);
-
 					formatData(data);
 				}
 				if (activeSearchField === 1) {
@@ -111,11 +88,9 @@ const List = () => {
 					<Header>
 						<SearchBox>
 							<SearchComponent
-								options={searchOptions}
-								onClickItem={onClickSearchItem}
-								inputLabel={searchInputLabel}
+								options={options}
+								onClickItem={activeField => setActiveSearchField(activeField)}
 								onSearchValueChange={onSearchValueChange}
-								inputMaxLength={maxLength}
 							/>
 						</SearchBox>
 						<ButtonContainer>

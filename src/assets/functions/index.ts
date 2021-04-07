@@ -59,8 +59,9 @@ export const CutString = (note: string | null, length: number) => {
 	let noteFormatted = note;
 	if (note) {
 		if (note.length > length) {
-			noteFormatted = `${note.slice(0, length)}...`;
+			noteFormatted = StringFormatter(`${note.slice(0, length)}...`);
 		}
+		noteFormatted = noteFormatted ? StringFormatter(noteFormatted) : note;
 	}
 	return noteFormatted;
 };
@@ -101,6 +102,14 @@ export const DateTimeFormatter = (date: string, time: string) => {
 
 export const ZipCodeFormatter = (zipCode: string) => {
 	return zipCode ? zipCode.replace(/(\d{5})(\d{3})/g, '$1-$2') : '';
+};
+
+export const OnlyNumbers = (value: string) => {
+	return value.replace(/\D/g, '');
+};
+
+export const OnlyLetters = (value: string) => {
+	return StringFormatter(value.replace(/\d/g, ''));
 };
 
 export const GetAddress = async (zipCode: string) => {
