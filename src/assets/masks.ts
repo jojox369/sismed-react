@@ -69,6 +69,6 @@ export const phone = (e: React.FormEvent<HTMLInputElement>) => {
 export const textInput = (e: React.FormEvent<HTMLInputElement>) => {
 	let value = e.currentTarget.value;
 	value = value.replace(/\d/g, '');
-	value = value.toLowerCase().replace(/(?:^|\s)(?!da|de|do)\S/g, l => l.toUpperCase());
+	value = value.toLowerCase().replace(/(?:^|\s)\S/g, l => l.toUpperCase());
 	e.currentTarget.value = value;
 };

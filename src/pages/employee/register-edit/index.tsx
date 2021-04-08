@@ -89,8 +89,6 @@ const RegisterEdit = () => {
 			} catch {
 				Message('Erro ao tentar buscar as informações do funcionário', 1);
 				setHasError(true);
-			} finally {
-				setLoading(false);
 			}
 		}
 		/* try {
@@ -100,7 +98,10 @@ const RegisterEdit = () => {
 		} catch {
 			Message('Erro ao tentar recuperar a lista de convenios', 1);
 			setHasError(true);
-		} */
+		} finally {
+				setLoading(false);
+			}*/
+		setLoading(false);
 	};
 
 	const address = async (zipCodeSearch: string) => {
@@ -197,6 +198,7 @@ const RegisterEdit = () => {
 				Message('Funcionário salvo com sucesso!', 0);
 
 				reset();
+				setEmployee(initialState);
 			} else {
 				savePatient = { ...savePatient, id: +id };
 				const { data } = await EmployeeService.update(savePatient);
@@ -224,10 +226,17 @@ const RegisterEdit = () => {
 		}
 	};
 
+	const profileChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const { value } = e.target;
+		const typeSelected = employeeTypes.filter(type => type.id === +value).shift();
+		setEmployee({ ...employee, profile: { id: typeSelected?.id.toString() as string, type: typeSelected?.name as string } });
+	};
+
 	useEffect(() => {
 		setLoading(true);
 		getData();
 	}, []);
+
 	return (
 		<>
 			{!loading && !hasError && (
@@ -262,23 +271,39 @@ const RegisterEdit = () => {
 									defaultValue={StringFormatter(employee.name)}
 									isRequired={true}
 								/>
-								<Input name='dateBirth' label='Data de Nascimento' type='date' fieldActive={false} defaultValue={employee.dateBirth} />
-								<Input name='cpf' label='CPF' mask='cpf' fieldActive={false} defaultValue={CpfFormatter(employee.cpf)} />
-								<Input name='rg' label='RG' mask='rg' fieldActive={false} defaultValue={RgFormatter(employee.rg)} />
+								<Input
+									name='dateBirth'
+									label='Data de Nascimento'
+									type='date'
+									fieldActive={false}
+									defaultValue={employee.dateBirth}
+									isRequired={true}
+								/>
+								<Input name='cpf' label='CPF' mask='cpf' fieldActive={false} defaultValue={CpfFormatter(employee.cpf)} isRequired={true} />
+								<Input name='rg' label='RG' mask='rg' fieldActive={false} defaultValue={RgFormatter(employee.rg)} isRequired={true} />
 								<Input
 									name='emittingOrgan'
 									mask='text'
 									label='Orgão Emissor'
 									fieldActive={false}
 									defaultValue={StringFormatter(employee.emittingOrgan)}
+									isRequired={true}
 								/>
-								<Input name='emittingDate' type='date' label='Data de Emissão' fieldActive={false} defaultValue={employee.emittingDate} />
+								<Input
+									name='emittingDate'
+									type='date'
+									label='Data de Emissão'
+									fieldActive={false}
+									defaultValue={employee.emittingDate}
+									isRequired={true}
+								/>
 								<Input
 									name='naturalness'
 									mask='text'
 									label='Naturalidade'
 									fieldActive={false}
 									defaultValue={StringFormatter(employee.naturalness)}
+									isRequired={true}
 								/>
 								<Select
 									name='nationality'
@@ -287,14 +312,29 @@ const RegisterEdit = () => {
 									fieldActive={false}
 									defaultLabel='Selecione um'
 									defaultValue={employee.nationality}
+									isRequired={true}
 								/>
 							</div>
 							<div>
-								<Input name='beginDate' label='Data Contratação' type='date' fieldActive={false} defaultValue={employee.beginDate} />
+								<Input
+									name='beginDate'
+									label='Data Contratação'
+									type='date'
+									fieldActive={false}
+									defaultValue={employee.beginDate}
+									isRequired={true}
+								/>
 								{id && (
 									<Input name='dismissalDate' label='Data Dispensa' type='date' fieldActive={false} defaultValue={employee.dismissalDate} />
 								)}
-								<Input name='phone' label='Telefone Fixo' mask='phone' fieldActive={false} defaultValue={PhoneFormatter(employee.phone)} />
+								<Input
+									name='phone'
+									label='Telefone Fixo'
+									mask='phone'
+									fieldActive={false}
+									defaultValue={PhoneFormatter(employee.phone)}
+									isRequired={true}
+								/>
 
 								<Input
 									name='cellNumber'
@@ -310,6 +350,7 @@ const RegisterEdit = () => {
 									label='Email'
 									fieldActive={false}
 									defaultValue={employee.email ? employee.email.toLowerCase() : ''}
+									isRequired={true}
 								/>
 								<Select
 									name='sex'
@@ -318,6 +359,7 @@ const RegisterEdit = () => {
 									fieldActive={false}
 									defaultLabel='Selecione um'
 									defaultValue={employee.sex}
+									isRequired={true}
 								/>
 								<Select
 									name='maritalStatus'
@@ -326,6 +368,7 @@ const RegisterEdit = () => {
 									fieldActive={false}
 									defaultLabel='Selecione um'
 									defaultValue={employee.maritalStatus}
+									isRequired={true}
 								/>
 								<Select
 									name='schooling'
@@ -334,6 +377,7 @@ const RegisterEdit = () => {
 									fieldActive={false}
 									defaultLabel='Selecione um'
 									defaultValue={employee.schooling}
+									isRequired={true}
 								/>
 							</div>
 
@@ -345,8 +389,10 @@ const RegisterEdit = () => {
 									fieldActive={false}
 									defaultLabel='Selecione um'
 									defaultValue={employee.profile.id}
+									isRequired={true}
+									onChange={profileChanged}
 								/>
-								{employee.profile.type.toLowerCase() !== 'outro(a)' && (
+								{employee.profile.type.toLowerCase() !== 'outro(a)' && employee.profile.type && (
 									<>
 										<Input name='specialty' label='Especialidade' fieldActive={false} defaultValue={StringFormatter(employee.specialty)} />
 										<Input name='crm' label='CRM' fieldActive={false} defaultValue={employee.crm} />
@@ -361,6 +407,7 @@ const RegisterEdit = () => {
 									fieldActive={false}
 									onBlur={e => address(e.target.value)}
 									defaultValue={ZipCodeFormatter(employee.address.zipCode)}
+									isRequired={true}
 								/>
 								<Input
 									name='address.street'
@@ -368,13 +415,14 @@ const RegisterEdit = () => {
 									mask='text'
 									fieldActive={!!employee.address.street}
 									defaultValue={StringFormatter(employee.address.street)}
+									isRequired={true}
 								/>
 								<Input
 									name='address.number'
 									label='Número'
-									mask='text'
 									fieldActive={!!employee.address.number}
 									defaultValue={employee.address.number}
+									isRequired={true}
 								/>
 								<Input
 									name='address.complement'
@@ -389,6 +437,7 @@ const RegisterEdit = () => {
 									mask='text'
 									fieldActive={!!employee.address.neighborhood}
 									defaultValue={StringFormatter(employee.address.neighborhood)}
+									isRequired={true}
 								/>
 								<Input
 									name='address.city'
@@ -396,6 +445,7 @@ const RegisterEdit = () => {
 									mask='text'
 									fieldActive={!!employee.address.city}
 									defaultValue={StringFormatter(employee.address.city)}
+									isRequired={true}
 								/>
 								<Select
 									name='address.state'
@@ -404,6 +454,7 @@ const RegisterEdit = () => {
 									options={stateOptions}
 									defaultLabel='Selecione um'
 									defaultValue={employee.address.state}
+									isRequired={true}
 								/>
 							</div>
 						</Form>

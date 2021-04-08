@@ -97,8 +97,8 @@ const RegisterEditPatient = () => {
 		}
 		try {
 			const { data } = await HealthInsuranceService.searchAll();
-			const testArray = [...data, { id: 2, name: 'Teste On Change' }];
-			setHealthInsurances(testArray);
+
+			setHealthInsurances(data);
 		} catch {
 			Message('Erro ao tentar recuperar a lista de convenios', 1);
 			setHasError(true);

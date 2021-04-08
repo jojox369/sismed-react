@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { RiUserAddLine } from 'react-icons/ri';
-import { CpfFormatter, Message } from '../../../assets/functions';
+import { CpfFormatter, Message, StringFormatter } from '../../../assets/functions';
 import { ButtonContainer, Container, Content, Header, LinkButton, SearchBox, TableLink } from '../../../assets/styles/global';
 import { SearchComponent, Spinner, Table, Error } from '../../../components';
 import EmployeeService from '../../../services/employee';
@@ -33,7 +33,7 @@ const List = () => {
 
 	const formatData = (data: EmployeeList[]) => {
 		const formattedData = data.map(employee => ({
-			nome: employee.name,
+			nome: StringFormatter(employee.name),
 			matricula: <TableLink to={`employee/edit/${employee.id}`}> {employee.id}</TableLink>,
 			cpf: CpfFormatter(employee.cpf),
 			cargo: employee.profile === 3 ? 'Funcionário(a)' : 'Médico(a)',
