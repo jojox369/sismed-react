@@ -114,9 +114,10 @@ export const OnlyLetters = (value: string) => {
 
 export const GetAddress = async (zipCode: string) => {
 	const validateZipCode = /^[0-9]{8}$/;
-	if (validateZipCode.test(zipCode.replace(/\D/g, ''))) {
+	const searchText = zipCode.replace(/\D/g, '');
+	if (validateZipCode.test(searchText)) {
 		try {
-			const { data } = await AddressService.getAddress(zipCode);
+			const { data } = await AddressService.getAddress(searchText);
 			return {
 				zipCode: data.cep,
 				street: data.logradouro,

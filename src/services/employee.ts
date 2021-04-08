@@ -49,5 +49,10 @@ const EmployeeService = {
 		const response = await api.put(`${baseURL}/`, employee);
 		return response;
 	},
+
+	delete: async (id: number) => {
+		const response = await api.delete(`${baseURL}/${id}`);
+		return response;
+	},
 };
 export default EmployeeService;

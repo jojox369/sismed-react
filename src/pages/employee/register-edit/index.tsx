@@ -1,6 +1,6 @@
 import { FormHandles, SubmitHandler } from '@unform/core';
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { RouteParams } from '../../../@types/router';
 import {
 	CellNumberFormatter,
@@ -74,6 +74,7 @@ const initialState = {
 const RegisterEdit = () => {
 	const { id } = useParams<RouteParams>();
 	const formRef = useRef<FormHandles>(null);
+	const history = useHistory();
 	const [employee, setEmployee] = useState(initialState);
 	const [loading, setLoading] = useState(false);
 	const [hasError, setHasError] = useState(false);
@@ -117,8 +118,17 @@ const RegisterEdit = () => {
 		}
 	};
 
-	const deleteEmployee = () => {
-		return;
+	const deleteEmployee = async () => {
+		setLoading(true);
+		setConfirmModal(false);
+		try {
+			await EmployeeService.delete(+id);
+			Message('Funcionário excluído com sucesso!', 0);
+			history.push('/employee');
+		} catch {
+			Message('Erro ao tentar excluir o funcionário', 1);
+			setLoading(false);
+		}
 	};
 
 	const onSubmit: SubmitHandler<Employee> = async (data, { reset }) => {
@@ -247,7 +257,7 @@ const RegisterEdit = () => {
 						confirmButtonTitle='Excluir'
 						onClickConfirmButton={deleteEmployee}
 					>
-						Tem certeza que deseja excluir o paciente?
+						Tem certeza que deseja excluir o funcionário?
 					</ConfirmModal>
 					<HeaderForm>
 						<PageTitle>
