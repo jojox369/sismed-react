@@ -8,7 +8,7 @@ import { RouteParams } from '../../../@types/router';
 import {
 	maritalStatusOptions,
 	nationalityOptions,
-	SchoolingOptions,
+	schoolingOptions,
 	sexTypeOptions,
 	situationsOptions,
 	stateOptions,
@@ -203,7 +203,7 @@ const RegisterEditPatient = () => {
 				street: Yup.string(),
 				number: Yup.string(),
 				complement: Yup.string(),
-				district: Yup.string(),
+				neighborhood: Yup.string(),
 				city: Yup.string(),
 				state: Yup.string(),
 			}),
@@ -318,7 +318,7 @@ const RegisterEditPatient = () => {
 								<Select
 									name='nationality'
 									label='Nacionalidade'
-									options={nationalityOptions()}
+									options={nationalityOptions}
 									fieldActive={false}
 									defaultLabel='Selecione um'
 									defaultValue={patient.nationality}
@@ -351,7 +351,7 @@ const RegisterEditPatient = () => {
 								<Select
 									name='sex'
 									label='Sexo'
-									options={sexTypeOptions()}
+									options={sexTypeOptions}
 									fieldActive={false}
 									defaultLabel='Selecione um'
 									defaultValue={patient.sex}
@@ -359,7 +359,7 @@ const RegisterEditPatient = () => {
 								<Select
 									name='maritalStatus'
 									label='Estado Civil'
-									options={maritalStatusOptions()}
+									options={maritalStatusOptions}
 									fieldActive={false}
 									defaultLabel='Selecione um'
 									defaultValue={patient.maritalStatus}
@@ -367,7 +367,7 @@ const RegisterEditPatient = () => {
 								<Select
 									name='schooling'
 									label='Escolaridade'
-									options={SchoolingOptions()}
+									options={schoolingOptions}
 									fieldActive={false}
 									defaultLabel='Selecione um'
 									defaultValue={patient.schooling}
@@ -418,7 +418,7 @@ const RegisterEditPatient = () => {
 										name='situation'
 										label='Situação'
 										fieldActive={false}
-										options={situationsOptions()}
+										options={situationsOptions}
 										defaultValue={patient.situation}
 									/>
 								)}
@@ -461,7 +461,7 @@ const RegisterEditPatient = () => {
 									name='address.state'
 									label='Estado'
 									fieldActive={false}
-									options={stateOptions()}
+									options={stateOptions}
 									defaultLabel='Selecione um'
 									defaultValue={patient.address.state}
 								/>

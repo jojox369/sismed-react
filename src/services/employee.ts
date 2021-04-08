@@ -1,8 +1,9 @@
+import { Employee } from '../@types/employee';
 import api from './api';
 
 const baseURL = '/employee';
 
-const Employee = {
+const EmployeeService = {
 	list: async () => {
 		const response = await api.get(`${baseURL}`);
 		return response;
@@ -16,8 +17,13 @@ const Employee = {
 		const response = await api.get(`${baseURL}/healthInsuranceAccepted/${id}`);
 		return response;
 	},
-	getById: async (id: number) => {
+	getDoctorById: async (id: number) => {
 		const response = await api.get(`${baseURL}/${id}?medic=true`);
+		return response;
+	},
+
+	getById: async (id: number) => {
+		const response = await api.get(`${baseURL}/${id}`);
 		return response;
 	},
 
@@ -33,5 +39,15 @@ const Employee = {
 		const response = await api.get(`${baseURL}?cpf=${cpf}`);
 		return response;
 	},
+
+	save: async (employee: Employee) => {
+		const response = await api.post(`${baseURL}/`, employee);
+		return response;
+	},
+
+	update: async (employee: Employee) => {
+		const response = await api.put(`${baseURL}/`, employee);
+		return response;
+	},
 };
-export default Employee;
+export default EmployeeService;

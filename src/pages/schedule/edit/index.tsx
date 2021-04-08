@@ -9,7 +9,7 @@ import ScheduleService from '../../../services/schedule';
 import EmployeeService from '../../../services/employee';
 import ProcedureService from '../../../services/procedure';
 import { Container, EmployeeArea, PatientArea, SchedulingArea, Header, Content, Form } from './styles';
-import { Employee } from '../../../@types/employee';
+import { Medic } from '../../../@types/employee';
 import { HealthInsuranceType } from '../../../@types/health-insurance-type';
 import { Button, DangerButton, ConfirmButton } from '../../../assets/styles/global';
 import { FormHandles, SubmitHandler } from '@unform/core';
@@ -33,7 +33,7 @@ const Edit = () => {
 	const [loading, setLoading] = useState(false);
 	const [hasError, setHasError] = useState(false);
 	const [scheduling, setScheduling] = useState<ScheduleDetails>({} as ScheduleDetails);
-	const [medics, setMedics] = useState<Employee[]>([]);
+	const [medics, setMedics] = useState<Medic[]>([]);
 	const [healthInsuranceTypes, setHealthInsuranceTypes] = useState<HealthInsuranceType[]>([]);
 	const [procedures, setProcedures] = useState<Procedure[]>([]);
 	const [confirmModal, setConfirmModal] = useState(false);
@@ -79,7 +79,7 @@ const Edit = () => {
 
 	const changeEmployee = async (id: number) => {
 		try {
-			const { data } = await EmployeeService.getById(id);
+			const { data } = await EmployeeService.getDoctorById(id);
 			setScheduling({ ...scheduling, employee: data });
 		} catch {
 			Message('Erro ao tentar recuperar as informações do médico', 1);
